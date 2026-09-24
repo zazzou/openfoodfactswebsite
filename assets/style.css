@@ -757,3 +757,11 @@ select.sort{border:1.5px solid var(--line);border-radius:999px;padding:9px 36px 
   .topbar-actions .btn-primary{width:42px;height:42px;padding:0;border-radius:13px;justify-content:center;font-size:0;gap:0;flex:none}
   .topbar-actions .btn-primary svg{width:20px;height:20px;margin:0}
 }
+
+
+/* ===================== Logo : version blanche sur fond sombre ===================== */
+.logo{position:relative;display:block;flex:none}
+.logo img{display:block}
+.logo .logo-light{display:none}
+.night .topbar .logo .logo-dark{display:none}
+.night .topbar .logo .logo-light{display:block}

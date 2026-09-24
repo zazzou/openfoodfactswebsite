@@ -1,6 +1,7 @@
 /* Open Food Facts - refonte : helpers partagés (header, footer, badges, API) */
 (function () {
   const LOGO = "https://static.openfoodfacts.org/images/logos/off-logo-horizontal-light.svg";
+  const LOGO_WHITE = "https://static.openfoodfacts.org/images/logos/off-logo-horizontal-mono-white.svg";
   const API = (window.OFF && OFF.locale && OFF.locale.api) ? OFF.locale.api() : "https://world.openfoodfacts.org";
   const SEARCH = "https://search.openfoodfacts.org";
 
@@ -55,7 +56,7 @@
     return `
 <header class="topbar">
   <div class="container">
-    <a class="logo" href="index.html" aria-label="Open Food Facts"><img src="${LOGO}" alt="Open Food Facts"></a>
+    <a class="logo" href="index.html" aria-label="Open Food Facts"><img class="logo-dark" src="${LOGO}" alt="Open Food Facts"><img class="logo-light" src="${LOGO_WHITE}" alt="" aria-hidden="true"></a>
     <nav class="nav" aria-label="Navigation principale">${links}</nav>
     <div class="topbar-actions">
       ${localeButton()}
