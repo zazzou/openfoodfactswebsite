@@ -7,7 +7,7 @@
 <link rel="icon" href="https://static.openfoodfacts.org/images/logos/off-logo-vertical-light.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=12">
+<link rel="stylesheet" href="assets/style.css?v=17">
 </head>
 <body>
 <div id="site-header"></div>
@@ -18,7 +18,7 @@
       <span class="eyebrow">Rejoignez le mouvement</span>
       <h1>Il y a mille façons de contribuer. <span style="color:var(--orange)">Choisissez la vôtre.</span></h1>
       <p class="lead">Photographier un produit, corriger une liste d'ingrédients, traduire, coder, donner… Chaque geste compte, et tout reste ouvert pour toujours.</p>
-      <div class="row mt-4"><a class="btn btn-primary btn-lg" href="#app">Télécharger l'app</a><a class="btn btn-outline btn-lg" href="#">Ajouter un produit sur le site</a></div>
+      <div class="row mt-4"><a class="btn btn-primary btn-lg" href="#app">Télécharger l'app</a><a class="btn btn-outline btn-lg" href="edit.html?new=1">Ajouter un produit sur le site</a></div>
     </div>
     <div class="card" style="padding:28px">
       <div class="row between"><h3 style="margin:0">En direct</h3><span class="tag ok"><span style="width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block"></span> Contributions du jour</span></div>
@@ -28,7 +28,7 @@
         <div class="fact"><small>Fiches modifiées</small><b style="font-size:1.6rem" data-count="3927"></b></div>
         <div class="fact"><small>Nouveaux contributeurs</small><b style="font-size:1.6rem" data-count="212"></b></div>
       </div>
-      <div class="contrib-strip" style="margin-top:16px;padding:14px 16px"><div class="row"><div class="avatars"><span>AL</span><span>MB</span><span>JP</span><span>+</span></div><small class="muted">Merci à <b>alexg, mbenoit, jpdev</b> et 209 autres aujourd'hui</small></div></div>
+      <div class="contrib-strip" style="margin-top:16px;padding:14px 16px"><div class="row"><div class="avatars"><span>AL</span><span>MB</span><span>JP</span><span>+</span></div><small class="muted">Merci à <b><a href="profile.html?user=teolemon">teolemon</a>, <a href="profile.html?user=charlesnepote">charlesnepote</a>, <a href="profile.html?user=aleene">aleene</a></b> et 209 autres aujourd'hui · <a href="changes.html" style="color:var(--orange-dark);font-weight:700">voir les modifications</a></small></div></div>
     </div>
   </div>
 </div>
@@ -63,8 +63,8 @@
   <div class="container">
     <div class="section-head"><span class="eyebrow green">Toutes les manières d'aider</span><h2>Pas besoin d'être expert. Juste d'avoir envie.</h2></div>
     <div class="grid-3">
-      <div class="card reveal" id="hunger"><div class="card-img"><img src="https://images.unsplash.com/photo-1601599561213-832382fd07ba?w=800&q=60&fit=crop" alt=""></div><div class="icon-box orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l-1 7a5 5 0 0 1-10 0L6 3ZM12 15v4M8 21h8"/></svg></div><h3>Hunger Games</h3><p>Un jeu de questions rapides : « cette photo montre-t-elle un label bio ? ». Oui, non, je ne sais pas. Cinq minutes dans le métro et vous avez validé 50 fiches.</p><a class="more" href="#">Jouer maintenant <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
-      <div class="card reveal"><div class="card-img"><img src="https://images.unsplash.com/photo-1506617420156-8e4536971650?w=800&q=60&fit=crop" alt=""></div><div class="icon-box green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></div><h3>Compléter les fiches</h3><p>Des milliers de produits attendent une catégorie, une origine ou un emballage. Nos listes de « produits à compléter » vous montrent où aider.</p><a class="more" href="#">Voir les produits à compléter <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+      <div class="card reveal" id="hunger"><div class="card-img"><img src="https://images.unsplash.com/photo-1601599561213-832382fd07ba?w=800&q=60&fit=crop" alt=""></div><div class="icon-box orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l-1 7a5 5 0 0 1-10 0L6 3ZM12 15v4M8 21h8"/></svg></div><h3>Hunger Games</h3><p>Un jeu de questions rapides : « cette photo montre-t-elle un label bio ? ». Oui, non, je ne sais pas. Cinq minutes dans le métro et vous avez validé 50 fiches.</p><a class="more" href="hunger.html">Jouer maintenant <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+      <div class="card reveal"><div class="card-img"><img src="https://images.unsplash.com/photo-1506617420156-8e4536971650?w=800&q=60&fit=crop" alt=""></div><div class="icon-box green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></div><h3>Compléter les fiches</h3><p>Des milliers de produits attendent une catégorie, une origine ou un emballage. Nos listes de « produits à compléter » vous montrent où aider.</p><a class="more" href="facet.html?facet=states&value=to-be-completed">Voir les produits à compléter <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
       <div class="card reveal"><div class="card-img"><img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&q=60&fit=crop" alt=""></div><div class="icon-box blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 5h16M4 12h10M4 19h7M17 15l3 3-3 3"/></svg></div><h3>Traduire</h3><p>Le site existe en 180 langues, mais tout n'est pas traduit. Aidez-nous sur Crowdin, sans aucune compétence technique.</p><a class="more" href="#">Rejoindre Crowdin <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
       <div class="card reveal" id="dev"><div class="card-img"><img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&q=60&fit=crop" alt=""></div><div class="icon-box brand"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 8-4 4 4 4M16 8l4 4-4 4M14 4l-4 16"/></svg></div><h3>Développer</h3><p>Perl, Python, Dart, TypeScript… Le serveur, l'app mobile, l'IA Robotoff et le moteur de recherche sont sur GitHub, avec des issues « good first issue ».</p><a class="more" href="#">Voir sur GitHub <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
       <div class="card reveal"><div class="card-img"><img src="https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=800&q=60&fit=crop" alt=""></div><div class="icon-box orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11h4l3-7 4 14 3-7h4"/></svg></div><h3>Producteurs</h3><p>Vous êtes une marque ? Importez vos données directement sur la plateforme producteurs et obtenez des analyses gratuites de vos produits.</p><a class="more" href="#">Plateforme producteurs <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
@@ -85,14 +85,17 @@
     <div class="band reveal" style="text-align:center">
       <h2>Fait par tout le monde, pour tout le monde</h2>
       <p style="max-width:56ch;margin:14px auto 28px;font-size:1.05rem">Depuis 2012, plus de 280 000 personnes ont contribué. Elles ne sont ni nutritionnistes ni informaticiennes : juste des gens qui veulent savoir ce qu'ils mangent.</p>
-      <a class="btn btn-primary btn-lg" href="#">Créer un compte contributeur</a>
+      <a class="btn btn-primary btn-lg" href="signup.html">Créer un compte contributeur</a>
     </div>
   </div>
 </section>
 
 <div id="site-footer"></div>
-<script src="assets/app.js?v=6"></script>
-<script src="assets/i18n.js?v=6"></script>
+<script src="assets/locale.js?v=1"></script>
+<script src="assets/app.js?v=9"></script>
+<script src="assets/i18n-es.js?v=3"></script>
+<script src="assets/i18n.js?v=10"></script>
+<script src="assets/prefs.js?v=1"></script>
 <script>
   OFF.mount("contribute.html");
   fetch("assets/sample.json").then(r => r.json()).then(list => { document.getElementById("strip").innerHTML = list.slice(0, 12).map(p => `<a href="product.html?code=${p.code}"><img loading="lazy" src="${p.image_front_small_url}" alt="${OFF.esc(p.product_name)}"></a>`).join(""); });

@@ -7,7 +7,7 @@
 <link rel="icon" href="https://static.openfoodfacts.org/images/logos/off-logo-vertical-light.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=12">
+<link rel="stylesheet" href="assets/style.css?v=17">
 </head>
 <body>
 <div id="site-header"></div>
@@ -55,7 +55,7 @@
       <div class="endpoint"><span class="m">GET</span>/api/v2/taxonomy?tagtype=…<span class="d">Taxonomies : catégories, additifs, allergènes, labels…</span></div>
       <div class="endpoint"><span class="m">GET</span>robotoff.openfoodfacts.org/api/v1/questions<span class="d">Questions générées par l'IA à valider</span></div>
     </div>
-    <div class="row mt-4"><a class="btn btn-brand" href="#">Documentation OpenAPI complète</a><a class="btn btn-outline" href="#">Tutoriel : votre première requête</a><a class="btn btn-ghost" href="#">Tester dans le navigateur</a></div>
+    <div class="row mt-4"><a class="btn btn-brand" href="#">Documentation OpenAPI complète</a><a class="btn btn-outline" href="properties.html">Propriétés libres (folksonomie)</a><a class="btn btn-outline" href="changes.html">Flux des modifications</a><a class="btn btn-outline" href="countries.html">Produits par pays</a></div>
   </div>
 </section>
 
@@ -110,8 +110,11 @@
 </section>
 
 <div id="site-footer"></div>
-<script src="assets/app.js?v=6"></script>
-<script src="assets/i18n.js?v=6"></script>
+<script src="assets/locale.js?v=1"></script>
+<script src="assets/app.js?v=9"></script>
+<script src="assets/i18n-es.js?v=3"></script>
+<script src="assets/i18n.js?v=10"></script>
+<script src="assets/prefs.js?v=1"></script>
 <script>OFF.mount("data.html");</script>
 </body>
 </html>

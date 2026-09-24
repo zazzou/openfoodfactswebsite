@@ -7,11 +7,30 @@
 <link rel="icon" href="https://static.openfoodfacts.org/images/logos/off-logo-vertical-light.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=12">
+<link rel="stylesheet" href="assets/style.css?v=17">
+<style>
+  .po-missing{background:linear-gradient(135deg,#fff7ef,#fff);border:1px solid #ffd9b3}
+  .po-missing .top{display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:center;margin-bottom:8px}
+  @media(max-width:560px){.po-missing .top{grid-template-columns:1fr}}
+  .po-missing .top p{color:var(--ink-2);font-size:.95rem}
+  .po-anchors{display:flex;gap:8px;flex-wrap:wrap;margin-top:24px}
+  .po-prices .price-list{display:grid;gap:8px;margin-top:14px}
+  .po-prices .pr{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;padding:12px 14px;border:1px solid var(--line-2);border-radius:12px;background:#fff;font-size:.92rem}
+  .po-prices .pr .p{font-family:var(--font-head);font-weight:800;font-size:1.15rem;color:var(--brand);min-width:70px}
+  .po-prices .pr .where{color:var(--ink-2);min-width:0;overflow-wrap:anywhere}
+  .po-prices .pr .when{color:var(--muted);white-space:nowrap}
+  @media(max-width:480px){.po-prices .pr{grid-template-columns:auto 1fr}.po-prices .pr .when{grid-column:2}}
+  .po-prices .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  @media(max-width:600px){.po-prices .stats{grid-template-columns:1fr 1fr}}
+  .gallery .main.empty{background:var(--sand);border-style:dashed;color:var(--ink-2);font-weight:600;text-align:center}
+  .gallery .main.empty svg{width:48px;height:48px;color:var(--muted);margin:0 auto 10px}
+  .gallery .main.empty a{display:block;color:var(--orange-dark);font-size:.9rem;margin-top:6px}
+</style>
 </head>
 <body>
 <div id="site-header"></div>
 
+<main id="pp-page">
 <div class="container" style="padding-top:28px">
   <nav class="breadcrumb" aria-label="Fil d'Ariane">
     <a href="index.html">Accueil</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 6 6 6-6 6"/></svg>
@@ -23,61 +42,43 @@
 <div class="container product-top" style="margin-top:24px">
   <!-- Galerie -->
   <div class="gallery">
-    <div class="main"><img id="mainImg" src="https://images.openfoodfacts.org/images/products/301/762/042/2003/front_en.879.400.jpg" alt="Nutella – face avant"></div>
+    <div class="main" id="mainBox"><img id="mainImg" src="https://images.openfoodfacts.org/images/products/301/762/042/2003/front_en.879.400.jpg" alt="Nutella – face avant"></div>
     <div class="thumbs" id="thumbs">
       <button class="active" data-src="https://images.openfoodfacts.org/images/products/301/762/042/2003/front_en.879.400.jpg" title="Face avant"><img src="https://images.openfoodfacts.org/images/products/301/762/042/2003/front_en.879.400.jpg" alt=""></button>
       <button data-src="https://images.openfoodfacts.org/images/products/301/762/042/2003/ingredients_en.821.400.jpg" title="Ingrédients"><img src="https://images.openfoodfacts.org/images/products/301/762/042/2003/ingredients_en.821.400.jpg" alt=""></button>
       <button data-src="https://images.openfoodfacts.org/images/products/301/762/042/2003/nutrition_en.822.400.jpg" title="Nutrition"><img src="https://images.openfoodfacts.org/images/products/301/762/042/2003/nutrition_en.822.400.jpg" alt=""></button>
-      <button class="add" type="button">+ Photo</button>
+      <button class="add" type="button" id="addPhoto" data-href="edit.html?code=3017620422003#photos">+ Photo</button>
     </div>
   </div>
 
-  <!-- En-tête produit -->
-  <div>
-    <div class="product-head">
-      <div class="row" style="gap:8px;margin-bottom:12px"><span class="tag ok">✓ Fiche complète</span><span class="tag">Modifié il y a 3 jours</span></div>
-      <h1 id="p-name">Nutella</h1>
-      <div class="product-meta" id="p-meta">
-        <span>Marque <b>Ferrero</b></span>
-        <span>Quantité <b>400 g</b></span>
-        <span>Code-barres <b>3017620422003</b></span>
-        <span>Vendu en <b>France</b></span>
-      </div>
-    </div>
-
-    <div class="score-row" id="score-row">
-      <div class="score-box e"><small>Nutri-Score</small><div class="val"><span class="ns lg"><i class="a">A</i><i class="b">B</i><i class="c">C</i><i class="d">D</i><i class="e on">E</i></span></div><span style="font-size:.85rem;color:var(--ink-2)">Qualité nutritionnelle faible</span></div>
-      <div class="score-box nova4"><small>Transformation</small><div class="val"><span class="pill nova-4 lg">NOVA 4</span></div><span style="font-size:.85rem;color:var(--ink-2)">Aliment ultra-transformé</span></div>
-      <div class="score-box d"><small>Environnement</small><div class="val"><span class="pill eco-d lg">Green-Score D</span></div><span style="font-size:.85rem;color:var(--ink-2)">Impact élevé (huile de palme)</span></div>
-    </div>
-
-    <div class="facts" id="facts">
-      <div class="fact warn"><small>Huile de palme</small><b>Présente</b></div>
-      <div class="fact warn"><small>Additifs</small><b>1 (E322)</b></div>
-      <div class="fact"><small>Allergènes</small><b>Lait, soja, noisettes</b></div>
-      <div class="fact ok"><small>Régime</small><b>Végétarien</b></div>
-    </div>
-
-    <div class="product-actions mt-4">
-      <a class="btn btn-primary" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg> Modifier la fiche</a>
-      <a class="btn btn-outline" href="#">Comparer</a>
-      <a class="btn btn-outline" href="#">Partager</a>
-      <a class="btn btn-ghost" href="#">Signaler un problème</a>
-    </div>
-  </div>
+  <!-- En-tête produit (rendu par OFF.productPage.renderHeader) -->
+  <div id="pp-head"><div class="pp-skel"><i class="skeleton" style="width:30%"></i><i class="skeleton" style="height:44px;width:60%"></i><i class="skeleton" style="width:50%"></i><i class="skeleton" style="height:90px"></i><i class="skeleton" style="width:70%"></i></div></div>
 </div>
 
-<!-- Sous-navigation -->
-<div class="subnav">
-  <div class="container">
-    <a href="#ingredients" class="active">Ingrédients</a><a href="#nutrition">Nutrition</a><a href="#environment">Environnement</a><a href="#infos">Informations</a><a href="#history">Contributeurs</a>
-  </div>
-</div>
+<!-- Sous-navigation à 4 onglets -->
+<div id="pp-subnav"></div>
 
 <div class="container" style="max-width:1200px">
   <div class="product-top" style="grid-template-columns:420px 1fr">
     <div></div>
     <div>
+      <!-- Presque vide : ce qu'on ne sait pas encore -->
+      <div class="panel po-missing" id="missing" hidden>
+        <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .9-1 1.7M12 17h.01"/></svg> Ce qu'on ne sait pas encore</h2>
+        <div class="top">
+          <div class="pp-bignum" id="missing-pct">0 %<em>complété</em></div>
+          <p id="missing-line">Cette fiche vient d'être créée. Quatre gestes en rayon suffisent pour la rendre utile à tout le monde.</p>
+        </div>
+        <ol class="pp-todo" id="missing-list"></ol>
+        <div class="row mt-3"><a class="btn btn-primary" id="missing-cta" href="edit.html">Commencer par la photo de face</a><a class="btn btn-ghost" id="missing-more" href="product-contribute.html">Tout ce qui manque ›</a></div>
+      </div>
+
+      <div id="callout-box"></div>
+
+      <div class="po-anchors" id="anchors">
+        <a class="chip" href="#ingredients">Ingrédients</a><a class="chip" href="#nutrition">Nutrition</a><a class="chip" href="#environment">Environnement</a><a class="chip" href="#infos">Informations</a><a class="chip" href="#prices">Prix</a><a class="chip" href="#history">Contributeurs</a>
+      </div>
+
       <!-- Ingrédients -->
       <div class="panel" id="ingredients">
         <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg> Ingrédients</h2>
@@ -92,16 +93,17 @@
           </div>
           <div>
             <h3 style="font-size:1rem;margin-bottom:10px">Analyse</h3>
-            <div class="row" style="gap:8px"><span class="tag warn">🌴 Huile de palme</span><span class="tag ok">🌱 Végétarien</span><span class="tag">Végan : peut-être</span></div>
+            <div class="row" style="gap:8px"><span class="tag warn">Huile de palme</span><span class="tag ok">Végétarien</span><span class="tag">Végan : peut-être</span></div>
             <p class="muted mt-2" style="font-size:.85rem">Le lait rend ce produit non végan. Le cacao et l'huile de palme sont analysés pour le Green-Score.</p>
           </div>
         </div>
+        <p class="mt-3" style="font-size:.9rem"><a href="product-health.html?code=3017620422003" class="po-health-link" style="font-weight:700;color:var(--orange-dark)">Détail santé : Nutri-Score, additifs, allergènes ›</a></p>
       </div>
 
       <!-- Nutrition -->
       <div class="panel" id="nutrition">
         <div class="row between">
-          <div><h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 19V5M4 19h16M8 15v-4M12 15V8M16 15v-6"/></svg> Valeurs nutritionnelles</h2><p class="sub">Nutri-Score E : sucre et graisses saturées trop élevés.</p></div>
+          <div><h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 19V5M4 19h16M8 15v-4M12 15V8M16 15v-6"/></svg> Valeurs nutritionnelles</h2><p class="sub" id="nutrition-sub">Nutri-Score E : sucre et graisses saturées trop élevés.</p></div>
           <div class="tabs" id="nutri-tabs"><button class="active" data-per="100">Pour 100 g</button><button data-per="15">Par portion (15 g)</button></div>
         </div>
         <div class="bars" id="bars"></div>
@@ -110,12 +112,13 @@
           <thead><tr><th>Nutriment</th><th style="text-align:right">Pour 100 g</th><th style="text-align:right">Par portion</th><th>Niveau</th></tr></thead>
           <tbody id="nutri-body"></tbody>
         </table>
+        <div id="nutrition-empty" hidden class="callout">Tableau nutritionnel non renseigné. <a class="po-nutri-link" href="edit.html" style="font-weight:700;text-decoration:underline">Photographiez-le (30 s)</a> pour débloquer le Nutri-Score.</div>
       </div>
 
       <!-- Environnement -->
       <div class="panel" id="environment">
         <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5-3 8-7 8-12a8 8 0 1 0-16 0c0 5 3 9 8 12Z"/><path d="M12 22V10M12 14l3-3M12 12l-3-3"/></svg> Environnement</h2>
-        <p class="sub">Green-Score D : l'huile de palme et le cacao pèsent lourd (déforestation, transport).</p>
+        <p class="sub" id="env-sub">Green-Score D : l'huile de palme et le cacao pèsent lourd (déforestation, transport).</p>
         <div class="grid-2">
           <div>
             <h3 style="font-size:1rem;margin-bottom:12px">Emballage</h3>
@@ -125,9 +128,9 @@
               <div class="pack"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="4" y="6" width="16" height="12" rx="2"/></svg></div><div><b>Opercule en aluminium</b><small>Recyclable · bac de tri</small></div></div>
             </div>
           </div>
-          <div>
+          <div id="carbon-col">
             <h3 style="font-size:1rem;margin-bottom:12px">Empreinte carbone</h3>
-            <div style="padding:20px;border-radius:16px;background:var(--sand)">
+            <div style="padding:20px;border-radius:16px;background:var(--sand)" id="carbon">
               <div style="font-family:var(--font-head);font-size:2rem;font-weight:800;color:var(--brand)">2,97 kg <span style="font-size:1rem;color:var(--muted)">CO₂e / kg</span></div>
               <p class="muted" style="font-size:.85rem;margin-top:4px">Équivaut à 12 km en voiture pour ce pot de 400 g. Source : Agribalyse.</p>
               <div class="bars" style="margin-top:14px">
@@ -139,6 +142,7 @@
             </div>
           </div>
         </div>
+        <p class="mt-3" style="font-size:.9rem"><a href="product-environment.html?code=3017620422003" class="po-env-link" style="font-weight:700;color:var(--orange-dark)">Détail environnement : comment le Green-Score est construit ›</a></p>
       </div>
 
       <!-- Infos -->
@@ -148,31 +152,46 @@
         <dl class="kv" id="kv">
           <dt>Catégories</dt><dd>Petit-déjeuners › Produits à tartiner › Pâtes à tartiner sucrées › Pâtes à tartiner aux noisettes et au cacao</dd>
           <dt>Labels</dt><dd><span class="tag ok">Végétarien</span> <span class="tag ok">Sans gluten</span> <span class="tag">Triman</span></dd>
-          <dt>Origine des ingrédients</dt><dd>Non renseignée – <a href="#" style="color:var(--orange-dark);font-weight:600">complétez la fiche</a></dd>
+          <dt>Origine des ingrédients</dt><dd>Non renseignée – <a href="edit.html?code=3017620422003#origins" style="color:var(--orange-dark);font-weight:600">complétez la fiche</a></dd>
           <dt>Lieu de fabrication</dt><dd>Villers-Écalles (France)</dd>
           <dt>Magasins</dt><dd>Carrefour, Leclerc, Auchan, Intermarché</dd>
           <dt>Pays de vente</dt><dd>France, Belgique, Suisse, Allemagne, Italie, Espagne + 42 autres</dd>
         </dl>
       </div>
 
+      <!-- Prix (Open Prices) -->
+      <div class="panel po-prices" id="prices">
+        <div class="row between">
+          <div><h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8Z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg> Prix</h2><p class="sub">Relevés par la communauté dans Open Prices, ticket de caisse ou étiquette de rayon à l'appui.</p></div>
+          <a class="btn btn-outline btn-sm" href="#">Ajouter un prix</a>
+        </div>
+        <div id="prices-box"><div class="pp-skel"><i class="skeleton" style="height:56px"></i><i class="skeleton" style="height:40px"></i><i class="skeleton" style="height:40px"></i></div></div>
+      </div>
+
       <!-- Contributeurs -->
       <div class="panel" id="history">
         <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4a3.5 3.5 0 0 1 0 7M21.5 20a6.5 6.5 0 0 0-4.5-6.2"/></svg> Contributeurs</h2>
-        <p class="sub">Cette fiche est le fruit du travail de 214 personnes depuis 2012.</p>
+        <p class="sub" id="history-sub">Cette fiche est le fruit du travail de 214 personnes depuis 2012.</p>
         <div class="contrib-strip" style="margin-top:0">
-          <div class="row"><div class="avatars"><span>KI</span><span>ML</span><span>SÉ</span><span>+</span></div><div><b style="color:var(--brand)">kiliweb, moon-rabbit, segundo</b><br><small class="muted">et 211 autres contributeurs</small></div></div>
-          <a class="btn btn-brand btn-sm" href="#">Voir l'historique complet</a>
+          <div class="row"><div class="avatars" id="avatars"><span>KI</span><span>ML</span><span>SÉ</span><span>+</span></div><div><b style="color:var(--brand)">kiliweb, moon-rabbit, segundo</b><br><small class="muted">et 211 autres contributeurs</small></div></div>
+          <a class="btn btn-brand btn-sm" id="history-link" href="product-contribute.html?code=3017620422003">Contribuer à cette fiche</a>
         </div>
       </div>
     </div>
   </div>
 </div>
+</main>
 
 <div id="site-footer"></div>
-<script src="assets/app.js?v=6"></script>
-<script src="assets/i18n.js?v=6"></script>
+<script src="assets/locale.js?v=1"></script>
+<script src="assets/app.js?v=9"></script>
+<script src="assets/i18n-es.js?v=3"></script>
+<script src="assets/i18n.js?v=10"></script>
+<script src="assets/prefs.js?v=1"></script>
+<script src="assets/product-common.js?v=1"></script>
 <script>
   OFF.mount(null);
+  const PP = OFF.productPage, T = PP.T;
   const LEVELS = { fat: [3, 20], "saturated-fat": [1.5, 5], sugars: [5, 22.5], salt: [.3, 1.5] };
   const NAMES0 = { "energy-kcal": "Énergie", fat: "Matières grasses", "saturated-fat": "dont acides gras saturés", carbohydrates: "Glucides", sugars: "dont sucres", fiber: "Fibres", proteins: "Protéines", salt: "Sel" };
   const NAMES = Object.fromEntries(Object.entries(NAMES0).map(([k, v]) => [k, OFF.t(v)]));
@@ -180,13 +199,13 @@
   const BAR_MAX = { fat: 100, "saturated-fat": 50, sugars: 100, salt: 5 };
   let nutr = { "energy-kcal": 539, fat: 30.9, "saturated-fat": 10.6, carbohydrates: 57.5, sugars: 56.3, fiber: 0, proteins: 6.3, salt: 0.107 };
   let portion = 15;
-  function level(k, v) { const l = LEVELS[k]; if (!l) return ""; return v < l[0] ? "low" : v < l[1] ? "moderate" : "high"; }
+  function level(k, v) { const l = LEVELS[k]; if (!l || v == null) return ""; return v < l[0] ? "low" : v < l[1] ? "moderate" : "high"; }
   const LT = { low: OFF.t("faible"), moderate: OFF.t("modéré"), high: OFF.t("élevé") };
-  function fmt(v) { return v == null ? "–" : (+v).toLocaleString(OFF.locale || "fr-FR", { maximumFractionDigits: 1 }); }
+  function fmt(v, d) { return v == null ? "–" : (+v).toLocaleString(OFF.locale || "fr-FR", { maximumFractionDigits: d == null ? 1 : d }); }
   function renderNutrition() {
     document.getElementById("bars").innerHTML = ["fat", "saturated-fat", "sugars", "salt"].map(k => {
       const v = nutr[k], lv = level(k, v);
-      return `<div class="bar"><span style="font-size:.85rem">${NAMES[k].replace("dont ", "").replace("of which ", "")}</span><div class="track"><div class="fill ${lv}" style="width:${Math.min(100, (v / BAR_MAX[k]) * 100)}%"></div></div><b>${fmt(v)} g</b></div>`;
+      return `<div class="bar"><span style="font-size:.85rem">${NAMES[k].replace("dont ", "").replace("of which ", "")}</span><div class="track"><div class="fill ${lv}" style="width:${v == null ? 0 : Math.min(100, (v / BAR_MAX[k]) * 100)}%"></div></div><b>${fmt(v)} g</b></div>`;
     }).join("");
     document.getElementById("nutri-body").innerHTML = Object.keys(NAMES).map(k => {
       const v = nutr[k], u = UNITS[k] || "g", lv = level(k, v);
@@ -200,60 +219,149 @@
   }));
   // Galerie
   document.getElementById("thumbs").addEventListener("click", e => {
+    const add = e.target.closest("button.add"); if (add) { location.href = add.dataset.href; return; }
     const b = e.target.closest("button[data-src]"); if (!b) return;
     document.querySelectorAll("#thumbs button").forEach(x => x.classList.remove("active")); b.classList.add("active");
     document.getElementById("mainImg").src = b.dataset.src;
   });
-  // Scrollspy sous-nav
-  const links = [...document.querySelectorAll(".subnav a")];
+  // Ancres internes : surlignage au défilement
+  const links = [...document.querySelectorAll("#anchors a")];
   const spy = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) { links.forEach(l => l.classList.toggle("active", l.getAttribute("href") === "#" + en.target.id)); } }), { rootMargin: "-40% 0px -55% 0px" });
-  document.querySelectorAll(".panel").forEach(p => spy.observe(p));
+  document.querySelectorAll(".panel[id]").forEach(p => spy.observe(p));
 
-  // Chargement dynamique d'un autre produit via ?code=
-  const code = new URLSearchParams(location.search).get("code");
-  if (code && code !== "3017620422003") hydrate(code);
-  async function hydrate(code) {
+  /* ---------- Chargement du produit (?code=, défaut Nutella) ---------- */
+  const code = PP.code();
+  document.querySelectorAll(".po-health-link").forEach(a => a.href = "product-health.html?code=" + code);
+  document.querySelectorAll(".po-env-link").forEach(a => a.href = "product-environment.html?code=" + code);
+  document.querySelectorAll(".po-nutri-link").forEach(a => a.href = PP.editUrl(code, "nutrition"));
+  document.getElementById("history-link").href = "product-contribute.html?code=" + code;
+  document.getElementById("addPhoto").dataset.href = PP.editUrl(code, "photos");
+  document.getElementById("missing-cta").href = PP.editUrl(code, "photos");
+  document.getElementById("missing-more").href = "product-contribute.html?code=" + code;
+
+  function gallery(p) {
+    const imgs = [[p.image_front_url, "Face avant"], [p.image_ingredients_url, "Ingrédients"], [p.image_nutrition_url, "Nutrition"], [p.image_packaging_url, "Emballage"]].filter(x => x[0]);
+    const main = document.getElementById("mainBox");
+    if (!imgs.length) {
+      main.classList.add("empty"); main.innerHTML = `<div>${PP.I.camera}<div>${T("Pas encore d'image")}</div><a href="${PP.editUrl(code, "photos")}">${T("Prendre la photo de face (10 s)")}</a></div>`;
+      document.getElementById("thumbs").innerHTML = `<button class="add" type="button" data-href="${PP.editUrl(code, "photos")}">+ Photo</button>`;
+      return;
+    }
+    main.classList.remove("empty"); main.innerHTML = `<img id="mainImg" src="${OFF.esc(imgs[0][0])}" alt="${OFF.esc(PP.name(p))}">`;
+    document.getElementById("thumbs").innerHTML = imgs.map((s, i) => `<button class="${i ? "" : "active"}" data-src="${OFF.esc(s[0])}" title="${T(s[1])}"><img src="${OFF.esc(s[0])}" alt=""></button>`).join("") + `<button class="add" type="button" data-href="${PP.editUrl(code, "photos")}">+ Photo</button>`;
+  }
+  function missing(p) {
+    const el = document.getElementById("missing");
+    const nearlyEmpty = !p.image_front_url || (p.completeness || 0) < .5;
+    if (!nearlyEmpty) { el.hidden = true; return; }
+    el.hidden = false;
+    const pct = Math.round((p.completeness || 0) * 100), eds = (p.editors_tags || []).length;
+    document.getElementById("missing-pct").innerHTML = `${pct} %<em>${T("complété")}</em>`;
+    document.getElementById("missing-line").textContent = `${eds} ${T(eds > 1 ? "contributeurs jusqu'ici" : "contributeur jusqu'ici")}. ${T("Quatre gestes en rayon suffisent pour rendre cette fiche utile à tout le monde.")}`;
+    const steps = PP.TASKS.slice(0, 4).filter(t => PP.vertical(p) === "food" || t.section !== "nutrition");
+    document.getElementById("missing-list").innerHTML = steps.map(t => PP.taskItem(t, p, !PP.taskMissing(t, p))).join("");
+    const first = steps.find(t => PP.taskMissing(t, p)) || steps[0];
+    const cta = document.getElementById("missing-cta");
+    cta.href = PP.editUrl(code, first.section);
+    cta.textContent = first.section === "photos" ? T("Commencer par la photo de face") : T("Commencer :") + " " + T(first.label).toLowerCase();
+  }
+  function callouts(p) {
+    const v = PP.vertical(p), cats = (p.categories_tags || []).join(" ") + " " + (p.categories || "").toLowerCase();
+    const box = document.getElementById("callout-box"); box.innerHTML = "";
+    if (/tobacco|cigarette|tabac/.test(cats) || code === "4030600259702") box.innerHTML = `<div class="callout" style="border-color:var(--red);background:var(--red-soft);color:#5a1a1a"><b style="display:block;font-family:var(--font-head);font-size:1.3rem;color:#8a1c1c">Fumer tue</b>${T("Avertissement sanitaire obligatoire : le tabac nuit gravement à votre santé et à celle de votre entourage. Ce produit n'est pas un aliment et n'a ni Nutri-Score ni Green-Score.")} <a href="#" style="font-weight:700;text-decoration:underline">Tabac Info Service – 39 89</a></div>`;
+    else if (v === "beauty") box.innerHTML = `<div class="callout blue">${T("Produit cosmétique (Open Beauty Facts) : pas de valeurs nutritionnelles. Les ingrédients (liste INCI) et les labels sont affichés.")}</div>`;
+    else if (v === "product" || v === "petfood") box.innerHTML = `<div class="callout blue">${T("Produit non alimentaire (Open Products Facts) : pas de valeurs nutritionnelles ni de Green-Score. Emballage, labels et prix restent renseignables.")}</div>`;
+    box.querySelectorAll('a[href="#"]').forEach(a => a.addEventListener("click", e => { e.preventDefault(); OFF.toast(T("Maquette : lien non câblé")); }));
+  }
+  async function prices(p) {
+    const box = document.getElementById("prices-box");
+    const empty = () => { box.innerHTML = `<div class="callout" style="margin:0">${T("Pas encore de prix – soyez le premier")} : <a href="#" style="font-weight:700;text-decoration:underline">${T("ajouter un prix depuis un ticket de caisse")}</a>.</div>`; box.querySelector("a").addEventListener("click", e => { e.preventDefault(); OFF.toast(T("Maquette : lien non câblé")); }); };
     try {
-      const p = await OFF.product(code);
-      const name = p["product_name_" + OFF.lang] || p.product_name || p.product_name_fr || "Produit " + code;
-      document.title = `${name} | Open Food Facts`;
-      document.getElementById("p-name").textContent = name; document.getElementById("bc-name").textContent = name; const bc = document.querySelector(".breadcrumb a:nth-of-type(2)"); if (bc) { const cat = (p.categories || "").split(",").pop().trim().replace(/^[a-z]{2}:/, ""); if (cat) { bc.textContent = cat; bc.href = "search.html?q=" + encodeURIComponent(cat); } }
-      document.getElementById("p-meta").innerHTML = `<span>Marque <b>${OFF.esc(p.brands || "–")}</b></span><span>Quantité <b>${OFF.esc(p.quantity || "–")}</b></span><span>Code-barres <b>${code}</b></span><span>Vendu en <b>${OFF.esc((p.countries || "–").replace(/[a-z]{2}:/g, ""))}</b></span>`;
-      const imgs = [p.image_front_url, p.image_ingredients_url, p.image_nutrition_url].filter(Boolean);
-      document.getElementById("mainImg").src = imgs[0] || "";
-      document.getElementById("thumbs").innerHTML = imgs.map((s, i) => `<button class="${i ? "" : "active"}" data-src="${s}"><img src="${s}" alt=""></button>`).join("") + '<button class="add" type="button">+ Photo</button>';
-      const g = p.nutriscore_grade, nv = p.nova_group, ec = p.ecoscore_grade;
-      const NSL = Object.fromEntries(Object.entries({ a: "Excellente qualité nutritionnelle", b: "Bonne qualité nutritionnelle", c: "Qualité nutritionnelle moyenne", d: "Qualité nutritionnelle faible", e: "Qualité nutritionnelle très faible" }).map(([k, v]) => [k, OFF.t(v)]));
-      const NVL = Object.fromEntries(Object.entries({ 1: "Aliment non transformé", 2: "Ingrédient culinaire", 3: "Aliment transformé", 4: "Aliment ultra-transformé" }).map(([k, v]) => [k, OFF.t(v)]));
-      document.getElementById("score-row").innerHTML = `
-        <div class="score-box ${"abcde".includes(g) ? g : "unknown"}"><small>Nutri-Score</small><div class="val">${OFF.ns(g, 1)}</div><span style="font-size:.85rem;color:var(--ink-2)">${NSL[g] || OFF.t("Non calculé")}</span></div>
-        <div class="score-box ${nv == 4 ? "nova4" : nv == 1 ? "a" : "c"}"><small>Transformation</small><div class="val">${OFF.nova(nv, 1)}</div><span style="font-size:.85rem;color:var(--ink-2)">${NVL[nv] || OFF.t("Non déterminé")}</span></div>
-        <div class="score-box ${"abcde".includes(ec) ? ec : "unknown"}"><small>Environnement</small><div class="val">${OFF.eco(ec, 1)}</div><span style="font-size:.85rem;color:var(--ink-2)">${ec && "abcde".includes(ec) ? OFF.t("Impact") + " " + OFF.t({ a: "très faible", b: "faible", c: "modéré", d: "élevé", e: "très élevé" }[ec]) : OFF.t("Non calculé")}</span></div>`;
-      const tags = p.ingredients_analysis_tags || [];
-      const palm = tags.includes("en:palm-oil") ? OFF.t("Présente") : tags.includes("en:palm-oil-free") ? OFF.t("Absente") : OFF.t("Inconnu");
-      const veg = tags.includes("en:vegetarian") ? OFF.t("Végétarien") : tags.includes("en:non-vegetarian") ? OFF.t("Non végétarien") : OFF.t("Inconnu");
-      const adds = (p.additives_tags || []).map(t => t.replace("en:", "").toUpperCase());
-      document.getElementById("facts").innerHTML = `
-        <div class="fact ${palm === OFF.t("Présente") ? "warn" : palm === OFF.t("Absente") ? "ok" : ""}"><small>Huile de palme</small><b>${palm}</b></div>
-        <div class="fact ${adds.length ? "warn" : "ok"}"><small>Additifs</small><b>${adds.length ? adds.length + " (" + adds.slice(0, 3).join(", ") + ")" : OFF.t("Aucun")}</b></div>
-        <div class="fact"><small>Allergènes</small><b>${OFF.esc((p.allergens || "").replace(/[a-z]{2}:/g, "") || OFF.t("Aucun signalé"))}</b></div>
-        <div class="fact ${veg === OFF.t("Végétarien") ? "ok" : ""}"><small>Régime</small><b>${veg}</b></div>`;
-      const txt = p["ingredients_text_" + OFF.lang] || p.ingredients_text || p.ingredients_text_fr || OFF.t("Liste d'ingrédients non renseignée – ajoutez une photo !");
-      const allergens = (p.allergens_tags || []).map(t => t.replace(/^[a-z]{2}:/, ""));
-      document.getElementById("ingredients-text").textContent = txt;
-      document.getElementById("ingredients-extra").innerHTML = `<div><h3 style="font-size:1rem;margin-bottom:10px">Additifs</h3><div class="row">${adds.length ? adds.map(a => `<span class="tag warn">${a}</span>`).join("") : `<span class="tag ok">${OFF.t("Aucun additif")}</span>`}</div></div><div><h3 style="font-size:1rem;margin-bottom:10px">Allergènes</h3><div class="row">${allergens.length ? allergens.map(a => `<span class="tag warn">${OFF.esc(a)}</span>`).join("") : `<span class="tag">${OFF.t("Aucun signalé")}</span>`}</div></div>`;
+      const r = await fetch(`https://prices.openfoodfacts.org/api/v1/prices?product_code=${code}&size=5&order_by=-date`);
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      const d = await r.json(); const items = d.items || [];
+      if (!items.length) return empty();
+      const nums = items.map(x => +x.price).filter(x => !isNaN(x)); const cur = items[0].currency || "EUR";
+      const money = v => v.toLocaleString(OFF.locale || "fr-FR", { style: "currency", currency: cur });
+      const where = x => { const l = x.location || {}; return [l.osm_name || x.location_osm_name, l.osm_address_city || x.location_osm_address_city].filter(Boolean).join(", ") || T("Lieu non précisé"); };
+      const when = x => x.date ? new Date(x.date).toLocaleDateString(OFF.locale || "fr-FR", { day: "numeric", month: "short", year: "numeric" }) : "";
+      box.innerHTML = `<div class="stats">
+          <div class="fact"><small>${T("Prix relevés")}</small><b style="font-size:1.6rem">${(d.total || items.length).toLocaleString(OFF.locale || "fr-FR")}</b></div>
+          <div class="fact ok"><small>${T("Le moins cher (5 derniers)")}</small><b style="font-size:1.6rem">${money(Math.min(...nums))}</b></div>
+          <div class="fact"><small>${T("Le plus cher (5 derniers)")}</small><b style="font-size:1.6rem">${money(Math.max(...nums))}</b></div>
+        </div>
+        <div class="price-list">${items.map(x => `<div class="pr"><span class="p">${money(+x.price)}</span><span class="where">${OFF.esc(where(x))}</span><span class="when">${when(x)}</span></div>`).join("")}</div>
+        <p class="muted mt-2" style="font-size:.8rem">${T("Source : Open Prices, licence ODbL.")}</p>`;
+    } catch (e) { empty(); }
+  }
+  function hydrate(p, demo) {
+    const v = PP.vertical(p), name = PP.name(p);
+    PP.renderHeader(p, document.getElementById("pp-head"), "overview", { noImage: true, demo });
+    document.getElementById("bc-name").textContent = name;
+    const bc = document.querySelector(".breadcrumb a:nth-of-type(2)"); if (bc) { const cat = (p.categories || "").split(",").pop().trim().replace(/^[a-z]{2}:/, ""); if (cat) { bc.textContent = cat; bc.href = "search.html?q=" + encodeURIComponent(cat); } }
+    gallery(p); missing(p); callouts(p); prices(p);
+    // Ingrédients
+    const tags = p.ingredients_analysis_tags || [];
+    const adds = (p.additives_tags || []).map(t => t.replace("en:", "").toUpperCase());
+    const txt = p["ingredients_text_" + OFF.lang] || p.ingredients_text || p.ingredients_text_fr;
+    const allergens = (p.allergens_tags || []).map(PP.readable);
+    const it = document.getElementById("ingredients-text");
+    if (txt) it.innerHTML = OFF.esc(txt).replace(/\b([A-ZÉÈÀÂÎÔÛÇ]{3,}(?:\s[A-ZÉÈÀÂÎÔÛÇ]{3,})*)\b/g, "<mark>$1</mark>");
+    else it.innerHTML = `<span class="muted">${T("Liste d'ingrédients non renseignée – ajoutez une photo !")}</span> <a href="${PP.editUrl(code, "ingredients")}" style="font-weight:700;color:var(--orange-dark)">${T("Photographier les ingrédients (30 s)")}</a>`;
+    const palm = tags.includes("en:palm-oil") ? `<span class="tag warn">${T("Huile de palme")}</span>` : tags.includes("en:palm-oil-free") ? `<span class="tag ok">${T("Sans huile de palme")}</span>` : "";
+    const veg = tags.includes("en:vegetarian") ? `<span class="tag ok">${T("Végétarien")}</span>` : tags.includes("en:non-vegetarian") ? `<span class="tag">${T("Non végétarien")}</span>` : "";
+    const vegan = tags.includes("en:vegan") ? `<span class="tag ok">${T("Végan")}</span>` : tags.includes("en:non-vegan") ? `<span class="tag">${T("Non végan")}</span>` : tags.includes("en:maybe-vegan") ? `<span class="tag">${T("Végan : peut-être")}</span>` : "";
+    document.getElementById("ingredients-extra").innerHTML = `
+      <div><h3 style="font-size:1rem;margin-bottom:10px">${T("Additifs")}</h3><div class="row">${adds.length ? adds.map(a => `<span class="tag warn">${a}</span>`).join("") : `<span class="tag ${txt ? "ok" : ""}">${txt ? T("Aucun additif") : T("Inconnu")}</span>`}</div></div>
+      <div><h3 style="font-size:1rem;margin-bottom:10px">${T("Allergènes et analyse")}</h3><div class="row" style="gap:8px">${allergens.length ? allergens.map(a => `<span class="tag warn">${OFF.esc(a)}</span>`).join("") : `<span class="tag">${txt ? T("Aucun allergène signalé") : T("Inconnu")}</span>`}${v === "food" ? palm + veg + vegan : ""}</div></div>`;
+    // Nutrition
+    const nutPanel = document.getElementById("nutrition");
+    document.querySelector('#anchors a[href="#nutrition"]').style.display = v !== "food" ? "none" : "";
+    if (v !== "food") nutPanel.hidden = true;
+    else {
+      nutPanel.hidden = false;
       const n = p.nutriments || {};
       nutr = Object.fromEntries(Object.keys(NAMES).map(k => [k, n[k + "_100g"] ?? null]));
+      const has = Object.values(nutr).some(x => x != null);
       portion = parseFloat(p.serving_quantity) || 100;
-      document.querySelector('#nutri-tabs [data-per="15"]').textContent = `${OFF.t("Par portion")} (${portion} g)`;
+      document.querySelector('#nutri-tabs [data-per="15"]').textContent = `${T("Par portion")} (${portion} g)`;
+      const g = p.nutriscore_grade;
+      document.getElementById("nutrition-sub").textContent = g && "abcde".includes(g) ? `Nutri-Score ${g.toUpperCase()} · ${T("valeurs pour 100 g, telles qu'indiquées sur l'emballage.")}` : T("Nutri-Score non calculé.") + " " + (has ? T("Choisissez une catégorie plus précise pour le débloquer.") : T("Photographiez le tableau nutritionnel pour le débloquer."));
+      document.getElementById("nutrition-empty").hidden = has;
+      nutPanel.querySelector("table").style.display = has ? "" : "none"; nutPanel.querySelector(".divider").style.display = has ? "" : "none"; document.getElementById("bars").style.display = has ? "" : "none";
       renderNutrition();
-      document.getElementById("kv").innerHTML = `<dt>Catégories</dt><dd>${OFF.esc(p.categories || "–")}</dd><dt>Labels</dt><dd>${OFF.esc(p.labels || "–")}</dd><dt>Origine des ingrédients</dt><dd>${OFF.esc(p.origins || OFF.t("Non renseignée"))}</dd><dt>Magasins</dt><dd>${OFF.esc(p.stores || "–")}</dd><dt>Pays de vente</dt><dd>${OFF.esc(p.countries || "–")}</dd>`;
-      document.getElementById("packaging").innerHTML = (p.packagings || []).length ? p.packagings.map(x => `<div class="pack"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="4" y="6" width="16" height="12" rx="2"/></svg></div><div><b>${OFF.esc((x.shape || "").replace("en:", ""))} ${OFF.esc((x.material || "").replace("en:", ""))}</b><small>${OFF.esc((x.recycling || "").replace("en:", "") || "Recyclage non précisé")}</small></div></div>`).join("") : '<p class="muted" style="font-size:.9rem">Emballage non renseigné.</p>';
-      document.querySelector(".contrib-strip b").textContent = (p.editors_tags || []).slice(0, 3).join(", ") || "–";
-      document.querySelector(".contrib-strip small").textContent = `et ${Math.max(0, (p.editors_tags || []).length - 3)} autres contributeurs`;
-      document.querySelector(".product-head .tag").textContent = OFF.t((p.completeness || 0) > .8 ? "✓ Fiche complète" : "Fiche à compléter");
-    } catch (e) { OFF.toast(OFF.t("Produit introuvable ou API indisponible – fiche de démonstration affichée")); }
+    }
+    // Environnement
+    const ec = p.ecoscore_grade, ag = p.ecoscore_data && p.ecoscore_data.agribalyse;
+    document.getElementById("env-sub").textContent = v !== "food" ? T("Pas de Green-Score pour cette catégorie de produit ; l'emballage reste renseignable.") : ec && ["a-plus", "a", "b", "c", "d", "e"].includes(ec) ? `Green-Score ${ec.toUpperCase().replace("-PLUS", "+")} · ${T("impact sur tout le cycle de vie : agriculture, transport, emballage.")}` : T("Green-Score non calculé : choisissez une catégorie plus précise (10 s).");
+    document.getElementById("packaging").innerHTML = (p.packagings || []).length ? p.packagings.map(x => `<div class="pack"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="4" y="6" width="16" height="12" rx="2"/></svg></div><div><b>${OFF.esc(PP.readable(x.shape) || T("Élément"))}${x.material ? " · " + OFF.esc(PP.readable(x.material)) : ""}</b><small>${OFF.esc(PP.readable(x.recycling) || T("Recyclage non précisé"))}</small></div></div>`).join("") : `<p class="muted" style="font-size:.9rem">${T("Emballage non renseigné.")} <a href="${PP.editUrl(code, "packaging")}" style="font-weight:700;color:var(--orange-dark)">${T("Décrire l'emballage (30 s)")}</a></p>`;
+    const carbon = document.getElementById("carbon-col");
+    if (ag && ag.co2_total != null) {
+      carbon.hidden = false;
+      const steps = [["co2_agriculture", "Agriculture"], ["co2_processing", "Transformation"], ["co2_packaging", "Emballage"], ["co2_transportation", "Transport"]].filter(s => ag[s[0]] != null);
+      const total = ag.co2_total || 1;
+      document.getElementById("carbon").innerHTML = `<div style="font-family:var(--font-head);font-size:2rem;font-weight:800;color:var(--brand)">${fmt(ag.co2_total, 2)} kg <span style="font-size:1rem;color:var(--muted)">CO₂e / kg</span></div><p class="muted" style="font-size:.85rem;margin-top:4px">${T("Source : Agribalyse.")}</p><div class="bars" style="margin-top:14px">${steps.map(s => { const pct = Math.round(100 * ag[s[0]] / total); return `<div class="bar"><span style="font-size:.85rem">${T(s[1])}</span><div class="track"><div class="fill ${pct >= 50 ? "high" : pct >= 15 ? "moderate" : "low"}" style="width:${pct}%"></div></div><b>${pct} %</b></div>`; }).join("")}</div>`;
+    } else carbon.hidden = true;
+    // Infos
+    const labels = (p.labels_tags || []).map(t => `<span class="tag ${/organic|fair-trade|vegan|vegetarian|no-gluten/.test(t) ? "ok" : ""}">${OFF.esc(PP.readable(t))}</span>`).join(" ");
+    const miss = s => `<span style="color:#a35f00;font-weight:600">${T("Non renseigné")}</span> – <a href="${PP.editUrl(code, s)}" style="color:var(--orange-dark);font-weight:600">${T("complétez la fiche")}</a>`;
+    document.getElementById("kv").innerHTML = `<dt>${T("Catégories")}</dt><dd>${p.categories ? OFF.esc(p.categories).split(",").map(s => s.trim()).join(" › ") : miss("categories")}</dd><dt>${T("Labels")}</dt><dd>${labels || miss("labels")}</dd><dt>${T("Origine des ingrédients")}</dt><dd>${OFF.esc(p.origins || "") || miss("origins")}</dd>${p.manufacturing_places ? `<dt>${T("Lieu de fabrication")}</dt><dd>${OFF.esc(p.manufacturing_places)}</dd>` : ""}<dt>${T("Magasins")}</dt><dd>${OFF.esc(p.stores || "") || miss("stores")}</dd><dt>${T("Pays de vente")}</dt><dd>${OFF.esc(String(p.countries || "").replace(/[a-z]{2}:/g, "")) || miss("countries")}</dd>`;
+    // Contributeurs
+    const eds = p.editors_tags || [];
+    document.getElementById("history-sub").textContent = eds.length ? `${T("Cette fiche est le fruit du travail de")} ${eds.length} ${T(eds.length > 1 ? "personnes" : "personne")}${p.created_t ? " " + T("depuis") + " " + new Date(p.created_t * 1000).getFullYear() : ""}.` : T("Personne n'a encore contribué à cette fiche.");
+    document.getElementById("avatars").innerHTML = eds.slice(0, 3).map(e => `<span>${OFF.esc(e.slice(0, 2).toUpperCase())}</span>`).join("") + (eds.length > 3 ? "<span>+</span>" : "");
+    document.querySelector(".contrib-strip b").textContent = eds.slice(0, 3).join(", ") || "–";
+    document.querySelector(".contrib-strip small").textContent = eds.length > 3 ? `${T("et")} ${eds.length - 3} ${T("autres contributeurs")}` : "";
   }
+  (async () => {
+    try { hydrate(await PP.load(code), false); }
+    catch (e) {
+      if (e.code === "not_found") { PP.renderUnknown(code, document.getElementById("pp-page")); document.title = T("Produit inconnu") + " | Open Food Facts"; return; }
+      // Repli : fiche Nutella statique (les panneaux HTML restent tels quels) + bandeau depuis DEMO
+      hydrate(Object.assign({}, PP.DEMO, { code }), true);
+      OFF.toast(T("Produit introuvable ou API indisponible – fiche de démonstration affichée"));
+    }
+  })();
 </script>
 </body>
 </html>

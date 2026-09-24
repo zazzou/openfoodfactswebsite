@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Préférences alimentaires | Open Food Facts</title>
+<link rel="icon" href="https://static.openfoodfacts.org/images/logos/off-logo-vertical-light.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=17">
+<style>
+  /* Pastille de correspondance (générée par OFF.prefs.badge) */
+  .match{display:inline-flex;align-items:center;gap:8px;padding:4px 10px 4px 4px;border-radius:999px;background:#fff;border:1.5px solid var(--line);font-size:.8rem;font-weight:600;color:var(--ink-2)}
+  .match b{display:inline-grid;place-items:center;min-width:44px;height:26px;padding:0 8px;border-radius:999px;background:var(--c);color:#fff;font-family:var(--font-head)}
+  .match.lg{font-size:.95rem;padding:6px 14px 6px 6px}
+  .match.lg b{height:34px;min-width:60px;font-size:1.05rem}
+
+  .prefs-layout{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:32px;align-items:start;margin-top:32px}
+  @media(max-width:1000px){.prefs-layout{grid-template-columns:1fr}}
+  .prefs-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+  .prefs-toolbar .summary{font-weight:600;color:var(--ink-2);font-size:.95rem}
+  .prefs-toolbar .summary b{color:var(--brand);font-family:var(--font-head);font-size:1.3rem;margin-right:4px}
+
+  /* Accordéons */
+  .acc{background:#fff;border:1px solid var(--line-2);border-radius:var(--r-lg);margin-bottom:12px;overflow:hidden;box-shadow:var(--shadow-sm)}
+  .acc-head{width:100%;display:flex;align-items:center;gap:14px;padding:18px 22px;text-align:left;font-family:var(--font-head);font-weight:800;font-size:1.15rem;color:var(--brand);letter-spacing:-.01em}
+  .acc-head:hover{background:var(--cream)}
+  .acc-head .ic{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;flex:none;background:var(--sand);color:var(--brand)}
+  .acc-head .ic svg{width:20px;height:20px}
+  .acc-head .cnt{font-family:var(--font-body);font-weight:600;font-size:.88rem;color:var(--ink-2);margin-left:2px}
+  .acc-head .cnt.on{color:var(--orange-dark)}
+  .acc-head .chev{margin-left:auto;width:22px;height:22px;color:var(--muted);transition:transform .25s;flex:none}
+  .acc[open] .acc-head .chev{transform:rotate(180deg)}
+  .acc summary{list-style:none}.acc summary::-webkit-details-marker{display:none}
+  .acc-body{border-top:1px solid var(--line-2)}
+  .crit{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px 18px;align-items:center;padding:14px 22px;border-bottom:1px solid var(--line-2)}
+  .crit:last-child{border-bottom:0}
+  .crit:hover{background:var(--cream)}
+  .crit .lbl{font-weight:600;color:var(--ink);font-size:.95rem;line-height:1.3}
+  .crit .lbl small{display:block;font-weight:500;color:var(--ink-2);font-size:.8rem;margin-top:2px}
+  @media(max-width:640px){.crit{grid-template-columns:1fr;padding:14px 16px}}
+
+  /* Segmented control */
+  .seg{display:inline-grid;grid-template-columns:repeat(4,auto);background:var(--sand);padding:4px;border-radius:999px;gap:2px}
+  .seg label{position:relative;cursor:pointer}
+  .seg input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer}
+  .seg span{display:inline-flex;align-items:center;justify-content:center;padding:7px 12px;border-radius:999px;font-size:.8rem;font-weight:700;color:var(--ink-2);white-space:nowrap;transition:.15s;line-height:1}
+  .seg label:hover span{color:var(--brand)}
+  .seg input:focus-visible+span{box-shadow:0 0 0 3px rgba(255,135,20,.45)}
+  .seg input:checked+span{background:#fff;color:var(--brand);box-shadow:var(--shadow-sm)}
+  .seg label:nth-child(2) input:checked+span{background:var(--blue);color:#fff}
+  .seg label:nth-child(3) input:checked+span{background:var(--orange);color:var(--brand)}
+  .seg label:nth-child(4) input:checked+span{background:var(--brand);color:#fff}
+  @media(max-width:640px){.seg{width:100%;grid-template-columns:repeat(4,1fr)}.seg span{width:100%;padding:8px 6px;font-size:.74rem}}
+
+  /* Colonne droite */
+  .impact{position:sticky;top:96px;background:#fff;border:1px solid var(--line-2);border-radius:var(--r-lg);padding:22px;box-shadow:var(--shadow-sm)}
+  @media(max-width:1000px){.impact{position:static}}
+  .impact h2{font-size:1.3rem;margin-bottom:4px}
+  .impact .sub{color:var(--ink-2);font-size:.88rem;margin-bottom:16px}
+  .ex{border:1px solid var(--line-2);border-radius:var(--r);padding:14px;margin-bottom:12px;background:var(--cream)}
+  .ex-top{display:flex;gap:12px;align-items:center}
+  .ex-top .img{width:64px;height:64px;border-radius:12px;background:#fff;display:grid;place-items:center;overflow:hidden;flex:none;border:1px solid var(--line-2)}
+  .ex-top .img img{max-height:56px;width:auto;object-fit:contain}
+  .ex-top .name{font-weight:700;color:var(--brand);font-size:.95rem;line-height:1.25}
+  .ex-top .brand{font-size:.78rem;color:var(--ink-2)}
+  .ex-top a:hover .name{text-decoration:underline}
+  .ex .badge{margin-top:10px}
+  .ex .badge .match{transition:border-color .2s}
+  .ex .badge .match b{transition:background .3s}
+  .crit-list{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:6px}
+  .crit-list li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;font-size:.8rem;color:var(--ink-2)}
+  .crit-list li .k{font-weight:600;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .crit-list li .k small{display:block;font-weight:500;color:var(--muted);font-size:.72rem}
+  .dot{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:999px;font-weight:700;font-size:.74rem;white-space:nowrap;color:#fff}
+  .dot.g{background:var(--ns-a)}.dot.o{background:var(--ns-d)}.dot.r{background:var(--ns-e)}.dot.x{background:#cfc4be;color:#5a4d47}
+  .crit-list .empty{font-size:.82rem;color:var(--ink-2);font-style:italic}
+  .ex .skeleton{height:64px}
+  .demo-tag{display:none;margin-bottom:12px}
+  .demo .demo-tag{display:inline-flex}
+
+  .prefs-foot{margin:56px 0 64px;padding:32px;border-radius:var(--r-xl);background:var(--brand);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+  .prefs-foot p{font-size:1.05rem;font-weight:600;max-width:52ch}
+  .prefs-foot p span{display:block;font-weight:400;color:rgba(255,255,255,.75);font-size:.92rem;margin-top:4px}
+  @media(max-width:600px){.prefs-foot{padding:24px 20px}}
+</style>
+</head>
+<body>
+<div id="site-header"></div>
+
+<div class="page-hero">
+  <div class="container">
+    <nav class="breadcrumb" aria-label="Fil d'Ariane">
+      <a href="index.html">Accueil</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 6 6 6-6 6"/></svg>
+      <a href="profile.html">Mon compte</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 6 6 6-6 6"/></svg>
+      <span>Préférences alimentaires</span>
+    </nav>
+    <span class="eyebrow" style="margin-top:22px">Personnalisation</span>
+    <h1 style="font-size:clamp(2.2rem,5vw,3.6rem)">Préférences alimentaires</h1>
+    <p class="lead">Choisissez ce qui compte pour vous. Ces préférences restent dans votre navigateur et ne sont pas liées à votre compte.</p>
+  </div>
+</div>
+
+<div class="container prefs-layout">
+  <div>
+    <div class="prefs-toolbar">
+      <div class="summary"><b id="nActive">0</b><span id="nActiveLabel">critères réglés</span></div>
+      <button class="btn btn-outline btn-sm" type="button" id="resetBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5"/></svg> Réinitialiser</button>
+    </div>
+    <div id="groups"></div>
+  </div>
+
+  <aside class="impact" aria-label="Ce que ça change">
+    <h2>Ce que ça change</h2>
+    <p class="sub">Trois vrais produits, notés en direct avec vos préférences.</p>
+    <span class="tag warn demo-tag">données de démonstration</span>
+    <div id="examples"></div>
+  </aside>
+</div>
+
+<div class="container">
+  <div class="prefs-foot">
+    <p>Ces préférences trient les résultats de recherche et s'affichent sur chaque fiche produit.<span>Vous pouvez les changer à tout moment, elles ne quittent jamais votre navigateur.</span></p>
+    <div class="row">
+      <a class="btn btn-primary" href="search.html">Rechercher un produit</a>
+      <a class="btn btn-white" href="ranking.html?category=breakfast-cereals">Classer les céréales</a>
+    </div>
+  </div>
+</div>
+
+<div id="site-footer"></div>
+<script src="assets/locale.js?v=1"></script>
+<script src="assets/app.js?v=9"></script>
+<script src="assets/i18n-es.js?v=3"></script>
+<script src="assets/i18n.js?v=10"></script>
+<script src="assets/prefs.js?v=1"></script>
+<script>
+  OFF.mount(null);
+  const P = OFF.prefs;
+  const API = "https://world.openfoodfacts.org";
+  const GROUP_ICONS = {
+    "Qualité nutritionnelle": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 19V5M4 19h16M8 15v-4M12 15V8M16 15v-6"/></svg>',
+    "Transformation": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16v10H4zM8 7V4h8v3M8 17v3h8v-3"/></svg>',
+    "Allergènes": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2 20h20L12 3Z"/><path d="M12 10v4M12 17h.01"/></svg>',
+    "Ingrédients": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>',
+    "Labels": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 2.5 5 5.5.8-4 3.9.9 5.5L12 15.6 7.1 18.2l.9-5.5-4-3.9L9.5 8 12 3Z"/></svg>',
+    "Environnement": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5-3 8-7 8-12a8 8 0 1 0-16 0c0 5 3 9 8 12Z"/><path d="M12 22V10"/></svg>',
+  };
+  const GROUP_HINT = {
+    "Qualité nutritionnelle": "Nutri-Score et repères sel, sucre, gras",
+    "Transformation": "Groupe NOVA et additifs",
+    "Allergènes": "« Obligatoire » exclut tout produit qui en contient",
+    "Ingrédients": "Régimes et huile de palme",
+    "Labels": "D'après les labels déclarés sur l'emballage",
+    "Environnement": "Green-Score et déforestation",
+  };
+
+  /* ---------- Colonne gauche : accordéons ---------- */
+  const groups = []; P.CRITERIA.forEach(c => { if (!groups.includes(c.group)) groups.push(c.group); });
+  function renderGroups() {
+    const prefs = P.get();
+    document.getElementById("groups").innerHTML = groups.map((g, gi) => {
+      const crit = P.CRITERIA.filter(c => c.group === g);
+      const n = crit.filter(c => (prefs[c.id] || 0) > 0).length;
+      return `<details class="acc" ${gi === 0 ? "open" : ""} data-group="${OFF.esc(g)}">
+        <summary class="acc-head"><span class="ic">${GROUP_ICONS[g] || ""}</span><span>${OFF.esc(OFF.t(g))} <span class="cnt ${n ? "on" : ""}" data-cnt>· ${n} ${OFF.t("réglés sur")} ${crit.length}</span></span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg></summary>
+        <div class="acc-body">${crit.map(c => `
+          <div class="crit">
+            <div class="lbl">${OFF.esc(OFF.t(c.label))}${crit.indexOf(c) === 0 && GROUP_HINT[g] ? `<small>${OFF.esc(OFF.t(GROUP_HINT[g]))}</small>` : ""}</div>
+            <div class="seg" role="radiogroup" aria-label="${OFF.esc(OFF.t(c.label))}">${P.IMPORTANCE.map((l, i) => `<label><input type="radio" name="${c.id}" value="${i}" ${(prefs[c.id] || 0) === i ? "checked" : ""}><span>${OFF.esc(OFF.t(l))}</span></label>`).join("")}</div>
+          </div>`).join("")}</div>
+      </details>`;
+    }).join("");
+    updateCounts();
+  }
+  function updateCounts() {
+    const prefs = P.get();
+    document.querySelectorAll(".acc").forEach(d => {
+      const g = d.dataset.group, crit = P.CRITERIA.filter(c => c.group === g);
+      const n = crit.filter(c => (prefs[c.id] || 0) > 0).length;
+      const el = d.querySelector("[data-cnt]"); el.textContent = `· ${n} ${OFF.t("réglés sur")} ${crit.length}`; el.classList.toggle("on", n > 0);
+    });
+    const a = P.active().length;
+    document.getElementById("nActive").textContent = a;
+    document.getElementById("nActiveLabel").textContent = a > 1 ? OFF.t("critères réglés") : OFF.t("critère réglé");
+  }
+  document.getElementById("groups").addEventListener("change", e => {
+    const r = e.target; if (r.type !== "radio") return;
+    const prefs = P.get(); prefs[r.name] = +r.value; P.set(prefs);
+    updateCounts(); renderExamples();
+  });
+  document.getElementById("resetBtn").addEventListener("click", () => {
+    P.reset(); renderGroups(); renderExamples();
+    OFF.toast(OFF.t("Préférences réinitialisées (Nutri-Score très important, NOVA et Green-Score importants)"));
+  });
+  renderGroups();
+
+  /* ---------- Colonne droite : 3 produits réels ---------- */
+  const EXAMPLES = [
+    { code: "3017620422003", fallback: { product_name: "Nutella", brands: "Ferrero", quantity: "400 g", image_front_small_url: "https://images.openfoodfacts.org/images/products/301/762/042/2003/front_en.879.200.jpg", nutriscore_grade: "e", ecoscore_grade: "d", nova_group: 4, additives_n: 1, nutrient_levels: { fat: "high", "saturated-fat": "high", sugars: "high", salt: "low" }, ingredients_analysis_tags: ["en:palm-oil", "en:non-vegan", "en:vegetarian"], allergens_tags: ["en:milk", "en:nuts", "en:soybeans"], traces_tags: [], labels_tags: ["en:gluten-free", "en:vegetarian"], ingredients_text: "Sucre, huile de palme, noisettes 13 %, cacao maigre, lait écrémé en poudre, lactosérum, lécithines (soja), vanilline" } },
+    { code: "5010029000306", fallback: { product_name: "Flocons d'avoine", brands: "Quaker", quantity: "1 kg", image_front_small_url: "https://images.openfoodfacts.org/images/products/501/002/900/0306/front_fr.85.200.jpg", nutriscore_grade: "a", ecoscore_grade: "b", nova_group: 1, additives_n: 0, nutrient_levels: { fat: "moderate", "saturated-fat": "low", sugars: "low", salt: "low" }, ingredients_analysis_tags: ["en:palm-oil-free", "en:vegan", "en:vegetarian"], allergens_tags: ["en:gluten"], traces_tags: [], labels_tags: [], ingredients_text: "Flocons d'avoine complète 100 %" } },
+    { code: "5449000214911", fallback: { product_name: "Coca-Cola", brands: "Coca-Cola", quantity: "33 cl", image_front_small_url: "https://images.openfoodfacts.org/images/products/544/900/021/4911/front_hi.242.200.jpg", nutriscore_grade: "e", ecoscore_grade: "not-applicable", nova_group: 4, additives_n: 3, nutrient_levels: { fat: "low", "saturated-fat": "low", sugars: "high", salt: "low" }, ingredients_analysis_tags: ["en:palm-oil-free", "en:vegan", "en:vegetarian"], allergens_tags: [], traces_tags: [], labels_tags: [], ingredients_text: "Eau gazéifiée, sucre, colorant E150d, acidifiant E338, arômes naturels (extraits végétaux), caféine" } },
+  ];
+  const PRODUCTS = {};
+  let demoUsed = false;
+  async function loadExample(ex) {
+    try {
+      const u = `${API}/api/v2/product/${ex.code}.json?lc=${OFF.lang || "fr"}&fields=code,product_name,product_name_fr,brands,quantity,image_front_small_url,${P.FIELDS}`;
+      const r = await fetch(u); if (!r.ok) throw new Error("HTTP " + r.status);
+      const d = await r.json(); if (d.status !== 1 || !d.product) throw new Error("not found");
+      PRODUCTS[ex.code] = Object.assign({ code: ex.code }, d.product);
+    } catch (e) { demoUsed = true; PRODUCTS[ex.code] = Object.assign({ code: ex.code, demo: true }, ex.fallback); }
+  }
+
+  const LV = { low: "faible", moderate: "modéré", high: "élevé" };
+  // Texte lisible de la valeur d'un critère pour un produit
+  function valueText(c, p, v) {
+    if (v == null) return OFF.t("Inconnu");
+    const tags = p.ingredients_analysis_tags || [], al = p.allergens_tags || [], tr = p.traces_tags || [];
+    switch (c.id) {
+      case "nutriscore": return "Nutri-Score " + (p.nutriscore_grade || "?").toUpperCase();
+      case "ecoscore": return "Green-Score " + (p.ecoscore_grade || "?").toUpperCase().replace("-PLUS", "+");
+      case "nova": return "NOVA " + p.nova_group;
+      case "additives": return p.additives_n + " " + OFF.t(p.additives_n > 1 ? "additifs" : "additif");
+      case "salt": case "sugars": case "fat": case "saturated-fat": return OFF.t(LV[(p.nutrient_levels || {})[c.id]] || "?");
+      case "vegan": case "vegetarian": case "palm-oil-free": return v === 100 ? OFF.t("Oui") : v === 0 ? OFF.t("Non") : OFF.t("Peut-être");
+      case "organic": case "fair-trade": return v === 100 ? OFF.t("Oui") : OFF.t("Non déclaré");
+      case "forest-footprint": return v === 100 ? OFF.t("Faible") : OFF.t("Élevé");
+      default: if (c.allergen) return al.includes(c.allergen) ? OFF.t("Présent") : tr.includes(c.allergen) ? OFF.t("Traces") : OFF.t("Absent"); return v + " %";
+    }
+  }
+  const dotClass = v => v == null ? "x" : v >= 75 ? "g" : v >= 40 ? "o" : "r";
+  function renderExamples() {
+    document.getElementById("examples").innerHTML = EXAMPLES.map(ex => {
+      const p = PRODUCTS[ex.code];
+      if (!p) return `<div class="ex"><div class="skeleton"></div></div>`;
+      const name = p["product_name_" + (OFF.lang || "fr")] || p.product_name || ex.code;
+      const s = P.score(p);
+      const rows = s.details.length ? s.details.map(d => `<li><span class="k">${OFF.esc(OFF.t(d.label))}<small>${OFF.esc(OFF.t(P.IMPORTANCE[d.importance]))}</small></span><span class="dot ${dotClass(d.value)}">${OFF.esc(valueText(d, p, d.value))}</span></li>`).join("") : `<li class="empty">${OFF.t("Aucun critère actif : réglez au moins une préférence.")}</li>`;
+      return `<div class="ex">
+        <div class="ex-top"><div class="img">${p.image_front_small_url ? `<img src="${p.image_front_small_url}" alt="${OFF.esc(name)}">` : ""}</div>
+          <a href="product.html?code=${ex.code}"><div class="name">${OFF.esc(name)}</div><div class="brand">${OFF.esc(OFF.brandOf(p))}${p.quantity ? " · " + OFF.esc(p.quantity) : ""}</div></a></div>
+        <div class="badge">${P.badge(p, false)}</div>
+        <ul class="crit-list">${rows}</ul>
+      </div>`;
+    }).join("");
+  }
+  renderExamples();
+  Promise.all(EXAMPLES.map(loadExample)).then(() => { if (demoUsed) document.body.classList.add("demo"); renderExamples(); });
+</script>
+</body>
+</html>

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Historique des modifications | Open Food Facts</title>
+<meta name="description" content="Toutes les modifications apportées aux fiches produits Open Food Facts, du plus récent au plus ancien.">
+<link rel="icon" href="https://static.openfoodfacts.org/images/logos/off-logo-vertical-light.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=17">
+<style>
+  .layout{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:32px;align-items:start;margin-top:28px}
+  @media(max-width:900px){.layout{grid-template-columns:1fr}}
+  .aside{position:sticky;top:96px;display:grid;gap:16px}
+  @media(max-width:900px){.aside{position:static}}
+  .filters-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:18px}
+  .filters-bar .chip{cursor:pointer}
+  .filters-bar .searchbar{max-width:320px;padding:4px 4px 4px 14px;box-shadow:none;margin-left:auto}
+  .filters-bar .searchbar input{font-size:.92rem;padding:8px 10px}
+  @media(max-width:600px){.filters-bar .searchbar{margin-left:0;max-width:none}}
+  .feed{display:grid;gap:12px}
+  .chg{background:#fff;border:1px solid var(--line-2);border-radius:var(--r-lg);padding:18px 20px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:16px;transition:.2s;position:relative}
+  .chg:hover{box-shadow:var(--shadow);transform:translateY(-2px)}
+  .chg .ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;flex:none}
+  .chg .ic svg{width:20px;height:20px}
+  .chg.edit .ic{background:var(--blue-soft);color:var(--blue)}
+  .chg.add .ic{background:var(--green-soft);color:var(--green-dark)}
+  .chg.delete .ic{background:var(--red-soft);color:#b83232}
+  .chg .prod{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap;font-size:.9rem;color:var(--ink-2)}
+  .chg .prod a{font-family:var(--font-head);font-weight:700;color:var(--brand);font-size:1.05rem}
+  .chg .prod a:hover{color:var(--orange-dark)}
+  .chg .sum{margin-top:6px;font-size:1rem;color:var(--ink);line-height:1.45}
+  .chg .sum b{color:var(--brand)}
+  .chg .sum .old{text-decoration:line-through;color:var(--muted)}
+  .chg .sum q{quotes:"« " " »";font-style:italic;color:var(--ink-2)}
+  .chg .meta{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:10px;font-size:.85rem;color:var(--ink-2);align-items:center}
+  .chg .meta .who{font-weight:700;color:var(--brand)}
+  .chg .meta .badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase}
+  .chg .meta .badge.producer{background:var(--orange-soft);color:var(--orange-dark)}
+  .chg .meta .badge.app{background:var(--blue-soft);color:var(--blue)}
+  .chg .meta .badge.anon{background:var(--sand);color:var(--ink-2)}
+  .chg .meta code{font-family:ui-monospace,Menlo,Consolas,monospace;background:var(--sand);padding:1px 7px;border-radius:6px;color:var(--brand);font-size:.8rem}
+  .chg .foot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px;padding-top:12px;border-top:1px solid var(--line-2)}
+  .chg .rev{font-size:.8rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+  .chg time{font-size:.85rem;color:var(--muted)}
+  @media(max-width:520px){.chg{grid-template-columns:1fr}.chg .ic{width:36px;height:36px}}
+  .sub-card{background:linear-gradient(135deg,#fff3e6,#fdf8f4 70%);border:1px solid #ffd9b3;border-radius:var(--r-lg);padding:24px}
+  .sub-card h3{font-size:1.15rem;margin:10px 0 8px}
+  .sub-card p{color:var(--ink-2);font-size:.92rem}
+  .sub-card ul{margin:12px 0 0;padding-left:18px;color:var(--ink-2);font-size:.9rem}
+  .legend{background:#fff;border:1px solid var(--line-2);border-radius:var(--r-lg);padding:20px}
+  .legend h4{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:10px}
+  .legend div{display:flex;gap:10px;align-items:center;font-size:.88rem;color:var(--ink-2);padding:5px 0}
+  .legend i{width:12px;height:12px;border-radius:4px;flex:none}
+  /* Vue produit */
+  .pband{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:20px;align-items:center;background:#fff;border:1px solid var(--line-2);border-radius:var(--r-lg);padding:18px 22px;box-shadow:var(--shadow-sm);margin-top:16px}
+  .pband .im{width:84px;height:84px;border-radius:14px;background:var(--sand);display:grid;place-items:center;overflow:hidden}
+  .pband .im img{max-height:84px;width:auto;object-fit:contain}
+  .pband .im.empty{color:var(--muted);font-size:.65rem;font-weight:700;text-align:center;line-height:1.1;padding:6px}
+  .pband h1{font-size:clamp(1.3rem,2.6vw,1.9rem);line-height:1.15}
+  .pband .meta{display:flex;flex-wrap:wrap;gap:6px 14px;color:var(--ink-2);font-size:.92rem;margin-top:6px;align-items:center}
+  .pband .meta code{font-family:ui-monospace,Menlo,Consolas,monospace;background:var(--sand);padding:2px 8px;border-radius:6px;color:var(--brand);font-size:.85rem}
+  .pband .side{display:flex;flex-direction:column;gap:8px;align-items:flex-end}
+  @media(max-width:720px){.pband{grid-template-columns:auto minmax(0,1fr)}.pband .side{grid-column:1/-1;flex-direction:row;flex-wrap:wrap}}
+  .back{display:inline-flex;align-items:center;gap:8px;font-weight:700;color:var(--brand);font-size:.95rem}
+  .back svg{width:18px;height:18px}
+  .tl-head{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:end;margin:36px 0 22px}
+  .tl-head h2{font-size:1.6rem}
+  .tl-head .last{color:var(--ink-2);font-size:.95rem}
+  .tl-head .last b{color:var(--brand)}
+  .tl-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:22px}
+  @media(max-width:600px){.tl-stats{grid-template-columns:1fr 1fr}}
+  .tl-stats .fact b{font-family:var(--font-head);font-size:2.4rem;line-height:1;letter-spacing:-.02em}
+  .timeline{padding-left:34px;margin:0}
+  .timeline li{background:#fff;border:1px solid var(--line-2);border-radius:var(--r);padding:16px 18px}
+  .timeline li.first::before{background:var(--green)}
+  .timeline li.last::before{background:var(--brand)}
+  .timeline li time{display:block;font-size:.8rem;color:var(--muted);font-weight:600;margin-bottom:4px}
+  .timeline li .who{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;margin-top:8px;font-size:.88rem;color:var(--ink-2)}
+  .timeline li .who strong{color:var(--brand)}
+  .timeline .badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase}
+  .timeline .badge.producer{background:var(--orange-soft);color:var(--orange-dark)}
+  .timeline .badge.app{background:var(--blue-soft);color:var(--blue)}
+  .timeline .badge.anon{background:var(--sand);color:var(--ink-2)}
+  .timeline .rev{margin-left:auto;font-size:.78rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+  .timeline .recon{margin-top:8px}
+  .sk-band{height:120px;border-radius:var(--r-lg)}
+</style>
+</head>
+<body>
+<div id="site-header"></div>
+<div id="page"></div>
+<div id="site-footer"></div>
+<script src="assets/locale.js?v=1"></script>
+<script src="assets/app.js?v=9"></script>
+<script src="assets/i18n-es.js?v=3"></script>
+<script src="assets/i18n.js?v=10"></script>
+<script src="assets/prefs.js?v=1"></script>
+<script src="assets/folk.js?v=1"></script>
+<script>
+  const CODE = (new URLSearchParams(location.search).get("code") || "").replace(/\D/g, "");
+  OFF.mount(CODE ? null : "contribute.html");
+  const F = OFF.folk, esc = OFF.esc;
+  const I = {
+    edit: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>',
+    add: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
+    del: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>',
+    bell: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10 21a2 2 0 0 0 4 0"/></svg>',
+    arrow: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
+    back: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>',
+    tag: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12 12 20 3 11V3h8l9 9ZM7 7h.01"/></svg>',
+  };
+  const TYPE = { edit: OFF.t("Modifié"), add: OFF.t("Ajouté"), delete: OFF.t("Supprimé") };
+  const FIELDS = { packaging_text: "Consignes de recyclage", traces: "Traces", serving_size: "Taille de portion", ingredients_text: "Liste d'ingrédients", categories: "Catégories", labels: "Labels", nutriments: "Valeurs nutritionnelles", product_name: "Nom du produit", image_front: "Photo de face", stores: "Magasins", quantity: "Quantité", origins: "Origine des ingrédients", allergens: "Allergènes", brands: "Marques", emb_codes: "Code emballeur", countries: "Pays de vente", image_ingredients: "Photo des ingrédients", image_nutrition: "Photo du tableau nutritionnel" };
+  const H = 3600, D = 86400, NOW = Math.floor(Date.now() / 1000);
+
+  /* ---- Flux global : données de démonstration réalistes ---- */
+  const FEED = [
+    { code: "3017620422003", name: "Nutella", brands: "Ferrero", type: "edit", field: "packaging_text", lang: ["de", "fr"], user: "openfoodfacts-dart", rev: 947, t: NOW - 11 * 60, sum: `<b>Modifié :</b> consignes de recyclage, en allemand et en français — <q>Glas: Altglas · Deckel: Gelber Sack</q> / <q>Pot : bac à verre · couvercle : bac de tri</q>` },
+    { code: "4009300524588", name: "Pompadour – infusion fruits des bois", brands: "Teekanne", type: "add", field: "quantity", lang: ["en"], user: "roboto-app", rev: 17, t: NOW - 48 * 60, sum: `<b>Ajouté :</b> quantité <q>3 × 20 g</q>, lue automatiquement sur la photo de face` },
+    { code: "4009233014354", name: "Steinofen-Pizza Thunfisch", brands: "Wagner", type: "delete", field: "traces", lang: ["de"], user: "food-my-beloved", rev: 31, t: NOW - 3 * H, sum: `<b>Supprimé :</b> <span class="old">Kann enthalten: Ei, Sellerie, Senf</span> — la mention n'est plus sur le nouvel emballage` },
+    { code: "4000417025005", name: "RITTER SPORT Alpenmilch", brands: "Ritter Sport", type: "edit", field: "serving_size", lang: [], user: "macrofactor", rev: 58, t: NOW - 5 * H, sum: `<b>Modifié :</b> taille de portion <span class="old">100 g</span> → <b>1 carré (6,25 g)</b>` },
+    { code: "3560070791460", name: "Salade de betteraves", brands: "Carrefour", type: "edit", field: "ingredients_text", lang: ["fr"], user: "org-carrefour", rev: 12, t: NOW - 7 * H, sum: `<b>Modifié :</b> liste d'ingrédients — <q>betteraves rouges 92 %, vinaigre d'alcool, huile de colza, sel, poivre</q> (recette 2026)` },
+    { code: "3256220091251", name: "Sauce bourguignonne", brands: "U", type: "add", field: "labels", lang: [], user: "org-systeme-u", rev: 9, t: NOW - 9 * H, sum: `<b>Ajouté :</b> label <b>Viande bovine française</b> et code emballeur <code>FR 71.076.007 CE</code>` },
+    { code: "5449000214911", name: "Coca-Cola", brands: "Coca-Cola", type: "edit", field: "nutriments", lang: [], user: "kiliweb", rev: 412, t: NOW - 14 * H, sum: `<b>Modifié :</b> sucres pour 100 ml <span class="old">11 g</span> → <b>10,6 g</b> et énergie <b>180 kJ / 42 kcal</b> (tableau relu depuis la nouvelle photo)` },
+    { code: "3168930163480", name: "Gazpacho l'original", brands: "Alvalle", type: "add", field: "image_ingredients", lang: ["fr"], user: "anonymous-3rtyqzngam", rev: 74, t: NOW - 1 * D - 2 * H, sum: `<b>Ajouté :</b> nouvelle photo des ingrédients (bouteille 1 L, lot d'août 2026)` },
+    { code: "7300400481588", name: "Wasa Fibres", brands: "Wasa", type: "edit", field: "categories", lang: [], user: "teolemon", rev: 63, t: NOW - 1 * D - 6 * H, sum: `<b>Modifié :</b> catégories — ajout de <b>Pains croustillants au seigle</b>, retrait de <span class="old">Biscottes</span>` },
+    { code: "3274080005003", name: "Eau de source Cristaline", brands: "Cristaline", type: "delete", field: "stores", lang: [], user: "segundo", rev: 88, t: NOW - 2 * D, sum: `<b>Supprimé :</b> magasin <span class="old">Dia</span> — enseigne disparue en France` },
+    { code: "3046920022606", name: "Excellence 70 % cacao", brands: "Lindt", type: "edit", field: "origins", lang: ["fr"], user: "org-lindt-sprungli", rev: 145, t: NOW - 2 * D - 5 * H, sum: `<b>Modifié :</b> origine des ingrédients <q>Cacao : Ghana, Équateur</q> (programme Farming Program)` },
+    { code: "20724696", name: "Amandes décortiquées", brands: "Alesto", type: "edit", field: "product_name", lang: ["es"], user: "yuka.sY2b0xO6T85zoF3NwEKvlkJ4Q9T0m1SPVj7A4Gi_35yXKJTtWMdzo9nZOfo", rev: 27, t: NOW - 3 * D, sum: `<b>Modifié :</b> nom du produit en espagnol <span class="old">Almendras</span> → <b>Almendras peladas</b>` },
+  ];
+
+  function badge(u) { const w = F.who(u); return w.kind === "user" ? "" : `<span class="badge ${w.kind}">${esc(w.label)}</span>`; }
+  function shortUser(u) { return u.length > 28 ? u.slice(0, 24) + "…" : u; }
+  function card(c) {
+    return `<article class="chg ${c.type}">
+      <div class="ic">${I[c.type === "edit" ? "edit" : c.type]}</div>
+      <div style="min-width:0">
+        <div class="prod"><a href="product.html?code=${c.code}">${esc(c.name)}</a><span>· ${esc(c.brands)}</span></div>
+        <div class="sum">${c.sum}</div>
+        <div class="meta"><span class="who">${esc(shortUser(c.user))}</span>${badge(c.user)}<span>${OFF.t("champ")} <code>${esc(c.field)}</code> ${esc(OFF.t(FIELDS[c.field] || c.field))}${c.lang.length ? " · " + c.lang.map(l => F.langName(l)).join(", ") : ""}</span></div>
+        <div class="foot"><span><span class="rev">${OFF.t("révision")} ${c.rev}</span> · <time datetime="${new Date(c.t * 1000).toISOString()}" title="${F.date(c.t, true)}">${F.ago(c.t)}</time></span><a class="btn btn-outline btn-sm" href="#" data-rev>${OFF.t("Voir cette révision")} ${I.arrow}</a></div>
+      </div>
+    </article>`;
+  }
+
+  function aside() {
+    return `<aside class="aside">
+      <div class="sub-card">
+        <div class="icon-box orange">${I.bell}</div>
+        <h3>${OFF.t("S'abonner aux modifications d'un produit")}</h3>
+        <p>${OFF.t("Seulement quand un changement touche votre liste d'ingrédients à éviter.")}</p>
+        <ul><li>${OFF.t("Allergènes et traces")}</li><li>${OFF.t("Additifs de votre liste")}</li><li>${OFF.t("Huile de palme, gluten, lactose…")}</li></ul>
+        <button type="button" class="btn btn-primary mt-3" id="subBtn" style="width:100%">${I.bell} ${OFF.t("M'alerter")}</button>
+        <p class="mt-2" style="font-size:.8rem">${OFF.t("Vos préférences alimentaires sont déjà connues ; l'alerte arrive par e-mail ou dans l'app.")}</p>
+      </div>
+      <div class="legend">
+        <h4>${OFF.t("Qui modifie ?")}</h4>
+        <div><i style="background:var(--orange)"></i>${OFF.t("compte du producteur")} — <code style="font-size:.8rem">org-*</code></div>
+        <div><i style="background:var(--blue)"></i>${OFF.t("app")} — ${OFF.t("application mobile ou robot")}</div>
+        <div><i style="background:var(--beige)"></i>${OFF.t("contributeur, parfois anonyme")}</div>
+        <h4 class="mt-3">${OFF.t("Quoi ?")}</h4>
+        <div><i style="background:var(--green)"></i>${OFF.t("Ajout d'une information")}</div>
+        <div><i style="background:var(--blue)"></i>${OFF.t("Modification")}</div>
+        <div><i style="background:var(--red)"></i>${OFF.t("Suppression")}</div>
+      </div>
+    </aside>`;
+  }
+
+  /* ---- Vue globale ---- */
+  let ftype = "all", fuser = "";
+  function renderGlobal() {
+    document.getElementById("page").innerHTML = `
+    <div class="page-hero"><div class="container">
+      <nav class="breadcrumb" aria-label="Fil d'Ariane"><a href="index.html">Accueil</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 6 6 6-6 6"/></svg><a href="contribute.html">Contribuer</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 6 6 6-6 6"/></svg><span>Historique</span></nav>
+      <span class="eyebrow mt-3">${OFF.t("Transparence totale")}</span>
+      <h1 style="font-size:clamp(2.2rem,4.6vw,3.6rem)">${OFF.t("Historique des modifications")}</h1>
+      <p class="lead">${OFF.t("Du plus récent au plus ancien, chaque produit, chaque modification. Qui a changé quoi, quand, et depuis quelle application.")}</p>
+      <div class="row mt-3"><span class="tag warn">${OFF.t("données de démonstration")}</span><span class="muted" style="font-size:.85rem">${OFF.t("L'API publique n'expose pas encore de flux global des révisions.")}</span></div>
+    </div></div>
+    <div class="container layout">
+      <div>
+        <div class="filters-bar">
+          <button class="chip ${ftype === "all" ? "active" : ""}" data-t="all">${OFF.t("Tout")}</button>
+          <button class="chip ${ftype === "add" ? "active" : ""}" data-t="add">${OFF.t("Ajouts")}</button>
+          <button class="chip ${ftype === "edit" ? "active" : ""}" data-t="edit">${OFF.t("Modifications")}</button>
+          <button class="chip ${ftype === "delete" ? "active" : ""}" data-t="delete">${OFF.t("Suppressions")}</button>
+          <form class="searchbar" onsubmit="return false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><input type="search" id="fuser" value="${esc(fuser)}" placeholder="${OFF.t("Filtrer par contributeur")}" aria-label="${OFF.t("Filtrer par contributeur")}"></form>
+        </div>
+        <div class="feed" id="feed"></div>
+      </div>
+      ${aside()}
+    </div>`;
+    renderFeed();
+    document.querySelectorAll(".filters-bar .chip").forEach(b => b.addEventListener("click", () => { ftype = b.dataset.t; document.querySelectorAll(".filters-bar .chip").forEach(x => x.classList.toggle("active", x === b)); renderFeed(); }));
+    document.getElementById("fuser").addEventListener("input", e => { fuser = e.target.value; renderFeed(); });
+    wireCommon();
+  }
+  function renderFeed() {
+    const u = fuser.trim().toLowerCase();
+    const list = FEED.filter(c => (ftype === "all" || c.type === ftype) && (!u || c.user.toLowerCase().includes(u) || F.who(c.user).name.toLowerCase().includes(u)));
+    document.getElementById("feed").innerHTML = list.map(card).join("") || `<div class="card" style="text-align:center;color:var(--ink-2)">${OFF.t("Aucune modification ne correspond à ces filtres.")}</div>`;
+  }
+  function wireCommon() {
+    document.getElementById("page").addEventListener("click", e => { const a = e.target.closest("[data-rev]"); if (a) { e.preventDefault(); OFF.toast(OFF.t("Maquette : le détail d'une révision n'est pas encore câblé")); } });
+    const s = document.getElementById("subBtn"); s && s.addEventListener("click", () => OFF.toast(OFF.t("Maquette : l'abonnement nécessite un compte Open Food Facts")));
+  }
+
+  /* ---- Vue produit : timeline reconstituée ---- */
+  const DEMO_PRODUCT = { code: "3017620422003", product_name: "Nutella", brands: "Ferrero", quantity: "400 g", image_front_small_url: "https://images.openfoodfacts.org/images/products/301/762/042/2003/front_en.879.200.jpg", creator: "openfoodfacts-contributors", created_t: 1457680652, last_editor: "openfoodfacts-dart", last_modified_t: NOW - 11 * 60, rev: 947, editors_tags: ["kiliweb", "org-ferrero", "teolemon", "moon-rabbit", "segundo", "yuka.sY2b0xO6T85zoF3NwEKvlkJ4Q9T0m1SPVj7A4Gi_35yXKJTtWMdzo9nZOfo", "date-limite-app", "charlesnepote", "packbot", "ecoscore-impact-estimator"] };
+  const PLAUSIBLE = ["nutriments", "ingredients_text", "categories", "image_front", "labels", "packaging_text", "serving_size", "stores", "quantity", "image_nutrition", "allergens", "brands", "countries", "origins"];
+  function hash(s) { let h = 7; for (const c of s) h = (h * 31 + c.charCodeAt(0)) >>> 0; return h; }
+  function buildTimeline(p) {
+    const rev = Math.max(1, +p.rev || 1), c0 = +p.created_t || NOW - 365 * D, c1 = +p.last_modified_t || NOW;
+    const items = [{ rev: 1, t: c0, user: p.creator || "openfoodfacts-contributors", type: "add", field: "product_name", first: true }];
+    const mids = (p.editors_tags || []).filter(u => u !== p.creator && u !== p.last_editor).slice(0, 8);
+    const n = rev > 2 ? Math.min(mids.length, rev - 2) : 0;
+    for (let i = 0; i < n; i++) {
+      const frac = (i + 1) / (n + 1), u = mids[i], h = hash(u + i);
+      items.push({ rev: Math.max(2, Math.round(1 + frac * (rev - 1))), t: Math.round(c0 + frac * (c1 - c0)), user: u, type: h % 7 === 0 ? "delete" : h % 3 === 0 ? "add" : "edit", field: PLAUSIBLE[h % PLAUSIBLE.length], recon: true });
+    }
+    if (rev > 1) items.push({ rev, t: c1, user: p.last_editor || "–", type: "edit", field: p.rev ? PLAUSIBLE[hash(p.last_editor || "") % PLAUSIBLE.length] : "nutriments", last: true, recon: !!p.rev });
+    return items.reverse();
+  }
+  function renderProduct(p, demo) {
+    const name = F.nameOf(p, CODE), items = buildTimeline(p);
+    const adds = items.filter(x => x.type === "add").length, dels = items.filter(x => x.type === "delete").length;
+    document.getElementById("page").innerHTML = `
+    <div class="container" style="padding-top:24px">
+      <a class="back" href="product.html?code=${CODE}">${I.back} ${OFF.t("Fiche produit")}</a>
+      <div class="pband">
+        <div class="im ${p.image_front_small_url ? "" : "empty"}">${p.image_front_small_url ? `<img src="${esc(p.image_front_small_url)}" alt="">` : OFF.t("Pas de photo")}</div>
+        <div style="min-width:0"><h1>${esc(name)}</h1><div class="meta">${p.brands ? `<span>${esc(p.brands)}</span>` : ""}${p.quantity ? `<span>${esc(p.quantity)}</span>` : ""}<code>${CODE}</code>${demo ? `<span class="tag warn">${OFF.t("données de démonstration")}</span>` : ""}</div></div>
+        <div class="side"><a class="btn btn-outline btn-sm" href="product-properties.html?code=${CODE}">${I.tag} ${OFF.t("Propriétés du produit")}</a><a class="btn btn-ghost btn-sm" href="changes.html">${OFF.t("Toutes les modifications")} ${I.arrow}</a></div>
+      </div>
+      <div class="tl-stats">
+        <div class="fact"><small>${OFF.t("Révisions")}</small><b>${F.num(p.rev || 1)}</b></div>
+        <div class="fact"><small>${OFF.t("Contributeurs")}</small><b>${F.num((p.editors_tags || []).length || 1)}</b></div>
+        <div class="fact"><small>${OFF.t("Fiche créée le")}</small><b style="font-size:1.1rem">${F.date(+p.created_t || NOW)}</b></div>
+      </div>
+      <div class="layout">
+        <div>
+          <div class="tl-head">
+            <div><h2>${OFF.t("Historique de cette fiche")}</h2><p class="last">${OFF.t("Dernière modification de la fiche le")} <b>${F.date(+p.last_modified_t || NOW, true)}</b> ${OFF.t("par")} <b>${esc(p.last_editor || "–")}</b></p></div>
+            <span class="tag info">${OFF.t("reconstitué : l'API publique n'expose pas le détail des révisions")}</span>
+          </div>
+          <ul class="timeline">${items.map(x => `
+            <li class="${x.first ? "first" : ""} ${x.last ? "last" : ""}">
+              <time>${F.date(x.t, true)}</time>
+              <b>${x.first ? OFF.t("Création de la fiche") : TYPE[x.type] + " : " + OFF.t(FIELDS[x.field] || x.field).toLowerCase()}</b>
+              <div class="who"><span>${OFF.t("par")} <strong>${esc(shortUser(x.user))}</strong></span>${badge(x.user)}<span class="rev">${OFF.t("révision")} ${x.rev}</span></div>
+              ${x.recon ? `<div class="recon"><span class="tag" style="font-size:.72rem">${OFF.t("reconstitué")}</span></div>` : ""}
+            </li>`).join("")}
+          </ul>
+          <p class="muted mt-3" style="font-size:.85rem">${OFF.t("Création et dernière révision sont réelles (créateur, dernier éditeur, dates). Les révisions intermédiaires sont attribuées aux contributeurs connus de la fiche avec des dates interpolées, jusqu'à ce que l'API expose l'historique complet.")}</p>
+        </div>
+        ${aside()}
+      </div>
+    </div>`;
+    document.title = `${OFF.t("Historique")} · ${name} | Open Food Facts`;
+    wireCommon();
+  }
+
+  if (!CODE) renderGlobal();
+  else {
+    document.getElementById("page").innerHTML = `<div class="container" style="padding-top:24px"><div class="skeleton sk-band"></div><div class="skeleton mt-3" style="height:300px"></div></div>`;
+    F.lite(CODE, "code,product_name,product_name_fr,product_name_en,brands,quantity,image_front_small_url,editors_tags,last_editor,last_modified_t,created_t,creator,rev")
+      .then(p => renderProduct(p, false))
+      .catch(() => { OFF.toast(OFF.t("Produit introuvable ou API indisponible – historique de démonstration affiché")); renderProduct({ ...DEMO_PRODUCT, code: CODE }, true); });
+  }
+</script>
+</body>
+</html>

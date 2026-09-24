@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guide | Open Food Facts</title>
+<link rel="icon" href="https://static.openfoodfacts.org/images/logos/off-logo-vertical-light.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=17">
+<style>
+  .ghero{position:relative;isolation:isolate;color:#fff;padding:56px 0 48px;overflow:hidden;background:var(--brand)}
+  .ghero img.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;opacity:.55}
+  .ghero::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(52,17,0,.95),rgba(52,17,0,.7) 55%,rgba(52,17,0,.35))}
+  .ghero .breadcrumb,.ghero .breadcrumb a{color:rgba(255,255,255,.75)}
+  .ghero h1{color:#fff;font-size:clamp(2rem,4.6vw,3.6rem);max-width:20ch}
+  .ghero .lead{color:rgba(255,255,255,.85)}
+  .ghero .eyebrow{color:var(--orange)}
+  .ghero .meta{display:flex;gap:18px;flex-wrap:wrap;margin-top:22px;font-size:.85rem;font-weight:600;color:rgba(255,255,255,.8)}
+  .ghero .meta span{display:inline-flex;align-items:center;gap:6px}
+  .ghero .meta svg{width:16px;height:16px}
+  .ghero .badge{height:76px;background:#fff;padding:8px 10px;border-radius:14px;box-shadow:var(--shadow-lg);width:auto}
+  .toc-head{font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700;padding:0 14px 8px}
+  .sticky-toc a{display:flex;gap:10px;align-items:baseline}
+  .sticky-toc a i{font-style:normal;font-family:var(--font-head);font-weight:800;font-size:.8rem;color:var(--orange-dark);min-width:18px}
+  .toc-mobile{display:none;background:#fff;border:1px solid var(--line-2);border-radius:14px;padding:14px 18px;margin-bottom:20px}
+  .toc-mobile summary{cursor:pointer;font-weight:700;color:var(--brand)}
+  .toc-mobile a{display:block;padding:8px 0;color:var(--ink-2);font-weight:600;border-top:1px solid var(--line-2)}
+  @media(max-width:860px){.toc-mobile{display:block}}
+  .body{counter-reset:sec}
+  .gsec{background:#fff;border:1px solid var(--line-2);border-radius:var(--r-lg);padding:32px;margin-bottom:20px;scroll-margin-top:96px}
+  @media(max-width:600px){.gsec{padding:22px}}
+  .gsec h2{display:flex;gap:14px;align-items:baseline;font-size:1.6rem;margin-bottom:14px}
+  .gsec h2::before{counter-increment:sec;content:counter(sec,decimal-leading-zero);font-size:.9rem;color:var(--orange-dark);font-family:var(--font-head);font-weight:800;letter-spacing:.04em;flex:none}
+  .gsec h3{font-size:1.1rem;margin:20px 0 8px}
+  .gsec p{font-size:1.02rem;line-height:1.7}
+  .gsec ul,.gsec ol{color:var(--ink-2);padding-left:22px;margin:0 0 14px;line-height:1.65}
+  .gsec li{margin-bottom:6px}
+  .gsec .bigfig{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0}
+  @media(max-width:600px){.gsec .bigfig{grid-template-columns:1fr}}
+  .gsec .bigfig div{background:var(--sand);border-radius:14px;padding:16px}
+  .gsec .bigfig b{display:block;font-family:var(--font-head);font-size:2.4rem;line-height:1;letter-spacing:-.03em;color:var(--brand)}
+  .gsec .bigfig span{font-size:.85rem;color:var(--ink-2);font-weight:600;display:block;margin-top:6px}
+  .gsec .lca{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin:18px 0}
+  @media(max-width:760px){.gsec .lca{grid-template-columns:repeat(3,1fr)}}
+  .gsec .lca div{background:var(--green-soft);border-radius:12px;padding:12px 10px;text-align:center;font-size:.8rem;font-weight:700;color:var(--green-dark)}
+  .gsec .lca div i{display:block;font-style:normal;font-family:var(--font-head);font-size:1.3rem;color:var(--brand);margin-bottom:4px}
+  .gsec .pm{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+  @media(max-width:600px){.gsec .pm{grid-template-columns:1fr}}
+  .gsec .pm div{border-radius:14px;padding:16px;border-left:4px solid}
+  .gsec .pm .plus{background:var(--green-soft);border-color:var(--green)}
+  .gsec .pm .minus{background:var(--red-soft);border-color:var(--red)}
+  .gsec .pm b{display:block;color:var(--brand);margin-bottom:4px}
+  .gsec .pm small{color:var(--ink-2);font-size:.9rem}
+  .gsec img.inline-badge{height:52px;display:inline-block;vertical-align:middle;margin:4px 8px 4px 0}
+  .gsec table{width:100%;border-collapse:collapse;font-size:.95rem;margin:14px 0}
+  .gsec th,.gsec td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line-2);vertical-align:top}
+  .gsec th{font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+  .gsec td.up{color:var(--green-dark);font-weight:700}.gsec td.down{color:#b83232;font-weight:700}
+  .gsec .src{font-size:.85rem;color:var(--muted)}
+  .pn{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px}
+  @media(max-width:600px){.pn{grid-template-columns:1fr}}
+  .pn a{display:flex;flex-direction:column;gap:4px;padding:18px 20px;border-radius:var(--r);background:#fff;border:1px solid var(--line-2);transition:.2s}
+  .pn a:hover{box-shadow:var(--shadow);transform:translateY(-2px)}
+  .pn a small{font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700}
+  .pn a b{color:var(--brand);font-family:var(--font-head);font-size:1.05rem}
+  .pn a.next{text-align:right;align-items:flex-end}
+  .pn a.disabled{opacity:.5;pointer-events:none}
+  .rtrack{position:fixed;top:72px;left:0;height:3px;background:var(--orange);width:0;z-index:51;transition:width .1s linear}
+</style>
+</head>
+<body>
+<div id="site-header"></div>
+<div class="rtrack" id="rtrack"></div>
+
+<div class="ghero" id="ghero">
+  <img class="bg" id="heroImg" src="" alt="">
+  <div class="container">
+    <nav class="breadcrumb"><a href="index.html">Accueil</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 6 6 6-6 6"/></svg><a href="guides.html">Guides</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 6 6 6-6 6"/></svg><span id="bcTitle">Guide</span></nav>
+    <div class="row mt-4" style="gap:20px;align-items:flex-end"><img class="badge" id="heroBadge" src="" alt="" style="display:none"><span class="eyebrow" id="heroKicker">Guide</span></div>
+    <h1 id="heroTitle" style="margin:14px 0 12px">Chargement…</h1>
+    <p class="lead" id="heroSub"></p>
+    <div class="meta"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span id="heroTime">— min</span> de lecture</span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v14H4zM8 9h8M8 13h5"/></svg><span id="heroSecs">—</span> sections</span><span>Écrit par Open Food Facts</span><span id="heroDate">Mis à jour en 2026</span></div>
+  </div>
+</div>
+
+<section style="padding-top:40px">
+  <div class="container article">
+    <nav class="sticky-toc" id="toc"><div class="toc-head">Dans ce guide</div></nav>
+    <div>
+      <details class="toc-mobile"><summary>Dans ce guide</summary><div id="tocMobile"></div></details>
+      <div class="body" id="body"></div>
+      <div class="pn" id="pn"></div>
+      <p class="mt-3" style="font-size:.85rem;color:var(--ink-2)">Un doute, une erreur ? Les guides sont publiés sous licence ouverte : <a href="#" style="font-weight:700;color:var(--orange-dark)">proposez une correction</a>.</p>
+    </div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+<script src="assets/locale.js?v=1"></script>
+<script src="assets/app.js?v=9"></script>
+<script src="assets/i18n-es.js?v=3"></script>
+<script src="assets/i18n.js?v=10"></script>
+<script src="assets/prefs.js?v=1"></script>
+<script>
+  OFF.mount("scores.html");
+  const BADGE = "https://static.openfoodfacts.org/images/attributes/dist/";
+  const U = id => `https://images.unsplash.com/photo-${id}?w=1600&q=60&fit=crop`;
+  const ORDER = ["green-score", "nutri-score", "ultra-processed", "off", "obf", "opff", "opf", "prices"];
+
+  const GUIDES = {
+    "green-score": {
+      kicker: "Green-Score", title: "Qu'est-ce que le Green-Score ?", sub: "Quel produit est le meilleur pour la planète ? Une lettre de A+ à E, calculée sur tout le cycle de vie, pour répondre en rayon.",
+      badge: BADGE + "green-score-a.svg", img: U("1542838132-92c53300491e"),
+      sections: [
+        { id: "quoi", title: "Le Green-Score, en une phrase", html: `
+          <p>Le Green-Score (anciennement Eco-Score) note l'impact environnemental d'un produit alimentaire, de <b>A+</b> (impact très faible) à <b>E</b> (impact très élevé). Il est calculé automatiquement par Open Food Facts sur des millions de produits, à partir des informations de l'emballage : catégorie, labels, origine des ingrédients, matériaux d'emballage.</p>
+          <p><img class="inline-badge" src="${BADGE}green-score-a-plus.svg" alt="A+"><img class="inline-badge" src="${BADGE}green-score-c.svg" alt="C"><img class="inline-badge" src="${BADGE}green-score-e.svg" alt="E"></p>
+          <p>Il fonctionne comme le Nutri-Score : une même échelle pour tous les produits, ce qui permet de comparer deux pizzas, deux jus d'orange, ou un plat préparé et son équivalent maison. Il ne remplace pas le Nutri-Score : un produit peut être bon pour la planète et mauvais pour la santé, et inversement.</p>
+          <div class="callout green">Le Green-Score a été lancé en janvier 2021 par un collectif d'acteurs indépendants (Open Food Facts, Yuka, ScanUp, Marmiton, Etiquettable, FoodChéri, Frigo Magic, La Fourche, Seazon) et renommé en 2024 pour éviter toute confusion avec l'affichage environnemental officiel.</div>` },
+        { id: "planete", title: "Quel produit est meilleur pour la planète ?", html: `
+          <p>Ce que nous mangeons pèse lourd. D'après l'étude de référence de Joseph Poore et Thomas Nemecek (<i>Science</i>, 2018), qui a compilé les données de 38 000 fermes dans 119 pays, <b>l'alimentation représente plus d'un quart des émissions mondiales de gaz à effet de serre</b>, 70 % des prélèvements d'eau douce et l'essentiel de la déforestation.</p>
+          <div class="bigfig"><div><b>26 %</b><span>des émissions mondiales viennent de l'alimentation (Poore & Nemecek, Science 2018)</span></div><div><b>1 000</b><span>repas par an et par personne : autant de décisions</span></div><div><b>×50</b><span>d'écart d'impact entre le pire et le meilleur producteur d'un même aliment</span></div></div>
+          <p>Nous prenons environ 1 000 repas par an. Chacun est une petite décision, mais personne ne peut consulter une analyse du cycle de vie avant d'attraper un paquet en rayon. Le Green-Score condense cette analyse en une lettre, avec le détail du calcul à un clic pour ceux qui veulent comprendre.</p>
+          <p>C'est aussi un outil de <b>transparence</b>. Les fabricants savent depuis longtemps ce que coûtent leurs recettes à l'environnement. Rendre cette information visible sur chaque produit, c'est la mettre entre les mains de ceux qui achètent, et pousser les marques à améliorer ce qui pèse le plus : l'origine, l'emballage, les espèces menacées.</p>` },
+        { id: "acv", title: "Le cœur : l'analyse du cycle de vie Agribalyse", html: `
+          <p>La base du calcul est l'<b>analyse du cycle de vie (ACV)</b> fournie par <b>Agribalyse</b>, la base de données publique construite par l'ADEME et l'INRAE. Pour environ 2 500 produits alimentaires types, elle mesure l'impact de chaque étape, du champ à l'assiette :</p>
+          <div class="lca"><div><i>1</i>Agriculture</div><div><i>2</i>Transformation</div><div><i>3</i>Emballage</div><div><i>4</i>Transport</div><div><i>5</i>Distribution</div><div><i>6</i>Consommation</div></div>
+          <p>Seize indicateurs sont agrégés (changement climatique, appauvrissement de la couche d'ozone, acidification, eutrophisation, usage des sols, épuisement de l'eau, particules fines…) en un <b>score unique sur 100</b>, selon la méthode européenne PEF (Product Environmental Footprint). Plus le score est élevé, plus l'impact est faible.</p>
+          <p>Pour un produit donné, Open Food Facts identifie sa catégorie la plus précise (par exemple « pizza au fromage surgelée ») et lui associe la fiche Agribalyse correspondante. C'est pour cela que la <b>catégorie</b> est la donnée la plus importante d'une fiche produit : sans elle, pas de Green-Score.</p>
+          <div class="callout">L'ACV donne un score moyen par type d'aliment, pas par marque. Deux pots de confiture de fraises partent du même score Agribalyse. C'est là que les bonus et malus entrent en jeu.</div>` },
+        { id: "bonus", title: "Bonus et malus : ce qui distingue deux produits", html: `
+          <p>Le score Agribalyse est ensuite ajusté avec les informations propres au produit. Quatre facteurs sont pris en compte :</p>
+          <div class="pm">
+            <div class="plus"><b>Labels et modes de production · jusqu'à +20 points</b><small>Bio (AB, Eurofeuille), Label Rouge, Haute Valeur Environnementale, Bleu-Blanc-Cœur, commerce équitable, MSC et ASC pour la pêche et l'aquaculture durables… Le bonus dépend de la robustesse du label.</small></div>
+            <div class="plus"><b>Origine des ingrédients · de −5 à +15 points</b><small>Deux critères : la distance de transport et la politique environnementale du pays d'origine (indice EPI). Des tomates espagnoles n'ont pas le même bonus que des tomates chiliennes.</small></div>
+            <div class="minus"><b>Emballage · jusqu'à −15 points</b><small>Chaque composant est noté selon son matériau et sa recyclabilité : le verre et le carton pèsent moins que le plastique composite ou le polystyrène. Un emballage non renseigné reçoit le malus maximal, par prudence.</small></div>
+            <div class="minus"><b>Espèces menacées · −10 points</b><small>Malus pour les ingrédients liés à la déforestation, en premier lieu l'huile de palme non certifiée durable.</small></div>
+          </div>
+          <p>Le score final, sur 100, est converti en lettre : A+ (≥ 90), A (≥ 80), B (≥ 70), C (≥ 55), D (≥ 40), E (< 40). Sur chaque fiche produit, le panneau « Environnement » détaille chaque bonus et malus pour que le calcul soit vérifiable.</p>` },
+        { id: "transparence", title: "Un besoin accru de transparence", html: `
+          <p>La précision du Green-Score dépend de ce qui est écrit sur l'emballage et de ce qui a été saisi dans la base. Or l'<b>origine</b> des ingrédients et le détail des <b>emballages</b> sont les données les plus souvent manquantes : les fabricants ne sont pas tenus de les indiquer, et quand ils le font, c'est en petits caractères.</p>
+          <ul>
+            <li>Sans catégorie précise, le Green-Score ne peut pas être calculé du tout.</li>
+            <li>Sans origine, le produit reçoit un bonus neutre, ni favorable, ni défavorable.</li>
+            <li>Sans emballage, le produit reçoit le malus maximal : mieux vaut un plastique déclaré qu'un emballage inconnu.</li>
+          </ul>
+          <p>C'est pourquoi chaque contribution compte. Une photo du dos du paquet, une catégorie choisie, un matériau coché : la note devient plus juste, et les marques ont une raison de plus de jouer la transparence.</p>
+          <div class="callout blue">Vérifiez par vous-même : <a href="product.html?code=3017624010701" style="font-weight:700;color:var(--blue)">le Nutella 1 kg</a> a un Green-Score D calculé, avec le détail des malus. <a href="contribute.html" style="font-weight:700;color:var(--blue)">Complétez l'origine et l'emballage</a> d'un produit que vous avez sous la main.</div>
+          <p class="src">Sources : Poore J. & Nemecek T., « Reducing food's environmental impacts through producers and consumers », Science, 2018 · ADEME/INRAE, base Agribalyse 3 · Documentation Green-Score, Open Food Facts.</p>` },
+      ],
+    },
+    "nutri-score": {
+      kicker: "Nutri-Score", title: "Le Nutri-Score évolue : explications", sub: "La formule 2024 corrige les angles morts de la première version. Voici ce qui monte, ce qui descend, et comment lire la lettre.",
+      badge: BADGE + "nutriscore-a-new-en.svg", img: U("1498837167922-ddd27525d352"),
+      sections: [
+        { id: "principe", title: "Le Nutri-Score, en une lettre", html: `
+          <p>Le Nutri-Score résume la qualité nutritionnelle d'un aliment en cinq lettres et cinq couleurs, de <b>A</b> (vert foncé) à <b>E</b> (orange foncé). Il est calculé pour 100 g ou 100 ml en attribuant des points défavorables (énergie, sucres, acides gras saturés, sel) et des points favorables (fibres, protéines, fruits, légumes et légumineuses). Conçu par l'équipe du Pr Serge Hercberg et adopté par la France en 2017, il est aujourd'hui utilisé dans sept pays européens.</p>
+          <p><img class="inline-badge" src="${BADGE}nutriscore-a-new-en.svg" alt="A"><img class="inline-badge" src="${BADGE}nutriscore-c-new-en.svg" alt="C"><img class="inline-badge" src="${BADGE}nutriscore-e-new-en.svg" alt="E"></p>
+          <p>Open Food Facts calcule le Nutri-Score pour tous les produits dont le tableau nutritionnel et la catégorie sont renseignés, y compris ceux dont la marque a choisi de ne pas l'afficher. Vous pouvez tester l'algorithme vous-même avec <a href="index.html#presets" style="font-weight:700;color:var(--orange-dark)">le simulateur de la page d'accueil</a>.</p>` },
+        { id: "pourquoi", title: "Pourquoi une nouvelle formule en 2024 ?", html: `
+          <p>La première version avait des limites connues : elle ne distinguait pas assez le pain complet du pain blanc, elle notait mal les poissons gras et les huiles riches en bons acides gras, et elle laissait passer des boissons très sucrées ou édulcorées avec une note moyenne. Le <b>comité scientifique européen du Nutri-Score</b>, qui réunit les sept pays engagés (Allemagne, Belgique, Espagne, France, Luxembourg, Pays-Bas, Suisse), a publié une mise à jour de l'algorithme en 2022 pour les aliments et en 2023 pour les boissons.</p>
+          <p>La nouvelle formule est entrée en application en France le 1<sup>er</sup> janvier 2024, avec deux ans de transition pour que les emballages soient mis à jour. Open Food Facts affiche la nouvelle version sur tous les produits depuis son entrée en vigueur.</p>
+          <div class="callout">La lettre sur un paquet imprimé avant 2024 peut encore être l'ancienne. Celle affichée sur Open Food Facts est toujours calculée avec la formule en vigueur.</div>` },
+        { id: "change", title: "Ce qui change, produit par produit", html: `
+          <table>
+            <tr><th>Famille</th><th>Ce qui change</th><th>Effet</th></tr>
+            <tr><td><b>Céréales complètes</b></td><td>Les fibres sont mieux valorisées, le seuil de sucre et de sel est plus strict. Le pain complet et les flocons d'avoine se détachent nettement des céréales sucrées.</td><td class="up">Pain complet : B → A</td></tr>
+            <tr><td><b>Poissons gras</b></td><td>Les protéines et les bonnes graisses comptent davantage : saumon, sardines et maquereaux remontent.</td><td class="up">Saumon fumé : D → C ou B</td></tr>
+            <tr><td><b>Huiles</b></td><td>Les huiles pauvres en acides gras saturés (olive, colza, noix) sont mieux traitées que les huiles de coco ou de palme.</td><td class="up">Huile d'olive : C → B</td></tr>
+            <tr><td><b>Boissons sucrées</b></td><td>Le sucre est pénalisé plus fortement : les sodas et les jus très sucrés descendent, l'eau reste la seule boisson notée A.</td><td class="down">Nectar de fruits : C → D ou E</td></tr>
+            <tr><td><b>Édulcorants</b></td><td>Les boissons avec édulcorants reçoivent une pénalité spécifique : « zéro sucre » ne veut plus dire bonne note.</td><td class="down">Cola light : B → C</td></tr>
+            <tr><td><b>Lait et boissons lactées</b></td><td>Le lait est désormais noté comme une boisson. Le lait entier nature reste B, les laits aromatisés sucrés descendent.</td><td class="down">Lait chocolaté : B → C ou D</td></tr>
+            <tr><td><b>Viande rouge</b></td><td>Les protéines de la viande rouge comptent moins que celles de la volaille ou du poisson.</td><td class="down">Steak haché 15 % : A → B</td></tr>
+          </table>
+          <p>Globalement, environ un produit sur trois change de lettre, dans les deux sens. Les produits très sucrés, très salés ou très gras descendent ; les produits simples et riches en fibres montent.</p>` },
+        { id: "lire", title: "Comment lire le Nutri-Score", html: `
+          <ul>
+            <li><b>Comparez dans une même famille.</b> Le Nutri-Score sert à choisir entre deux pizzas ou deux céréales, pas entre une pizza et une pomme.</li>
+            <li><b>C'est une note pour 100 g.</b> Une huile d'olive B reste une huile : la portion compte. La lettre dit la qualité, pas la quantité.</li>
+            <li><b>Il ne parle pas de transformation.</b> Un soda light peut être C et ultra-transformé. Regardez aussi le groupe NOVA et la liste d'ingrédients.</li>
+            <li><b>Il ne dit rien des additifs</b> ni des pesticides, ni de l'impact environnemental : c'est le rôle du Green-Score.</li>
+          </ul>
+          <div class="callout green">Ensemble, Nutri-Score, NOVA et Green-Score répondent à trois questions différentes : est-ce nutritif, est-ce transformé, est-ce durable. <a href="scores.html" style="font-weight:700;color:var(--green-dark)">Le résumé des trois scores</a>.</div>` },
+        { id: "off", title: "Sur Open Food Facts", html: `
+          <p>Le calcul est fait par notre serveur, en open source, à partir des valeurs nutritionnelles saisies par la communauté. Sur chaque fiche, le panneau « Santé » détaille les points positifs et négatifs. Si le Nutri-Score manque, c'est en général qu'il manque une valeur (fibres, sucres) ou une catégorie assez précise : une photo du tableau nutritionnel suffit souvent à le débloquer.</p>
+          <p class="src">Sources : Santé publique France, « Nutri-Score : évolution de l'algorithme », 2023–2024 · Comité scientifique du Nutri-Score, rapports 2022 (aliments) et 2023 (boissons).</p>` },
+      ],
+    },
+    "ultra-processed": {
+      kicker: "Aliments ultra-transformés", title: "Qu'est-ce que l'ultra-transformation ?", sub: "La classification NOVA ne regarde pas les nutriments mais ce qu'on a fait subir à l'aliment. Marqueurs, groupes et ce que disent les études.",
+      badge: BADGE + "nova-group-4.svg", img: U("1601599561213-832382fd07ba"),
+      sections: [
+        { id: "def", title: "Transformé, ultra-transformé : la différence", html: `
+          <p>Presque tout ce que nous mangeons est transformé : le pain, le fromage, la confiture le sont. L'<b>ultra-transformation</b> désigne autre chose : des produits fabriqués industriellement à partir de substances extraites d'aliments (amidons, sucres, huiles, protéines) puis assemblées avec des additifs pour être appétissants, pratiques et rentables. Ils contiennent des ingrédients qu'on ne trouve dans aucune cuisine.</p>
+          <p>La classification <b>NOVA</b>, proposée en 2009 par l'équipe de Carlos Monteiro à l'université de São Paulo et reprise par l'OMS et la FAO, range les aliments en quatre groupes selon leur degré de transformation, indépendamment de leur composition nutritionnelle.</p>` },
+        { id: "groupes", title: "Les quatre groupes NOVA", html: `
+          <p><img class="inline-badge" src="${BADGE}nova-group-1.svg" alt="NOVA 1"><img class="inline-badge" src="${BADGE}nova-group-2.svg" alt="NOVA 2"><img class="inline-badge" src="${BADGE}nova-group-3.svg" alt="NOVA 3"><img class="inline-badge" src="${BADGE}nova-group-4.svg" alt="NOVA 4"></p>
+          <ol>
+            <li><b>Aliments non transformés ou peu transformés</b> : fruits, légumes, œufs, lait, riz, légumineuses, viande et poisson frais, café, yaourt nature. Lavés, découpés, séchés, congelés, pasteurisés, mais rien n'y a été ajouté.</li>
+            <li><b>Ingrédients culinaires</b> : huile, beurre, sucre, sel, miel, farine. Extraits du groupe 1 pour cuisiner.</li>
+            <li><b>Aliments transformés</b> : le groupe 1 auquel on a ajouté du groupe 2. Pain de boulangerie, fromage, légumes en conserve, poisson fumé, jambon. Quelques ingrédients, reconnaissables.</li>
+            <li><b>Aliments ultra-transformés</b> : sodas, biscuits industriels, céréales du petit-déjeuner sucrées, nuggets, plats préparés, sauces, pains de mie industriels, la plupart des substituts de viande. Formulations de cinq ingrédients ou plus, dont des substances d'usage exclusivement industriel.</li>
+          </ol>` },
+        { id: "marqueurs", title: "Les marqueurs de l'ultra-transformation", html: `
+          <p>Comment reconnaître un produit du groupe 4 ? Il suffit de lire la liste d'ingrédients et d'y chercher des <b>marqueurs</b> : des substances qui n'existent pas dans une cuisine domestique.</p>
+          <div class="pm">
+            <div class="minus"><b>Substances extraites ou modifiées</b><small>Sirop de glucose-fructose, maltodextrine, dextrose, amidon modifié, huiles hydrogénées ou interestérifiées, protéines hydrolysées, isolat de protéines de soja, gluten ajouté, caséine, lactosérum.</small></div>
+            <div class="minus"><b>Additifs « cosmétiques »</b><small>Colorants, arômes (y compris naturels), exhausteurs de goût, édulcorants, émulsifiants (mono- et diglycérides, lécithines, carboxyméthylcellulose), épaississants, agents de charge, anti-agglomérants, agents de glaçage.</small></div>
+          </div>
+          <p>Un seul marqueur suffit à classer un produit en groupe 4. À l'inverse, les additifs de conservation (acide citrique, acide ascorbique, sel nitrité) et les levures ne sont pas des marqueurs : un jambon avec conservateur reste en groupe 3.</p>
+          <div class="callout">Piège fréquent : un Nutri-Score A ou B n'exclut pas le groupe 4. Un soda zéro sucre, un yaourt 0 % aromatisé ou une barre de céréales « riche en fibres » sont souvent ultra-transformés.</div>` },
+        { id: "etudes", title: "Ce que disent les études", html: `
+          <p>Depuis 2018, un grand nombre d'études ont associé une forte consommation d'aliments ultra-transformés à des risques accrus pour la santé. Il s'agit surtout d'études d'observation, qui montrent des associations et non des causes, mais leur convergence est frappante :</p>
+          <ul>
+            <li><b>NutriNet-Santé (BMJ, 2018 et 2019)</b> : sur plus de 100 000 adultes français, une hausse de 10 % de la part d'ultra-transformés dans l'alimentation est associée à une augmentation d'environ 12 % du risque de cancer et de 12 % du risque de maladies cardiovasculaires.</li>
+            <li><b>Essai contrôlé du NIH (Hall et al., Cell Metabolism, 2019)</b> : à menu comparable en nutriments, les participants nourris d'ultra-transformés ont mangé environ 500 kcal de plus par jour et pris du poids en deux semaines.</li>
+            <li><b>Revue « parapluie » (Lane et al., BMJ, 2024)</b> : en compilant 45 méta-analyses sur près de 10 millions de personnes, les auteurs trouvent des preuves convaincantes ou très suggestives pour 32 effets sur la santé : mortalité, maladies cardiovasculaires, diabète de type 2, obésité, anxiété et dépression.</li>
+          </ul>
+          <p>Les mécanismes discutés sont multiples : densité calorique, texture qui accélère l'ingestion, additifs et effets sur le microbiote, perte de la structure de l'aliment, contaminants issus de l'emballage. Aucun n'est encore tranché ; la recommandation des agences de santé, dont l'ANSES et Santé publique France, est de <b>limiter</b> ces produits sans les diaboliser un par un.</p>` },
+        { id: "off", title: "Comment Open Food Facts détermine le groupe", html: `
+          <p>Le groupe NOVA affiché sur chaque fiche est calculé automatiquement à partir de la <b>liste d'ingrédients</b> et de la catégorie. L'algorithme part de la catégorie (une eau minérale est groupe 1, un soda est groupe 4) puis parcourt les ingrédients à la recherche des marqueurs cités plus haut. Il est volontairement prudent : quand la liste d'ingrédients manque ou n'est pas analysable, il affiche « NOVA ? » plutôt qu'une note fausse.</p>
+          <p>Le meilleur moyen d'améliorer ce calcul est de photographier la liste d'ingrédients : notre IA la lit, la communauté la corrige, et le groupe apparaît dans la seconde.</p>` },
+        { id: "quotidien", title: "Et au quotidien ?", html: `
+          <ul>
+            <li>Tous les groupes 4 ne se valent pas : un pain de mie industriel et une boisson énergisante n'ont pas le même impact. Regardez aussi le Nutri-Score.</li>
+            <li>La liste d'ingrédients est votre meilleure alliée : courte, lisible, sans mots inconnus, c'est bon signe.</li>
+            <li>Ce sont les habitudes qui comptent, pas un paquet de biscuits un dimanche.</li>
+          </ul>
+          <div class="callout blue">Sur Open Food Facts, vous pouvez filtrer une recherche par groupe NOVA : <a href="search.html?q=céréales" style="font-weight:700;color:var(--blue)">céréales du petit-déjeuner</a>, puis « NOVA 1 à 3 » dans les filtres.</div>
+          <p class="src">Sources : Monteiro C. et al., « Ultra-processed foods: what they are and how to identify them », Public Health Nutrition, 2019 · Fiolet T. et al., BMJ, 2018 · Srour B. et al., BMJ, 2019 · Hall K. et al., Cell Metabolism, 2019 · Lane M. et al., BMJ, 2024.</p>` },
+      ],
+    },
+    "off": {
+      kicker: "Open Food Facts", title: "Bienvenue sur Open Food Facts", sub: "Une base de données de produits alimentaires, ouverte et collaborative, faite par tout le monde, pour tout le monde.",
+      badge: "https://static.openfoodfacts.org/images/logos/off-logo-vertical-light.svg", img: U("1543168256-418811576931"),
+      sections: [
+        { id: "mission", title: "La mission", html: `<p>Open Food Facts est une association à but non lucratif, fondée en France en 2012, qui construit le « Wikipédia de l'alimentation » : une base de données sur les produits alimentaires du monde entier, libre et gratuite, alimentée par des bénévoles. L'objectif est simple : rendre l'information sur ce que nous mangeons transparente, pour que chacun puisse choisir en connaissance de cause et que l'industrie ait intérêt à améliorer ses produits.</p><div class="bigfig"><div><b>4,7 M</b><span>de produits référencés</span></div><div><b>150</b><span>pays couverts</span></div><div><b>280 000</b><span>contributeurs depuis 2012</span></div></div>` },
+        { id: "trouver", title: "Ce qu'on y trouve", html: `<p>Pour chaque produit : les photos de l'emballage, la liste d'ingrédients, le tableau nutritionnel, les allergènes, les labels, l'origine, l'emballage, et trois scores calculés automatiquement : le <b>Nutri-Score</b> (qualité nutritionnelle), le <b>groupe NOVA</b> (degré de transformation) et le <b>Green-Score</b> (impact environnemental). Tout est réutilisable sous licence ouverte ODbL, ce qui fait vivre plus de 300 applications et de nombreux travaux de recherche.</p><div class="callout">Sans publicité, sans traqueur, indépendant de l'industrie agroalimentaire : Open Food Facts vit de dons et de subventions publiques.</div>` },
+        { id: "contribuer", title: "Comment contribuer", html: `<ul><li><b>Avec l'application</b> : scannez un produit, prenez trois photos, c'est en ligne. Aucune compétence requise.</li><li><b>Avec les Hunger Games</b> : répondez à des questions rapides (« ce produit est-il bio ? ») pour valider les propositions de notre IA.</li><li><b>En traduisant, en codant, en donnant</b> : tout est sur la <a href="contribute.html" style="font-weight:700;color:var(--orange-dark)">page Contribuer</a>.</li></ul>` },
+        { id: "famille", title: "Les projets frères", html: `<p>Le même modèle s'applique aux cosmétiques (<a href="guide.html?g=obf" style="font-weight:700;color:var(--orange-dark)">Open Beauty Facts</a>), à l'alimentation animale (<a href="guide.html?g=opff" style="font-weight:700;color:var(--orange-dark)">Open Pet Food Facts</a>), aux autres produits (<a href="guide.html?g=opf" style="font-weight:700;color:var(--orange-dark)">Open Products Facts</a>) et aux prix (<a href="guide.html?g=prices" style="font-weight:700;color:var(--orange-dark)">Open Prices</a>).</p>` },
+      ],
+    },
+    "obf": {
+      kicker: "Open Beauty Facts", title: "Bienvenue sur Open Beauty Facts", sub: "Les cosmétiques et produits d'hygiène, décodés avec la même exigence que les aliments.", color: "#c0355d",
+      badge: "", img: U("1506617420156-8e4536971650"),
+      sections: [
+        { id: "mission", title: "La mission", html: `<p>Open Beauty Facts applique le modèle d'Open Food Facts aux shampooings, dentifrices, crèmes, maquillage et produits d'hygiène. Lancé en 2016, il répond à une question que le rayon ne permet pas de poser : que contient vraiment ce flacon, et ces ingrédients me conviennent-ils ?</p>` },
+        { id: "trouver", title: "Ce qu'on y trouve", html: `<p>Pour chaque produit : la liste <b>INCI</b> des ingrédients (la nomenclature internationale des cosmétiques), les allergènes déclarés, la <b>période après ouverture</b> (le petit pot ouvert avec « 12M »), les labels (bio, cruelty-free, vegan) et les photos de l'étiquette. Les ingrédients sont progressivement reliés à une base de connaissances décrivant leur fonction (émollient, conservateur, filtre UV…).</p><div class="callout">Exemple : <a href="product.html?code=3337875598996" style="font-weight:700;color:var(--orange-dark)">la crème hydratante CeraVe</a>, disponible via l'API Open Beauty Facts.</div>` },
+        { id: "contribuer", title: "Comment contribuer", html: `<p>La même application mobile scanne les cosmétiques : le code-barres est reconnu, les photos partent au bon endroit. Les listes INCI sont longues et en petits caractères : une photo nette vaut de l'or.</p>` },
+        { id: "famille", title: "Le site frère", html: `<p>Open Beauty Facts partage son code, sa licence ouverte et sa communauté avec <a href="guide.html?g=off" style="font-weight:700;color:var(--orange-dark)">Open Food Facts</a>. Site : world.openbeautyfacts.org.</p>` },
+      ],
+    },
+    "opff": {
+      kicker: "Open Pet Food Facts", title: "Bienvenue sur Open Pet Food Facts", sub: "Croquettes, pâtées, friandises : la transparence pour ceux qui ne peuvent pas lire l'étiquette.", color: "#8a5a2b",
+      badge: "", img: U("1488459716781-31db52582fe9"),
+      sections: [
+        { id: "mission", title: "La mission", html: `<p>Nos animaux mangent des produits industriels toute leur vie, choisis par nous. Open Pet Food Facts référence les aliments pour chiens, chats, rongeurs, oiseaux et poissons pour que la composition, les additifs et l'origine soient aussi faciles à consulter que pour notre propre alimentation.</p>` },
+        { id: "trouver", title: "Ce qu'on y trouve", html: `<p>La liste des ingrédients et des « constituants analytiques » (protéines, matières grasses, cendres, fibres, humidité), les additifs nutritionnels (vitamines, oligo-éléments), l'espèce et l'âge visés, les labels, et les photos. Les scores humains (Nutri-Score, NOVA) ne s'appliquent pas : les besoins d'un chat ne sont pas ceux d'un humain.</p>` },
+        { id: "contribuer", title: "Comment contribuer", html: `<p>Scannez un sac de croquettes avec l'application : elle bascule automatiquement sur Open Pet Food Facts. Les grandes marques sont bien couvertes, les marques de distributeurs et les gammes vétérinaires beaucoup moins.</p>` },
+        { id: "famille", title: "Le site frère", html: `<p>Même code, même licence, même communauté qu'<a href="guide.html?g=off" style="font-weight:700;color:var(--orange-dark)">Open Food Facts</a>. Site : world.openpetfoodfacts.org.</p>` },
+      ],
+    },
+    "opf": {
+      kicker: "Open Products Facts", title: "Bienvenue sur Open Products Facts", sub: "Tout ce qui a un code-barres et ne se mange pas : réparabilité, matériaux, recyclage, durée de vie.", color: "#3a3a8a",
+      badge: "", img: U("1461749280684-dccba630e2f6"),
+      sections: [
+        { id: "mission", title: "La mission", html: `<p>Un smartphone, une perceuse, un jouet, un stylo : Open Products Facts référence les produits manufacturés pour rendre visibles les informations qui comptent pour un achat durable. Réparabilité, matériaux, pays de fabrication, disponibilité des pièces, recyclage : des données dispersées ou absentes des emballages.</p>` },
+        { id: "trouver", title: "Ce qu'on y trouve", html: `<p>Les photos, la marque, la catégorie, les matériaux, les labels (indice de réparabilité, Energy Star, FSC…), l'emballage et son recyclage. La base est jeune : les fiches sont plus courtes que sur Open Food Facts, et chaque ajout compte double.</p><div class="callout">Exemple d'appel API : <code>world.openproductsfacts.org/api/v2/product/4030600259702.json</code></div>` },
+        { id: "contribuer", title: "Comment contribuer", html: `<p>Scannez n'importe quel objet avec l'application Open Food Facts : s'il n'est pas alimentaire, il est créé sur Open Products Facts. Photographiez l'étiquette, le logo de recyclage et la fiche technique.</p>` },
+        { id: "famille", title: "Le site frère", html: `<p>Un projet de la même association, sous la même licence ouverte. Site : world.openproductsfacts.org. Retour à <a href="guide.html?g=off" style="font-weight:700;color:var(--orange-dark)">Open Food Facts</a>.</p>` },
+      ],
+    },
+    "prices": {
+      kicker: "Open Prices", title: "Bienvenue sur Open Prices", sub: "Une base ouverte des prix en rayon, construite à partir de vos tickets de caisse et de vos photos d'étiquettes.", color: "#0064c8",
+      badge: "", img: U("1551288049-bebda4e38f71"),
+      sections: [
+        { id: "mission", title: "La mission", html: `<p>Les prix des produits alimentaires sont partout et nulle part : affichés en rayon, imprimés sur les tickets, mais jamais rassemblés dans une base publique. Open Prices, lancé en 2023, collecte les prix observés par les contributeurs, magasin par magasin, jour par jour, pour rendre l'inflation, la « shrinkflation » et les écarts entre enseignes mesurables par tout le monde.</p>` },
+        { id: "trouver", title: "Ce qu'on y trouve", html: `<p>Pour un produit, la liste des prix relevés : montant, devise, date, magasin (via OpenStreetMap), et la preuve (photo d'étiquette ou ticket). L'API publique renvoie ces relevés en JSON, et chaque fiche produit Open Food Facts peut afficher l'historique des prix.</p><div class="bigfig"><div><b>1</b><span>photo de ticket = jusqu'à 50 prix</span></div><div><b>OSM</b><span>pour identifier chaque magasin</span></div><div><b>ODbL</b><span>même licence ouverte que les produits</span></div></div>` },
+        { id: "contribuer", title: "Comment contribuer", html: `<p>Prenez en photo l'étiquette de prix en rayon ou votre ticket de caisse dans l'application : l'IA lit les montants, vous confirmez, et les prix sont associés aux codes-barres. Les relevés réguliers dans un même magasin sont les plus précieux.</p>` },
+        { id: "famille", title: "Le site frère", html: `<p>Open Prices s'appuie sur les fiches produits d'<a href="guide.html?g=off" style="font-weight:700;color:var(--orange-dark)">Open Food Facts</a> et les lieux d'OpenStreetMap. Site : prices.openfoodfacts.org.</p>` },
+      ],
+    },
+  };
+
+  /* ---- Rendu ---- */
+  const key = new URLSearchParams(location.search).get("g");
+  const G = GUIDES[key] || GUIDES["green-score"];
+  const $ = id => document.getElementById(id);
+  if (!GUIDES[key]) OFF.toast(OFF.t("Guide introuvable : ouverture du guide Green-Score"));
+  document.title = G.title + " | Open Food Facts";
+  $("heroImg").src = G.img; $("heroKicker").textContent = G.kicker; $("heroTitle").textContent = G.title; $("heroSub").textContent = G.sub; $("bcTitle").textContent = G.kicker;
+  if (G.badge) { $("heroBadge").src = G.badge; $("heroBadge").style.display = "block"; }
+  if (G.color) $("ghero").style.background = G.color;
+  const words = G.sections.map(s => s.html.replace(/<[^>]+>/g, " ")).join(" ").split(/\s+/).filter(Boolean).length;
+  $("heroTime").textContent = Math.max(2, Math.round(words / 200)) + " min"; $("heroSecs").textContent = G.sections.length;
+  $("body").innerHTML = G.sections.map(s => `<article class="gsec" id="${s.id}"><h2>${OFF.esc(s.title)}</h2>${s.html}</article>`).join("");
+  $("toc").insertAdjacentHTML("beforeend", G.sections.map((s, i) => `<a href="#${s.id}" class="${i === 0 ? "active" : ""}"><i>${String(i + 1).padStart(2, "0")}</i>${OFF.esc(s.title)}</a>`).join(""));
+  $("tocMobile").innerHTML = G.sections.map((s, i) => `<a href="#${s.id}">${i + 1}. ${OFF.esc(s.title)}</a>`).join("");
+  const k = ORDER.indexOf(GUIDES[key] ? key : "green-score"), prev = ORDER[k - 1], nxt = ORDER[k + 1];
+  $("pn").innerHTML = `<a class="prev ${prev ? "" : "disabled"}" href="${prev ? "guide.html?g=" + prev : "guides.html"}"><small>${OFF.t("Précédent")}</small><b>${prev ? OFF.esc(GUIDES[prev].title) : OFF.t("Début de la collection")}</b></a><a class="next ${nxt ? "" : "disabled"}" href="${nxt ? "guide.html?g=" + nxt : "guides.html"}"><small>${OFF.t("Suivant")}</small><b>${nxt ? OFF.esc(GUIDES[nxt].title) : OFF.t("Fin de la collection")}</b></a>`;
+
+  /* Scrollspy + barre de lecture */
+  const links = [...document.querySelectorAll("#toc a")];
+  const spy = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) links.forEach(l => l.classList.toggle("active", l.getAttribute("href") === "#" + en.target.id)); }), { rootMargin: "-30% 0px -60% 0px" });
+  document.querySelectorAll(".gsec").forEach(s => spy.observe(s));
+  const track = $("rtrack");
+  addEventListener("scroll", () => { const h = document.documentElement; track.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + "%"; }, { passive: true });
+  document.querySelector(".toc-mobile").addEventListener("click", e => { if (e.target.tagName === "A") e.currentTarget.removeAttribute("open"); });
+</script>
+</body>
+</html>

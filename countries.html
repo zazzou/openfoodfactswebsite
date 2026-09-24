@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pays : où sont vendus les produits | Open Food Facts</title>
+<link rel="icon" href="https://static.openfoodfacts.org/images/logos/off-logo-vertical-light.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="stylesheet" href="assets/style.css?v=17">
+<style>
+  .geo{display:grid;grid-template-columns:1.4fr 1fr;gap:28px;align-items:start;margin:32px auto 64px}
+  @media(max-width:960px){.geo{grid-template-columns:1fr}}
+  .mapwrap{position:sticky;top:96px}
+  @media(max-width:960px){.mapwrap{position:static}}
+  #map{height:560px;border-radius:var(--r-lg);border:1px solid var(--line-2);background:#f3ece6;z-index:0}
+  @media(max-width:600px){#map{height:380px}}
+  .leaflet-tile-pane{filter:grayscale(1) saturate(0) brightness(1.04) contrast(.9);opacity:.75}
+  .leaflet-container{font-family:var(--font-body)}
+  .leaflet-popup-content-wrapper{border-radius:12px;box-shadow:var(--shadow-lg)}
+  .leaflet-popup-content{margin:12px 16px;font-size:.9rem}
+  .leaflet-popup-content b{font-family:var(--font-head);font-size:1.2rem;color:var(--brand);display:block}
+  .leaflet-popup-content a{color:var(--orange-dark);font-weight:700}
+  .mapnote{margin-top:12px;font-size:.85rem;color:var(--ink-2);line-height:1.5}
+  .mapnote b{color:var(--brand)}
+  .legend{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-top:10px;font-size:.8rem;color:var(--ink-2);font-weight:600}
+  .legend i{display:inline-block;border-radius:50%;background:rgba(255,135,20,.45);border:2px solid var(--orange-dark);vertical-align:middle;margin-right:6px}
+  .rank-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+  .rank-head h2{font-size:1.4rem}
+  .ranking{background:#fff;border:1px solid var(--line-2);border-radius:var(--r-lg);overflow:hidden}
+  .crow{display:grid;grid-template-columns:38px 1fr auto;grid-template-areas:"rk name num" "rk bar bar";column-gap:12px;row-gap:6px;align-items:center;padding:12px 18px;border-top:1px solid var(--line-2);transition:background .15s}
+  .crow:first-child{border-top:0}
+  .crow:hover{background:var(--cream)}
+  .crow .rk{grid-area:rk;font-family:var(--font-head);font-weight:800;color:var(--muted);font-variant-numeric:tabular-nums;font-size:.95rem}
+  .crow:nth-child(-n+3) .rk{color:var(--orange-dark)}
+  .crow .name{grid-area:name;font-weight:700;color:var(--brand)}
+  .crow .num{grid-area:num;font-family:var(--font-head);font-weight:800;font-variant-numeric:tabular-nums;font-size:1.15rem;color:var(--ink);white-space:nowrap}
+  .crow .track{grid-area:bar;height:6px;border-radius:999px;background:var(--sand);overflow:hidden}
+  .crow .fill{height:100%;border-radius:999px;background:var(--blue);transition:width .6s}
+  .crow.sk{padding:16px 18px}
+  .ranking .more{display:block;text-align:center;padding:14px;font-weight:700;color:var(--orange-dark);border-top:1px solid var(--line-2);cursor:pointer}
+  .hero-stats{display:flex;gap:32px;flex-wrap:wrap;margin-top:20px}
+  .hero-stats b{display:block;font-family:var(--font-head);font-size:2.4rem;font-weight:800;letter-spacing:-.03em;line-height:1;color:var(--brand);font-variant-numeric:tabular-nums}
+  .hero-stats span{font-size:.85rem;color:var(--ink-2);font-weight:600}
+</style>
+</head>
+<body>
+<div id="site-header"></div>
+
+<div class="page-hero" style="padding-bottom:28px">
+  <div class="container">
+    <div class="breadcrumb"><a href="index.html">Accueil</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m9 6 6 6-6 6"/></svg><a href="facets.html">Facettes</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m9 6 6 6-6 6"/></svg><span>Pays</span></div>
+    <span class="eyebrow blue mt-3">Géographie</span>
+    <h1 style="font-size:clamp(2rem,4.2vw,3.2rem);max-width:22ch">Pays : où sont vendus les produits de la base</h1>
+    <p class="lead">Le pays de vente est lu sur l'étiquette ou indiqué par la personne qui ajoute le produit. Un produit vendu dans trois pays compte trois fois.</p>
+    <div class="hero-stats">
+      <div><b id="nCountries">476</b><span>pays ou territoires</span></div>
+      <div><b id="nTop">1 262 032</b><span id="nTopLbl">produits en France, premier pays</span></div>
+      <div><a class="btn btn-outline btn-sm" href="map.html?q=camembert" style="margin-top:6px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Chercher un produit sur la carte</a></div>
+    </div>
+  </div>
+</div>
+
+<div class="container geo">
+  <div class="mapwrap">
+    <div id="map" role="img" aria-label="Carte du monde avec un cercle par pays, proportionnel au nombre de produits"></div>
+    <div class="legend"><span><i style="width:10px;height:10px"></i>1 000</span><span><i style="width:18px;height:18px"></i>100 000</span><span><i style="width:28px;height:28px"></i>1 000 000 produits</span><span class="muted" style="font-weight:500">échelle logarithmique</span></div>
+    <p class="mapnote" id="mapnote">Compté le <b id="date">…</b>. Un pays est gris quand rien ne le mentionne. « world » est une étiquette de pays dans les données (<b id="worldN">72 950</b> produits) : ce n'est pas un pays, il n'est pas classé.</p>
+  </div>
+
+  <div>
+    <div class="rank-head">
+      <h2>Classement</h2>
+      <div class="row"><span id="demoTag"></span><span class="muted" style="font-size:.85rem" id="rankInfo"></span></div>
+    </div>
+    <div class="ranking" id="ranking"></div>
+  </div>
+</div>
+
+<div id="site-footer"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="assets/locale.js?v=1"></script>
+<script src="assets/app.js?v=9"></script>
+<script src="assets/i18n-es.js?v=3"></script>
+<script src="assets/i18n.js?v=10"></script>
+<script src="assets/prefs.js?v=1"></script>
+<script>
+  OFF.mount("search.html");
+  const T = OFF.t, n = x => (+x || 0).toLocaleString(OFF.numLocale || "fr-FR"), esc = OFF.esc;
+  // Centroïdes (nom FR, lat, lon), clé = identifiant de la facette countries
+  const GEO = {
+    "en:france": ["France", 46.6, 2.4], "en:united-states": ["États-Unis", 39.8, -98.5], "en:germany": ["Allemagne", 51.1, 10.4], "en:spain": ["Espagne", 40.3, -3.7], "en:italy": ["Italie", 42.5, 12.5],
+    "en:united-kingdom": ["Royaume-Uni", 54, -2.5], "en:canada": ["Canada", 56.1, -106.3], "en:netherlands": ["Pays-Bas", 52.2, 5.3], "en:switzerland": ["Suisse", 46.8, 8.2], "en:belgium": ["Belgique", 50.6, 4.5],
+    "en:ireland": ["Irlande", 53.3, -8], "en:australia": ["Australie", -25.3, 133.8], "en:mexico": ["Mexique", 23.6, -102.5], "en:russia": ["Russie", 61.5, 105.3], "en:poland": ["Pologne", 52, 19.5],
+    "en:portugal": ["Portugal", 39.6, -8.2], "en:austria": ["Autriche", 47.5, 14.5], "en:sweden": ["Suède", 62, 15], "en:brazil": ["Brésil", -14.2, -51.9], "en:japan": ["Japon", 36.2, 138.3],
+    "en:czech-republic": ["Tchéquie", 49.8, 15.5], "en:denmark": ["Danemark", 56.3, 9.5], "en:india": ["Inde", 20.6, 79], "en:romania": ["Roumanie", 45.9, 25], "en:hungary": ["Hongrie", 47.2, 19.5],
+    "en:argentina": ["Argentine", -38.4, -63.6], "en:norway": ["Norvège", 64.5, 11], "en:new-zealand": ["Nouvelle-Zélande", -41, 174], "en:bulgaria": ["Bulgarie", 42.7, 25.5], "en:croatia": ["Croatie", 45.1, 15.2],
+    "en:greece": ["Grèce", 39, 22], "en:luxembourg": ["Luxembourg", 49.8, 6.1], "en:finland": ["Finlande", 64, 26], "en:turkey": ["Turquie", 39, 35], "en:south-africa": ["Afrique du Sud", -30.6, 22.9],
+    "en:morocco": ["Maroc", 31.8, -7.1], "en:algeria": ["Algérie", 28, 1.7], "en:tunisia": ["Tunisie", 34, 9.5], "en:slovenia": ["Slovénie", 46.2, 14.8], "en:slovakia": ["Slovaquie", 48.7, 19.7],
+    "en:chile": ["Chili", -35.7, -71.5], "en:serbia": ["Serbie", 44, 21], "en:israel": ["Israël", 31.5, 34.9], "en:thailand": ["Thaïlande", 15.9, 101], "en:china": ["Chine", 35.9, 104.2],
+    "en:colombia": ["Colombie", 4.6, -74.3], "en:indonesia": ["Indonésie", -2.5, 118], "en:saudi-arabia": ["Arabie saoudite", 24, 45], "en:united-arab-emirates": ["Émirats arabes unis", 24, 54], "en:egypt": ["Égypte", 26.8, 30.8],
+    "en:lithuania": ["Lituanie", 55.2, 23.9], "en:latvia": ["Lettonie", 56.9, 24.6], "en:estonia": ["Estonie", 58.6, 25], "en:ukraine": ["Ukraine", 48.4, 31.2], "en:south-korea": ["Corée du Sud", 36.5, 127.9],
+    "en:singapore": ["Singapour", 1.35, 103.8], "en:malaysia": ["Malaisie", 4.2, 102], "en:philippines": ["Philippines", 12.9, 121.8], "en:peru": ["Pérou", -9.2, -75], "en:vietnam": ["Viêt Nam", 14.1, 108.3],
+    "en:pakistan": ["Pakistan", 30.4, 69.3], "en:nigeria": ["Nigeria", 9.1, 8.7], "en:kenya": ["Kenya", -0.02, 37.9], "en:iceland": ["Islande", 65, -19], "en:hong-kong": ["Hong Kong", 22.3, 114.2], "en:taiwan": ["Taïwan", 23.7, 121],
+  };
+  const map = L.map("map", { worldCopyJump: true, minZoom: 1, maxZoom: 7, scrollWheelZoom: false }).setView([25, 10], 2);
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>', maxZoom: 19 }).addTo(map);
+  const layer = L.layerGroup().addTo(map);
+  const radius = p => Math.max(4, (Math.log10(Math.max(1, p)) - 2) * 7); // 1 000 → 7, 100 000 → 21, 1 000 000 → 28
+
+  const ranking = document.getElementById("ranking");
+  ranking.innerHTML = Array.from({ length: 12 }, () => '<div class="crow sk"><div class="skeleton" style="height:14px;width:20px"></div><div class="skeleton" style="height:14px;width:55%"></div><div class="skeleton" style="height:14px;width:70px"></div><div class="skeleton" style="grid-area:bar;height:6px"></div></div>').join("");
+
+  const nameOf = t => (GEO[t.id] && T(GEO[t.id][0])) || t.name || t.id.replace(/^[a-z]{2}:/, "");
+  const link = t => `facet.html?facet=countries&value=${encodeURIComponent(t.id.replace(/^[a-z]{2}:/, ""))}&name=${encodeURIComponent(nameOf(t))}`;
+  let shown = 30;
+  function render(tags) {
+    const max = tags[0].products;
+    const rows = tags.slice(0, shown).map((t, i) => `<a class="crow" href="${link(t)}" data-id="${t.id}">
+      <span class="rk">${i + 1}</span><span class="name">${esc(nameOf(t))}</span><span class="num">${n(t.products)}</span>
+      <span class="track"><span class="fill" style="width:${Math.max(1, Math.round(100 * t.products / max))}%"></span></span></a>`).join("");
+    ranking.innerHTML = rows + (shown < tags.length ? `<span class="more" id="more">${T("Afficher plus")} (${n(tags.length - shown)} ${T("autres")})</span>` : "");
+    const m = document.getElementById("more"); if (m) m.addEventListener("click", () => { shown += 30; render(tags); });
+    ranking.querySelectorAll(".crow").forEach(r => r.addEventListener("mouseenter", () => { const c = markers[r.dataset.id]; if (c) c.setStyle({ fillOpacity: .8 }); }));
+    ranking.querySelectorAll(".crow").forEach(r => r.addEventListener("mouseleave", () => { const c = markers[r.dataset.id]; if (c) c.setStyle({ fillOpacity: .45 }); }));
+  }
+  const markers = {};
+  function draw(tags) {
+    layer.clearLayers();
+    tags.slice(0, 80).forEach((t, i) => {
+      const g = GEO[t.id]; if (!g) return;
+      const c = L.circleMarker([g[1], g[2]], { radius: radius(t.products), color: "#cc6500", weight: 1.5, fillColor: "#ff8714", fillOpacity: .45 })
+        .bindPopup(`<b>${esc(nameOf(t))}</b>${n(t.products)} ${T("produits")} · ${T("rang")} ${i + 1}<br><a href="${link(t)}">${T("Voir les produits")} →</a>`);
+      c.addTo(layer); markers[t.id] = c;
+    });
+  }
+  async function load() {
+    let tags = null, demo = false;
+    try {
+      const ctrl = new AbortController(); const to = setTimeout(() => ctrl.abort(), 15000);
+      const r = await fetch("https://world.openfoodfacts.org/facets/countries.json", { signal: ctrl.signal }); clearTimeout(to);
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      const d = await r.json(); if (Array.isArray(d.tags) && d.tags.length) tags = d.tags;
+    } catch (e) { /* repli */ }
+    if (!tags) {
+      demo = true;
+      tags = await fetch("assets/facets-sample.json").then(r => r.json()).then(s => s.countries).catch(() => []);
+      document.getElementById("demoTag").innerHTML = `<span class="tag warn">${T("données de démonstration")}</span>`;
+    }
+    tags = tags.map(t => ({ id: t.id, name: t.name, products: +t.products || 0 })).sort((a, b) => b.products - a.products);
+    const world = tags.find(t => t.id === "en:world");
+    if (world) document.getElementById("worldN").textContent = n(world.products);
+    const ranked = tags.filter(t => t.id !== "en:world" && t.products > 0);
+    document.getElementById("nCountries").textContent = n(ranked.length);
+    document.getElementById("nTop").textContent = n(ranked[0].products);
+    document.getElementById("nTopLbl").textContent = `${T("produits en")} ${nameOf(ranked[0])}, ${T("premier pays")}`;
+    document.getElementById("date").textContent = new Date().toLocaleDateString(OFF.numLocale || "fr-FR", { day: "numeric", month: "long", year: "numeric" }) + (demo ? " (" + T("valeurs de démonstration") + ")" : "");
+    document.getElementById("rankInfo").textContent = `${n(ranked.length)} ${T("pays classés")}`;
+    draw(ranked); render(ranked);
+  }
+  load();
+</script>
+</body>
+</html>

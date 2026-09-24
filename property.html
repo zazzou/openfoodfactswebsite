@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Propriété | Open Food Facts</title>
+<link rel="icon" href="https://static.openfoodfacts.org/images/logos/off-logo-vertical-light.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=17">
+<style>
+  .khead{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:32px;align-items:end}
+  @media(max-width:800px){.khead{grid-template-columns:1fr}}
+  .khead h1{font-size:clamp(2rem,4.4vw,3.4rem)}
+  .rawkey{display:inline-flex;align-items:center;gap:8px;font-family:ui-monospace,Menlo,Consolas,monospace;background:#fff;border:1px solid var(--line);padding:8px 14px;border-radius:10px;color:var(--brand);font-size:.95rem;margin-top:14px;word-break:break-all}
+  .rawkey button{color:var(--muted);display:grid;place-items:center}
+  .rawkey button:hover{color:var(--brand)}
+  .rawkey svg{width:16px;height:16px}
+  .kfacts{display:grid;grid-template-columns:1fr 1fr;gap:12px;min-width:280px}
+  .kfacts .fact b{font-family:var(--font-head);font-size:2.4rem;line-height:1;letter-spacing:-.02em}
+  .kfacts .fact small{font-size:.8rem}
+  .vbars{display:grid;gap:10px;margin-top:6px}
+  .vbar{display:grid;grid-template-columns:minmax(0,190px) minmax(0,1fr) 92px;gap:14px;align-items:center;font-size:.92rem;padding:6px 8px;border-radius:10px;text-align:left;width:100%}
+  .vbar:hover,.vbar.on{background:var(--sand)}
+  .vbar .v{font-weight:700;color:var(--brand);font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.88rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .vbar .v small{display:block;font-family:var(--font-body);font-weight:500;color:var(--ink-2);font-size:.78rem}
+  .vbar .track{height:12px;border-radius:999px;background:var(--sand);overflow:hidden}
+  .vbar.on .track{background:#fff}
+  .vbar .fill{height:100%;border-radius:999px;background:var(--orange);transition:width .8s ease}
+  .vbar .num{text-align:right;font-variant-numeric:tabular-nums;color:var(--ink-2);white-space:nowrap}
+  .vbar .num b{color:var(--brand)}
+  @media(max-width:520px){.vbar{grid-template-columns:minmax(0,1fr) 80px}.vbar .track{grid-column:1/-1;grid-row:2}.vbar .num{text-align:right}}
+  .ptable{width:100%;border-collapse:collapse;font-size:.93rem}
+  .ptable th{text-align:left;font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;padding:10px 12px;border-bottom:2px solid var(--line)}
+  .ptable td{padding:10px 12px;border-bottom:1px solid var(--line-2);vertical-align:middle}
+  .ptable tr:hover td{background:var(--cream)}
+  .pcell{display:flex;align-items:center;gap:12px;min-width:0}
+  .pcell .im{width:46px;height:46px;border-radius:10px;background:var(--sand);display:grid;place-items:center;flex:none;overflow:hidden}
+  .pcell .im img{max-height:46px;width:auto;object-fit:contain}
+  .pcell .im.empty{color:var(--muted);font-size:.6rem;font-weight:700;text-align:center;line-height:1.1}
+  .pcell b{display:block;color:var(--brand);line-height:1.25;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+  .pcell small{color:var(--ink-2);display:block}
+  .pcell .sk{height:14px;width:140px}
+  .ptable code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.85rem;color:var(--brand);background:var(--sand);padding:3px 8px;border-radius:6px;white-space:nowrap}
+  .ptable .val{font-weight:700;color:var(--brand)}
+  .ptable .val small{display:block;font-weight:500;color:var(--ink-2)}
+  .ptable .act a{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:10px;color:var(--brand);background:var(--sand)}
+  .ptable .act a:hover{background:var(--orange);color:#fff}
+  .ptable .act svg{width:16px;height:16px}
+  @media(max-width:640px){.ptable thead{display:none}.ptable tr{display:grid;grid-template-columns:1fr auto;gap:4px 10px;padding:12px 0;border-bottom:1px solid var(--line-2)}.ptable td{border:0;padding:2px 0}.ptable td.pc{grid-column:1/-1}.ptable td.act{grid-column:2;grid-row:2}}
+  .empty{padding:36px;text-align:center;color:var(--ink-2);border:1px dashed var(--line);border-radius:var(--r)}
+</style>
+</head>
+<body>
+<div id="site-header"></div>
+
+<div class="page-hero">
+  <div class="container">
+    <nav class="breadcrumb" aria-label="Fil d'Ariane">
+      <a href="index.html">Accueil</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 6 6 6-6 6"/></svg>
+      <a href="properties.html">Propriétés</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 6 6 6-6 6"/></svg>
+      <a id="bc-group" href="properties.html">Conservation</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 6 6 6-6 6"/></svg>
+      <span id="bc-key">Durée de conservation</span>
+    </nav>
+    <div class="khead" style="margin-top:22px">
+      <div>
+        <span class="eyebrow" id="k-group">Conservation</span>
+        <h1 id="k-title" style="margin-top:10px">Durée de conservation</h1>
+        <div class="rawkey"><span id="k-raw">conservation:shelf_life</span><button type="button" id="copyKey" title="Copier la clé" aria-label="Copier la clé"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button></div>
+        <p class="lead mt-3" id="k-sub">Propriété <b>enregistrée sur 161 produits</b>, avec <b>40 valeurs différentes</b>.</p>
+      </div>
+      <div class="kfacts">
+        <div class="fact"><small>Produits</small><b id="f-count"><span class="skeleton" style="display:inline-block;width:70px;height:34px"></span></b></div>
+        <div class="fact"><small>Valeurs différentes</small><b id="f-values"><span class="skeleton" style="display:inline-block;width:50px;height:34px"></span></b></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container" style="margin-top:8px">
+  <div class="panel" id="values">
+    <div class="row between">
+      <div><h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 19V5M4 19h16M8 15v-4M12 15V8M16 15v-6"/></svg> Valeurs enregistrées</h2><p class="sub" id="v-sub">Les valeurs les plus fréquentes. Cliquez sur une valeur pour filtrer les produits.</p></div>
+      <div id="v-tag"></div>
+    </div>
+    <div class="vbars" id="vbars"><div class="skeleton" style="height:30px"></div><div class="skeleton" style="height:30px"></div><div class="skeleton" style="height:30px"></div><div class="skeleton" style="height:30px"></div></div>
+    <p class="muted mt-2" id="v-more" style="font-size:.85rem"></p>
+  </div>
+
+  <div class="panel" id="products">
+    <div class="row between">
+      <div><h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7l9-4 9 4-9 4-9-4ZM3 7v10l9 4 9-4V7M12 11v10"/></svg> Produits qui la portent</h2><p class="sub" id="p-sub">Les 20 premiers, avec leur valeur. Nom et marque chargés depuis la fiche produit.</p></div>
+      <div id="p-filter"></div>
+    </div>
+    <div style="overflow-x:auto">
+      <table class="ptable">
+        <thead><tr><th>Produit</th><th>Code-barres</th><th>Valeur</th><th></th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+    <p class="muted mt-2" id="p-more" style="font-size:.85rem"></p>
+  </div>
+
+  <div class="callout mt-4"><b>Vous avez cette information sous les yeux ?</b> Ouvrez la fiche d'un produit puis « Propriétés » pour ajouter la clé <code id="k-raw2" style="background:#fff;padding:2px 6px;border-radius:6px">conservation:shelf_life</code> avec sa valeur. Les conventions sont discutées sur le wiki avant de généraliser une nouvelle clé. <a href="properties.html" style="color:var(--orange-dark);font-weight:700">Toutes les propriétés →</a></div>
+</div>
+
+<div id="site-footer"></div>
+<script src="assets/locale.js?v=1"></script>
+<script src="assets/app.js?v=9"></script>
+<script src="assets/i18n-es.js?v=3"></script>
+<script src="assets/i18n.js?v=10"></script>
+<script src="assets/prefs.js?v=1"></script>
+<script src="assets/folk.js?v=1"></script>
+<script>
+  OFF.mount(null);
+  const F = OFF.folk, esc = OFF.esc;
+  const K = (new URLSearchParams(location.search).get("k") || "conservation:shelf_life").trim();
+  const LIMIT = 20;
+  const FALLBACK = {
+    "conservation:shelf_life": { count: 161, values: 40, rows: [["4810814002055", "12m"], ["6971016101026", "12m"], ["4607041459222", "12m"], ["8445290249531", "12m"], ["5904509289964", "12m"], ["8901030865169", "36m"], ["3017620422003", "36m"], ["5000112637922", "36m"], ["5000129302677", "6w"], ["5010251564119", "6w"], ["7300400481588", "6w"], ["3168930163480", "3m"], ["8000500037560", "3m"], ["3228857000852", "3m"], ["4056489130239", "24m"], ["3245414180819", "24m"], ["7622300336738", "24m"], ["4770266129598", "3w"], ["7771605000124", "60d"], ["5010251426820", "3d"], ["4631154522726", "120d"], ["193968286439", "1w"], ["3274080005003", "180d"], ["3046920022606", "180d"], ["8076800195057", "180d"], ["3033490004743", "90d"], ["3560070791460", "90d"]] },
+  };
+  let rows = [], filterV = null, demo = false;
+
+  const gl = F.groupOf(K);
+  document.title = `${F.label(K)} | Open Food Facts`;
+  document.getElementById("k-title").textContent = F.label(K);
+  document.getElementById("k-group").textContent = F.groupLabel(gl) + (F.lang(K) ? " · " + F.langName(F.lang(K)) : "");
+  const bg = document.getElementById("bc-group"); bg.textContent = F.groupLabel(gl); bg.href = "properties.html?q=" + encodeURIComponent(gl);
+  document.getElementById("bc-key").textContent = F.label(K);
+  document.getElementById("k-raw").textContent = K; document.getElementById("k-raw2").textContent = K;
+  document.getElementById("copyKey").addEventListener("click", () => { navigator.clipboard && navigator.clipboard.writeText(K).then(() => OFF.toast(OFF.t("Clé copiée")), () => {}); });
+
+  function setHead(count, values) {
+    document.getElementById("f-count").textContent = F.num(count);
+    document.getElementById("f-values").textContent = F.num(values);
+    document.getElementById("k-sub").innerHTML = `${OFF.t("Propriété")} <b>${OFF.t("enregistrée sur")} ${F.num(count)} ${OFF.t(count > 1 ? "produits" : "produit")}</b>, ${OFF.t("avec")} <b>${F.num(values)} ${OFF.t(values > 1 ? "valeurs différentes" : "valeur")}</b>.`;
+  }
+  function renderValues() {
+    const agg = new Map(); rows.forEach(r => agg.set(r.v, (agg.get(r.v) || 0) + 1));
+    const list = [...agg.entries()].sort((a, b) => b[1] - a[1]);
+    const total = rows.length || 1, max = list.length ? list[0][1] : 1, top = list.slice(0, 12);
+    document.getElementById("vbars").innerHTML = top.map(([v, n]) => {
+      const pv = F.prettyValue(K, v);
+      return `<button type="button" class="vbar ${filterV === v ? "on" : ""}" data-v="${esc(v)}"><span class="v" title="${esc(v)}">${esc(v || "∅")}${pv ? `<small>${esc(pv)}</small>` : ""}</span><span class="track"><span class="fill" style="display:block;width:${Math.max(3, n / max * 100)}%"></span></span><span class="num"><b>${F.num(n)}</b> · ${Math.round(n / total * 100)} %</span></button>`;
+    }).join("") || `<div class="empty">${OFF.t("Aucune valeur enregistrée.")}</div>`;
+    document.getElementById("v-more").textContent = list.length > top.length ? `${OFF.t("et")} ${F.num(list.length - top.length)} ${OFF.t("autres valeurs, moins fréquentes.")}` : "";
+    document.getElementById("v-tag").innerHTML = demo ? `<span class="tag warn">${OFF.t("données de démonstration")}</span>` : `<span class="tag ok">${OFF.t("Folksonomy Engine · en direct")}</span>`;
+  }
+  function renderRows() {
+    const sel = filterV == null ? rows : rows.filter(r => r.v === filterV);
+    const shown = sel.slice(0, LIMIT);
+    document.getElementById("p-filter").innerHTML = filterV == null ? "" : `<button type="button" class="chip active" id="clearF">${OFF.t("Valeur")} : ${esc(filterV)} ✕</button>`;
+    const cf = document.getElementById("clearF"); cf && cf.addEventListener("click", () => { filterV = null; renderValues(); renderRows(); });
+    document.getElementById("rows").innerHTML = shown.map(r => {
+      const pv = F.prettyValue(K, r.v);
+      return `<tr data-code="${esc(r.product)}">
+        <td class="pc"><a class="pcell" href="product-properties.html?code=${esc(r.product)}"><span class="im"><span class="skeleton" style="width:100%;height:100%"></span></span><span style="min-width:0"><span class="skeleton sk" style="display:block;margin-bottom:6px"></span><span class="skeleton sk" style="display:block;width:90px;height:11px"></span></span></a></td>
+        <td><code>${esc(r.product)}</code></td>
+        <td class="val">${esc(r.v)}${pv ? `<small>${esc(pv)}</small>` : ""}</td>
+        <td class="act"><a href="product-properties.html?code=${esc(r.product)}" title="${OFF.t("Propriétés du produit")}" aria-label="${OFF.t("Propriétés du produit")}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></td>
+      </tr>`;
+    }).join("") || `<tr><td colspan="4"><div class="empty">${OFF.t("Aucun produit pour cette valeur.")}</div></td></tr>`;
+    document.getElementById("p-more").textContent = sel.length > LIMIT ? `${OFF.t("Les")} ${LIMIT} ${OFF.t("premiers produits sur")} ${F.num(sel.length)}.` : `${F.num(sel.length)} ${OFF.t(sel.length > 1 ? "produits" : "produit")}.`;
+    hydrate(shown.map(r => r.product));
+  }
+  const cache = new Map();
+  async function hydrate(codes) {
+    await Promise.allSettled(codes.map(async code => {
+      let p = cache.get(code);
+      if (!p) { try { p = await F.lite(code); } catch (e) { p = { code, missing: true }; } cache.set(code, p); }
+      const tr = document.querySelector(`tr[data-code="${CSS.escape(code)}"] .pcell`); if (!tr) return;
+      const name = p.missing ? OFF.t("Fiche non disponible") : F.nameOf(p, code);
+      const brand = p.missing ? OFF.t("hors Open Food Facts ou API indisponible") : [p.brands, p.quantity].filter(Boolean).join(" · ");
+      tr.innerHTML = `<span class="im ${p.image_front_small_url ? "" : "empty"}">${p.image_front_small_url ? `<img loading="lazy" src="${esc(p.image_front_small_url)}" alt="">` : OFF.t("Pas de photo")}</span><span style="min-width:0"><b>${esc(name)}</b><small>${esc(brand)}</small></span>`;
+    }));
+  }
+  document.getElementById("vbars").addEventListener("click", e => { const b = e.target.closest(".vbar"); if (!b) return; filterV = filterV === b.dataset.v ? null : b.dataset.v; renderValues(); renderRows(); });
+
+  (async () => {
+    let meta = null;
+    try {
+      const [prods, keys] = await Promise.all([F.products(K), F.keys().catch(() => null)]);
+      if (!Array.isArray(prods)) throw new Error("bad");
+      rows = prods.filter(x => x && x.product).map(x => ({ product: String(x.product), v: String(x.v ?? "") }));
+      meta = keys && keys.find(x => x.k === K);
+      if (!rows.length && !meta) throw new Error("unknown key");
+    } catch (e) {
+      const fb = FALLBACK[K]; demo = true;
+      if (fb) { rows = fb.rows.map(([product, v]) => ({ product, v })); meta = { count: fb.count, values: fb.values }; }
+      else { rows = []; meta = { count: 0, values: 0 }; OFF.toast(OFF.t("API Folksonomy indisponible : aucune donnée pour cette clé")); }
+    }
+    const distinct = new Set(rows.map(r => r.v)).size;
+    setHead(meta ? meta.count : rows.length, meta ? meta.values : distinct);
+    renderValues(); renderRows();
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Propriétés des produits | Open Food Facts</title>
+<meta name="description" content="Les propriétés libres (clé/valeur) que les contributeurs enregistrent sur les produits Open Food Facts, groupées par famille.">
+<link rel="icon" href="https://static.openfoodfacts.org/images/logos/off-logo-vertical-light.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=17">
+<style>
+  .hero-props{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:end}
+  @media(max-width:900px){.hero-props{grid-template-columns:1fr}}
+  .bignum{background:#fff;border:1px solid var(--line-2);border-radius:var(--r-lg);padding:28px 30px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .bignum::before{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(255,135,20,.22),transparent 65%)}
+  .bignum b{display:block;font-family:var(--font-head);font-weight:800;font-size:clamp(3rem,6vw,4.4rem);line-height:1;letter-spacing:-.03em;color:var(--brand)}
+  .bignum b em{font-style:normal;color:var(--orange)}
+  .bignum .of{font-size:1.05rem;color:var(--ink-2);margin-top:8px}
+  .bignum .of strong{color:var(--brand)}
+  .bignum .hint{margin-top:14px;padding-top:14px;border-top:1px solid var(--line-2);font-size:.92rem;color:var(--ink-2);font-weight:600}
+  .toolbar{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin:8px 0 22px}
+  .toolbar .searchbar{max-width:460px;padding:4px 4px 4px 16px;box-shadow:none}
+  .toolbar .searchbar input{font-size:.95rem;padding:9px 10px}
+  .toolbar .meta{margin-left:auto;font-size:.9rem;color:var(--ink-2)}
+  .toolbar .meta b{color:var(--brand)}
+  .plist{display:grid;gap:10px}
+  .pgroup{background:#fff;border:1px solid var(--line-2);border-radius:var(--r);overflow:hidden;transition:box-shadow .2s}
+  .pgroup:hover{box-shadow:var(--shadow-sm)}
+  .prow{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:14px;padding:16px 18px}
+  .prow .main{display:flex;gap:14px;align-items:center;text-align:left;min-width:0;padding:0}
+  .prow .ic{width:42px;height:42px;border-radius:12px;background:var(--sand);color:var(--brand);display:grid;place-items:center;flex:none;font-family:var(--font-head);font-weight:800;font-size:1rem}
+  .prow .ic svg{width:18px;height:18px;transition:transform .2s}
+  .pgroup.open .prow .ic svg{transform:rotate(90deg)}
+  .prow .name{font-family:var(--font-head);font-weight:700;color:var(--brand);font-size:1.05rem;line-height:1.2}
+  .prow .pat{font-size:.82rem;color:var(--ink-2);margin-top:3px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .prow .pat code{font-family:ui-monospace,Menlo,Consolas,monospace;background:var(--sand);padding:2px 7px;border-radius:6px;color:var(--brand);font-size:.8rem}
+  .prow .n{font-family:var(--font-head);font-weight:800;font-size:1.7rem;color:var(--brand);letter-spacing:-.02em;font-variant-numeric:tabular-nums;text-align:right;line-height:1}
+  .prow .n small{display:block;font-family:var(--font-body);font-weight:600;font-size:.72rem;color:var(--muted);letter-spacing:0;margin-top:3px}
+  .prow .chev{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--sand);color:var(--brand);transition:.15s}
+  .prow .chev:hover{background:var(--orange);color:#fff}
+  .prow .chev svg{width:18px;height:18px}
+  .pkeys{display:none;border-top:1px solid var(--line-2);background:var(--cream)}
+  .pgroup.open .pkeys{display:block}
+  .pkey{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:12px;align-items:center;padding:11px 18px 11px 74px;border-top:1px solid var(--line-2);font-size:.92rem}
+  .pkey:first-child{border-top:0}
+  .pkey:hover{background:#fff}
+  .pkey code{font-family:ui-monospace,Menlo,Consolas,monospace;color:var(--brand);font-size:.85rem;word-break:break-all}
+  .pkey .lbl{color:var(--ink-2);display:block;font-size:.85rem}
+  .pkey .vals{color:var(--ink-2);font-size:.82rem;white-space:nowrap}
+  .pkey b{font-variant-numeric:tabular-nums;color:var(--brand);min-width:44px;text-align:right}
+  .pgroup.nonfood{border-color:#f3c8a3;background:#fffaf5}
+  .pgroup.nonfood .prow .ic{background:var(--orange-soft);color:var(--orange-dark)}
+  .sk-row{height:78px}
+  .empty{padding:40px;text-align:center;color:var(--ink-2);background:#fff;border:1px dashed var(--line);border-radius:var(--r)}
+  @media(max-width:600px){
+    .prow{grid-template-columns:minmax(0,1fr) auto;padding:14px}
+    .prow .chev{grid-column:2;grid-row:1}
+    .prow .n{grid-column:1;text-align:left;font-size:1.4rem}
+    .prow .n small{display:inline;margin-left:6px}
+    .pkey{padding-left:14px;grid-template-columns:minmax(0,1fr) auto}
+    .pkey .vals{display:none}
+  }
+</style>
+</head>
+<body>
+<div id="site-header"></div>
+
+<div class="page-hero">
+  <div class="container">
+    <nav class="breadcrumb" aria-label="Fil d'Ariane">
+      <a href="index.html">Accueil</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 6 6 6-6 6"/></svg>
+      <a href="data.html">Données & API</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 6 6 6-6 6"/></svg>
+      <span>Propriétés</span>
+    </nav>
+    <div class="hero-props" style="margin-top:22px">
+      <div>
+        <span class="eyebrow">Folksonomy · clés et valeurs libres</span>
+        <h1 style="font-size:clamp(2.2rem,4.6vw,3.6rem)">Propriétés des produits : <span style="color:var(--orange)">ce que les contributeurs enregistrent</span></h1>
+        <p class="lead">Les propriétés sont créées et rangées par les contributeurs, pour n'importe quel usage, en plus des champs qu'Open Food Facts a déjà.</p>
+      </div>
+      <div class="bignum reveal">
+        <b><em>7 464</em> produits</b>
+        <div class="of">sur <strong>4 707 307</strong> en portent une</div>
+        <div class="hint">Parcourez ce qui existe avant d'inventer une nouvelle clé.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section style="padding-top:32px">
+  <div class="container">
+    <div class="toolbar">
+      <div class="tabs" id="tabs" role="tablist">
+        <button class="active" data-tab="food" role="tab">Alimentaire</button>
+        <button data-tab="all" role="tab">Tous les produits</button>
+      </div>
+      <form class="searchbar" role="search" id="keySearch" onsubmit="return false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="search" id="q" placeholder="Rechercher une clé…" aria-label="Rechercher une clé" autocomplete="off">
+      </form>
+      <div class="meta" id="meta"><span class="skeleton" style="display:inline-block;width:160px;height:16px;vertical-align:middle"></span></div>
+    </div>
+    <div class="plist" id="list">
+      <div class="skeleton sk-row"></div><div class="skeleton sk-row"></div><div class="skeleton sk-row"></div><div class="skeleton sk-row"></div><div class="skeleton sk-row"></div><div class="skeleton sk-row"></div>
+    </div>
+    <p class="muted mt-3" style="font-size:.85rem">Le nombre affiché pour un groupe additionne les enregistrements de toutes ses clés ; un même produit peut en porter plusieurs. Les groupes se replient d'un clic, la flèche ouvre la clé la plus fréquente.</p>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="container">
+    <div class="band reveal">
+      <div class="grid-2" style="align-items:center;position:relative">
+        <div>
+          <span class="eyebrow" style="color:var(--orange)">Comment ça marche</span>
+          <h2 style="margin:12px 0 14px">Une clé, une valeur, sur n'importe quel produit</h2>
+          <p style="font-size:1.05rem">Les clés sont en minuscules, séparées par des deux-points : <code style="background:rgba(255,255,255,.1);padding:2px 6px;border-radius:6px">groupe:sous_clé:langue</code>. La communauté se met d'accord sur les conventions dans le wiki avant de généraliser une clé.</p>
+          <div class="row mt-4"><a class="btn btn-primary" href="product-properties.html?code=4009300524588">Voir un produit annoté</a><a class="btn btn-white" href="data.html#api">API Folksonomy</a></div>
+        </div>
+        <div class="code"><div class="code-head"><i></i><i></i><i></i></div><span class="c"># Les propriétés d'un produit</span>
+<span class="k">GET</span> https://api.folksonomy.openfoodfacts.org/product/<span class="n">4009300524588</span>
+
+[{ <span class="s">"k"</span>: <span class="s">"storage_conditions:en"</span>,
+   <span class="s">"v"</span>: <span class="s">"Store in a cool and dry place."</span>,
+   <span class="s">"editor"</span>: <span class="s">"libra"</span>, <span class="s">"version"</span>: <span class="n">1</span> }, …]</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+<script src="assets/locale.js?v=1"></script>
+<script src="assets/app.js?v=9"></script>
+<script src="assets/i18n-es.js?v=3"></script>
+<script src="assets/i18n.js?v=10"></script>
+<script src="assets/prefs.js?v=1"></script>
+<script src="assets/folk.js?v=1"></script>
+<script>
+  OFF.mount("data.html");
+  const F = OFF.folk, esc = OFF.esc;
+  const NF_TITLE = OFF.t("Importé d'autres projets Open X Facts");
+  let ALL = [], demo = false, tab = "food", q = "";
+
+  function build(keys) {
+    const groups = new Map();
+    keys.forEach(x => {
+      const g = F.isNonFood(x.k) && tab === "food" ? "__nonfood" : F.groupOf(x.k);
+      if (!groups.has(g)) groups.set(g, { g, keys: [], count: 0 });
+      const o = groups.get(g); o.keys.push(x); o.count += x.count;
+    });
+    const arr = [...groups.values()].map(o => { o.keys.sort((a, b) => b.count - a.count); o.top = o.keys[0].k; o.nonfood = o.g === "__nonfood" || F.isNonFood(o.top); return o; });
+    arr.sort((a, b) => (a.nonfood - b.nonfood) || (b.count - a.count));
+    return arr;
+  }
+  function render() {
+    const ql = q.trim().toLowerCase();
+    let keys = ALL;
+    if (ql) keys = keys.filter(x => x.k.includes(ql) || F.label(x.k).toLowerCase().includes(ql) || F.groupLabel(F.groupOf(x.k)).toLowerCase().includes(ql));
+    const groups = build(keys);
+    const list = document.getElementById("list");
+    document.getElementById("meta").innerHTML = `<b>${F.num(keys.length)}</b> ${OFF.t("clés")} · <b>${F.num(groups.length)}</b> ${OFF.t("groupes")}${demo ? ` <span class="tag warn" style="margin-left:6px">${OFF.t("données de démonstration")}</span>` : ""}`;
+    if (!groups.length) { list.innerHTML = `<div class="empty">${OFF.t("Aucune clé ne correspond à")} « ${esc(q)} ».<br><small>${OFF.t("Aucune propriété n'existe encore sous ce nom : vous pouvez la créer sur un produit.")}</small></div>`; return; }
+    list.innerHTML = groups.map(o => {
+      const single = o.keys.length === 1 && o.g !== "__nonfood";
+      const name = o.g === "__nonfood" ? NF_TITLE : (single ? F.label(o.top) : F.groupLabel(o.g));
+      const pat = o.g === "__nonfood" ? "france:reparability_index:*, consumer_electronics:*, …" : (single ? o.top : o.g + ":*");
+      const open = ql && !single ? " open" : "";
+      return `<div class="pgroup${o.nonfood ? " nonfood" : ""}${open}">
+        <div class="prow">
+          <button class="main" type="button" ${single ? 'data-href="property.html?k=' + encodeURIComponent(o.top) + '"' : 'data-toggle'} aria-expanded="${open ? "true" : "false"}">
+            <span class="ic">${single ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h10M4 17h7"/></svg>' : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>'}</span>
+            <span style="min-width:0"><span class="name">${esc(name)}</span><span class="pat"><code>${esc(pat)}</code>${single ? "" : `<span>· ${F.num(o.keys.length)} ${OFF.t(o.keys.length > 1 ? "clés" : "clé")}</span>`}${o.nonfood ? `<span class="tag warn" style="padding:2px 8px;font-size:.7rem">${OFF.t("NON ALIMENTAIRE")}</span>` : ""}</span></span>
+          </button>
+          <span class="n">${F.num(o.count)}<small>${OFF.t("produits")}</small></span>
+          <a class="chev" href="property.html?k=${encodeURIComponent(o.top)}" title="${esc(F.label(o.top))}" aria-label="${OFF.t("Ouvrir")} ${esc(F.label(o.top))}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
+        ${single ? "" : `<div class="pkeys">${o.keys.map(x => `<a class="pkey" href="property.html?k=${encodeURIComponent(x.k)}"><span style="min-width:0"><code>${esc(x.k)}</code><span class="lbl">${esc(F.label(x.k))}${F.lang(x.k) ? " · " + esc(F.langName(F.lang(x.k))) : ""}</span></span><span class="vals">${F.num(x.values)} ${OFF.t(x.values > 1 ? "valeurs" : "valeur")}</span><b>${F.num(x.count)}</b></a>`).join("")}</div>`}
+      </div>`;
+    }).join("");
+  }
+  document.getElementById("list").addEventListener("click", e => {
+    const b = e.target.closest("button.main"); if (!b) return;
+    if (b.dataset.href) { location.href = b.dataset.href; return; }
+    const g = b.closest(".pgroup"); g.classList.toggle("open"); b.setAttribute("aria-expanded", g.classList.contains("open"));
+  });
+  document.querySelectorAll("#tabs button").forEach(b => b.addEventListener("click", () => { document.querySelectorAll("#tabs button").forEach(x => x.classList.remove("active")); b.classList.add("active"); tab = b.dataset.tab; render(); }));
+  let tmr; document.getElementById("q").addEventListener("input", e => { clearTimeout(tmr); tmr = setTimeout(() => { q = e.target.value; render(); }, 120); });
+
+  (async () => {
+    try { const d = await F.keys(); if (!Array.isArray(d) || !d.length) throw new Error("empty"); ALL = d.filter(x => x.k); }
+    catch (e) { ALL = F.KEYS_FALLBACK; demo = true; }
+    const p = new URLSearchParams(location.search).get("q"); if (p) { q = p; document.getElementById("q").value = p; }
+    render();
+  })();
+</script>
+</body>
+</html>

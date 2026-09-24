@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mon classement personnalisé | Open Food Facts</title>
+<link rel="icon" href="https://static.openfoodfacts.org/images/logos/off-logo-vertical-light.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=17">
+<style>
+  .match{display:inline-flex;align-items:center;gap:8px;padding:4px 10px 4px 4px;border-radius:999px;background:#fff;border:1.5px solid var(--line);font-size:.8rem;font-weight:600;color:var(--ink-2)} .match b{display:inline-grid;place-items:center;min-width:44px;height:26px;padding:0 8px;border-radius:999px;background:var(--c);color:#fff;font-family:var(--font-head)} .match.lg{font-size:.95rem;padding:6px 14px 6px 6px} .match.lg b{height:34px;min-width:60px;font-size:1.05rem}
+  .rk-head{padding:28px 0 8px}
+  .rk-head h1{font-size:clamp(2rem,4.2vw,3.2rem);margin-top:10px}
+  .rk-head .n{color:var(--ink-2);font-weight:600;margin-top:8px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .rk-head .n b{font-family:var(--font-head);font-size:2.4rem;color:var(--brand);line-height:1}
+  .crit{background:#fff;border:1px solid var(--line-2);border-radius:var(--r-lg);padding:20px 24px;margin-top:22px;display:grid;gap:12px}
+  .crit .t{font-family:var(--font-head);font-weight:800;color:var(--brand);font-size:1.05rem}
+  .crit .list{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .crit .list .tag b{font-weight:800}
+  .crit .list a{margin-left:auto;color:var(--orange-dark);font-weight:700;font-size:.9rem}
+  .crit .why{color:var(--ink-2);font-size:.92rem;border-top:1px solid var(--line-2);padding-top:12px}
+  .grp{margin-top:32px}
+  .grp h2{font-size:1.2rem;display:flex;align-items:center;gap:10px;margin-bottom:12px}
+  .grp h2 i{width:12px;height:12px;border-radius:50%;background:var(--c)}
+  .grp h2 small{font-family:var(--font-body);font-weight:600;color:var(--muted);font-size:.85rem}
+  .rlist{display:grid;gap:10px}
+  .ritem{display:grid;grid-template-columns:44px 84px 118px 1fr auto;gap:16px;align-items:center;background:#fff;border:1px solid var(--line-2);border-radius:var(--r);padding:14px 16px;transition:.15s}
+  .ritem:hover{box-shadow:var(--shadow);border-color:var(--beige)}
+  .ritem.sel{border-color:var(--orange);box-shadow:0 0 0 3px rgba(255,135,20,.15)}
+  .ritem .rank{font-family:var(--font-head);font-weight:800;font-size:1.4rem;color:var(--muted);text-align:center}
+  .ritem .rank.top{color:var(--brand)}
+  .ritem .img{height:84px;display:grid;place-items:center;background:#fff;border-radius:12px;overflow:hidden}
+  .ritem .img img{max-height:84px;width:auto;object-fit:contain}
+  .ritem .img.empty{background:var(--sand);color:var(--muted);font-size:.7rem;font-weight:600;text-align:center;padding:4px}
+  .ritem .pct{font-family:var(--font-head);font-weight:800;font-size:2.4rem;line-height:1;letter-spacing:-.03em;color:var(--c)}
+  .ritem .pct small{font-size:1rem;letter-spacing:0;margin-left:2px}
+  .ritem .pct .st{display:block;font-family:var(--font-body);font-size:.72rem;font-weight:700;color:var(--ink-2);letter-spacing:0;margin-top:4px;line-height:1.2}
+  .ritem .name{font-family:var(--font-head);font-weight:800;color:var(--brand);font-size:1.1rem;line-height:1.2}
+  .ritem .brand{font-size:.85rem;color:var(--ink-2);margin:2px 0 8px;font-weight:500}
+  .ritem .why{display:flex;flex-wrap:wrap;gap:6px}
+  .ritem .cmp{display:flex;align-items:center;gap:8px;font-weight:700;font-size:.85rem;color:var(--brand);padding:8px 12px;border-radius:999px;border:1.5px solid var(--line);cursor:pointer;white-space:nowrap;background:#fff}
+  .ritem .cmp:hover{border-color:var(--orange)}
+  .ritem .cmp input{width:18px;height:18px;accent-color:var(--orange);margin:0}
+  .ritem .cmp.off{opacity:.5;cursor:not-allowed}
+  .selbar{position:fixed;left:50%;bottom:20px;transform:translateX(-50%) translateY(120%);background:var(--brand);color:#fff;border-radius:999px;padding:10px 10px 10px 20px;display:flex;gap:14px;align-items:center;box-shadow:var(--shadow-lg);z-index:60;transition:transform .3s;max-width:calc(100% - 32px);font-weight:600;font-size:.95rem}
+  .selbar.show{transform:translateX(-50%)}
+  .selbar b{font-family:var(--font-head);font-size:1.3rem}
+  .selbar .btn-primary{color:var(--brand)}
+  .selbar .clr{color:rgba(255,255,255,.7);font-size:.85rem}
+  .empty{background:#fff;border:1px dashed var(--line);border-radius:var(--r-lg);padding:48px 24px;text-align:center}
+  .sk{display:grid;gap:10px;margin-top:32px}
+  @media(max-width:760px){
+    .ritem{grid-template-columns:36px 64px 1fr;grid-template-rows:auto auto;gap:10px 12px}
+    .ritem .img{height:64px}.ritem .img img{max-height:64px}
+    .ritem .pct{font-size:2rem;grid-column:3}
+    .ritem .info{grid-column:1/-1}
+    .ritem .cmp{grid-column:1/-1;justify-content:center}
+    .crit .list a{margin-left:0}
+  }
+</style>
+</head>
+<body>
+<div id="site-header"></div>
+
+<div class="container rk-head">
+  <nav class="breadcrumb" aria-label="Fil d'Ariane">
+    <a href="facet.html">Facettes</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 6 6 6-6 6"/></svg>
+    <a href="facet.html?facet=categories">Catégories</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 6 6 6-6 6"/></svg>
+    <a href="facet.html?facet=categories&value=breakfast-cereals" id="bc-cat">Céréales pour petit-déjeuner</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 6 6 6-6 6"/></svg>
+    <span>Mon classement</span>
+  </nav>
+  <span class="eyebrow green" style="margin-top:22px">Selon vos préférences</span>
+  <h1>Mon classement personnalisé</h1>
+  <p class="lead" style="margin-top:10px" id="catLine">Céréales pour petit-déjeuner</p>
+  <div class="n" id="count"><b>…</b> produits</div>
+
+  <div class="crit" id="crit"></div>
+</div>
+
+<div class="container" id="main"></div>
+
+<div class="selbar" id="selbar" role="status">
+  <span><b id="selN">0</b> <span id="selL">produits sélectionnés</span></span>
+  <button class="clr" type="button" id="selClear">Effacer</button>
+  <a class="btn btn-primary btn-sm" id="selGo" href="compare.html">Comparer côte à côte <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+</div>
+
+<div id="site-footer"></div>
+<script src="assets/locale.js?v=1"></script>
+<script src="assets/app.js?v=9"></script>
+<script src="assets/i18n-es.js?v=3"></script>
+<script src="assets/i18n.js?v=10"></script>
+<script src="assets/prefs.js?v=1"></script>
+<script>
+  OFF.mount("search.html");
+  const T = OFF.t, esc = OFF.esc;
+  const CAT_NAMES = { "breakfast-cereals": "Céréales pour petit-déjeuner", "chocolates": "Chocolats", "yogurts": "Yaourts", "biscuits": "Biscuits", "pizzas": "Pizzas", "fruit-juices": "Jus de fruits", "sodas": "Sodas", "plant-based-milk-alternatives": "Boissons végétales", "chips": "Chips", "spreads": "Pâtes à tartiner", "cheeses": "Fromages", "breads": "Pains", "pastas": "Pâtes", "beverages": "Boissons", "snacks": "Snacks", "dairy-desserts": "Desserts lactés", "ice-creams": "Glaces", "cookies": "Cookies", "granola": "Granola", "mueslis": "Mueslis" };
+  const category = (new URLSearchParams(location.search).get("category") || "breakfast-cereals").replace(/^en:/, "");
+  const catName = CAT_NAMES[category] || category.replace(/-/g, " ").replace(/^./, c => c.toUpperCase());
+  document.getElementById("bc-cat").textContent = catName; document.getElementById("bc-cat").href = "facet.html?facet=categories&value=" + encodeURIComponent(category);
+  document.getElementById("catLine").textContent = catName; document.title = `${T("Mon classement personnalisé")} · ${catName} | Open Food Facts`;
+  document.getElementById("main").innerHTML = `<div class="sk">${Array.from({ length: 6 }, () => '<div class="skeleton" style="height:112px"></div>').join("")}</div>`;
+
+  const FIELDS = "code,product_name,product_name_fr,brands,quantity,image_front_small_url,nutriscore_grade,nova_group,ecoscore_grade,environmental_score_grade,nova_groups_markers," + OFF.prefs.FIELDS;
+  const URL_API = `https://world.openfoodfacts.org/api/v2/search?categories_tags=en:${encodeURIComponent(category)}&page_size=50&sort_by=unique_scans_n&lc=${OFF.lang || "fr"}&fields=${FIELDS}`;
+  let products = [], demo = false, selected = new Set();
+  const MAXSEL = 3;
+
+  const GROUPS = [
+    { id: "very_good", label: "Très bonne correspondance", c: "var(--ns-a)" },
+    { id: "good", label: "Bonne correspondance", c: "var(--ns-b)" },
+    { id: "poor", label: "Faible correspondance", c: "var(--ns-d)" },
+    { id: "very_poor", label: "Très faible correspondance", c: "var(--ns-e)" },
+    { id: "unknown", label: "Données insuffisantes", c: "#a89b95" },
+  ];
+  const norm = s => s === "does_not_match" ? "very_poor" : s === "none" ? "unknown" : s;
+  const NSL = { a: "Très bonne qualité nutritionnelle", b: "Bonne qualité nutritionnelle", c: "Qualité nutritionnelle moyenne", d: "Qualité nutritionnelle faible", e: "Qualité nutritionnelle très faible" };
+  const ECOL = { "a-plus": ["A+", "Très faible impact"], a: ["A", "Très faible impact"], b: ["B", "Faible impact"], c: ["C", "Impact modéré"], d: ["D", "Impact élevé"], e: ["E", "Impact très élevé"] };
+  const NOVAL = { 1: "Non transformé", 2: "Ingrédient culinaire", 3: "Transformé", 4: "Ultra-transformé" };
+  const LVL = { low: "faible quantité", moderate: "quantité modérée", high: "quantité élevée" };
+  const NUTN = { salt: "Sel", sugars: "Sucres", fat: "Matières grasses", "saturated-fat": "Graisses saturées" };
+
+  /* 2 ou 3 raisons principales : les critères les plus importants pour lesquels une valeur existe */
+  function reasons(p, s) {
+    const out = [];
+    s.details.slice().sort((a, b) => b.importance - a.importance).forEach(d => {
+      if (d.value == null || out.length >= 3) return;
+      let txt = "";
+      switch (d.id) {
+        case "nutriscore": txt = `Nutri-Score ${p.nutriscore_grade.toUpperCase()} · ${T(NSL[p.nutriscore_grade])}`; break;
+        case "ecoscore": { const e = ECOL[p.ecoscore_grade]; txt = `Green-Score ${e[0]} · ${T(e[1])}`; break; }
+        case "nova": { const m = p.nova_groups_markers && p.nova_groups_markers[p.nova_group]; txt = T(NOVAL[p.nova_group]) + (m && m.length ? ` · ${m.length} ${m.length > 1 ? T("marqueurs") : T("marqueur")}` : ""); break; }
+        case "additives": txt = p.additives_n ? `${p.additives_n} ${p.additives_n > 1 ? T("additifs") : T("additif")}` : T("Sans additifs"); break;
+        case "salt": case "sugars": case "fat": case "saturated-fat": txt = `${T(NUTN[d.id])} : ${T(LVL[(p.nutrient_levels || {})[d.id]])}`; break;
+        case "vegan": txt = d.value === 100 ? T("Végan") : d.value === 0 ? T("Non végan") : T("Peut-être végan"); break;
+        case "vegetarian": txt = d.value === 100 ? T("Végétarien") : d.value === 0 ? T("Non végétarien") : T("Peut-être végétarien"); break;
+        case "palm-oil-free": txt = d.value === 100 ? T("Sans huile de palme") : d.value === 0 ? T("Huile de palme") : T("Peut contenir de l'huile de palme"); break;
+        case "organic": txt = d.value ? T("Agriculture biologique") : T("Non bio"); break;
+        case "fair-trade": txt = d.value ? T("Commerce équitable") : T("Pas de label équitable"); break;
+        case "forest-footprint": txt = d.value === 100 ? T("Faible risque de déforestation") : T("Risque de déforestation"); break;
+        default: if (d.allergen) { const a = T(d.label).replace(/^Sans /, ""); txt = d.value === 100 ? T(d.label) : d.value === 0 ? `${T("Contient")} : ${a}` : `${T("Traces possibles")} : ${a}`; }
+      }
+      if (txt) out.push(`<span class="tag ${d.value >= 75 ? "ok" : d.value < 50 ? "warn" : ""}">${txt}</span>`);
+    });
+    return out.join("");
+  }
+
+  function item(p, rank) {
+    const s = OFF.prefs.score(p), st = norm(s.status), g = GROUPS.find(x => x.id === st);
+    const name = p["product_name_" + OFF.lang] || p.product_name || p.product_name_fr || T("Produit sans nom");
+    const img = p.image_front_small_url, sel = selected.has(p.code), full = !sel && selected.size >= MAXSEL;
+    return `<div class="ritem ${sel ? "sel" : ""}" style="--c:${g.c}" data-code="${p.code}">
+      <div class="rank ${rank <= 3 ? "top" : ""}">${rank}</div>
+      <a class="img ${img ? "" : "empty"}" href="product.html?code=${p.code}">${img ? `<img loading="lazy" src="${img}" alt="${esc(name)}">` : T("Pas de photo")}</a>
+      <div class="pct">${s.pct == null ? "?" : s.pct + "<small>%</small>"}<span class="st">${T(g.label)}${s.unknown ? " · " + T("données partielles") : ""}</span></div>
+      <div class="info"><a class="name" href="product.html?code=${p.code}">${esc(name)}</a><div class="brand">${esc(OFF.brandOf(p) || "–")}${p.quantity ? " · " + esc(p.quantity) : ""}</div><div class="why">${reasons(p, s) || `<span class="tag">${T("Aucune donnée pour vos critères")}</span>`}</div></div>
+      <label class="cmp ${full ? "off" : ""}"><input type="checkbox" data-sel="${p.code}" ${sel ? "checked" : ""} ${full ? "disabled" : ""}> ${T("Comparer")}</label>
+    </div>`;
+  }
+
+  function render() {
+    const crit = OFF.prefs.active();
+    document.getElementById("crit").innerHTML = (crit.length
+      ? `<div class="t">${T("Vos")} ${crit.length} ${crit.length > 1 ? T("critères") : T("critère")} : ${T("l'ordre ci-dessous est celui de ces critères, pondérés comme vous l'avez réglé")}</div><div class="list">${crit.map(c => `<span class="tag"><b>${T(c.label)}</b> · ${T(OFF.prefs.IMPORTANCE[c.importance])}</span>`).join("")}<a href="preferences.html">${T("Modifier mes préférences")}</a></div>`
+      : `<div class="t">${T("Aucun critère actif")}</div><div class="list"><span class="tag">${T("Le classement a besoin d'au moins un critère.")}</span><a href="preferences.html">${T("Choisir mes préférences")}</a></div>`)
+      + `<div class="why">${T("Choisissez-en deux ou trois : un classement répond « lequel ? », le côte à côte répond « en quoi diffèrent-ils ? ». Les deux sont sur cet écran.")}</div>`;
+    const scored = products.map(p => ({ p, s: OFF.prefs.score(p) })).sort((a, b) => (b.s.pct ?? -1) - (a.s.pct ?? -1));
+    document.getElementById("count").innerHTML = `<b>${scored.length}</b> ${T("produits")}${demo ? ` <span class="tag warn">${T("données de démonstration")}</span>` : ""}`;
+    const main = document.getElementById("main");
+    if (!scored.length) { main.innerHTML = `<div class="empty"><h2>${T("Aucun produit dans cette catégorie")}</h2><p class="mt-2"><a class="btn btn-outline" href="search.html">${T("Explorer les produits")}</a></p></div>`; return; }
+    let rank = 0;
+    main.innerHTML = GROUPS.map(g => {
+      const list = scored.filter(x => norm(x.s.status) === g.id); if (!list.length) return "";
+      return `<section class="grp" style="padding:0;--c:${g.c}"><h2><i></i>${T(g.label)} <small>${list.length}</small></h2><div class="rlist">${list.map(x => item(x.p, ++rank)).join("")}</div></section>`;
+    }).join("");
+    main.querySelectorAll("[data-sel]").forEach(cb => cb.addEventListener("change", () => {
+      if (cb.checked) { if (selected.size >= MAXSEL) { cb.checked = false; return OFF.toast(T("3 produits maximum pour la comparaison")); } selected.add(cb.dataset.sel); } else selected.delete(cb.dataset.sel);
+      syncSel();
+    }));
+    syncSel();
+  }
+  function syncSel() {
+    const n = selected.size;
+    document.getElementById("selN").textContent = n;
+    document.getElementById("selL").textContent = n > 1 ? T("produits sélectionnés") : T("produit sélectionné");
+    document.getElementById("selGo").href = "compare.html?codes=" + [...selected].join(",");
+    document.getElementById("selbar").classList.toggle("show", n > 0);
+    document.querySelectorAll(".ritem").forEach(el => {
+      const on = selected.has(el.dataset.code), cb = el.querySelector("[data-sel]"), full = !on && n >= MAXSEL;
+      el.classList.toggle("sel", on); cb.disabled = full; cb.closest(".cmp").classList.toggle("off", full);
+    });
+  }
+  document.getElementById("selClear").addEventListener("click", () => { selected.clear(); document.querySelectorAll("[data-sel]").forEach(c => c.checked = false); syncSel(); });
+
+  async function load() {
+    try {
+      const r = await fetch(URL_API); if (!r.ok) throw new Error("HTTP " + r.status);
+      const d = await r.json(); products = (d.products || []).filter(p => p.code); if (!products.length) throw new Error("empty");
+      products.forEach(p => { if (!p.ecoscore_grade && p.environmental_score_grade) p.ecoscore_grade = p.environmental_score_grade; });
+    } catch (e) {
+      demo = true;
+      products = await fetch("assets/sample.json").then(r => r.json()).catch(() => []);
+    }
+    render();
+  }
+  addEventListener("storage", e => { if (!e.key || e.key === "off_prefs") render(); });
+  load();
+</script>
+</body>
+</html>

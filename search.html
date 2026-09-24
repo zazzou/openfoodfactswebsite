@@ -7,7 +7,7 @@
 <link rel="icon" href="https://static.openfoodfacts.org/images/logos/off-logo-vertical-light.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=12">
+<link rel="stylesheet" href="assets/style.css?v=17">
 </head>
 <body>
 <div id="site-header"></div>
@@ -56,6 +56,7 @@
     <div class="results-head">
       <div class="n" id="count">Chargement…</div>
       <div class="row">
+        <a class="btn btn-ghost btn-sm" id="mapLink" href="map.html" title="Voir les pays de vente des résultats sur une carte"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6-7-12a7 7 0 0 1 14 0c0 6-7 12-7 12Z"/><circle cx="12" cy="9" r="2.5"/></svg>Voir sur une carte</a>
         <button class="btn btn-outline btn-sm" id="toggleFilters" style="display:none">Filtres</button>
         <select class="sort" id="sort" aria-label="Trier">
           <option value="">Pertinence</option>
@@ -72,8 +73,11 @@
 </div>
 
 <div id="site-footer"></div>
-<script src="assets/app.js?v=6"></script>
-<script src="assets/i18n.js?v=6"></script>
+<script src="assets/locale.js?v=1"></script>
+<script src="assets/app.js?v=9"></script>
+<script src="assets/i18n-es.js?v=3"></script>
+<script src="assets/i18n.js?v=10"></script>
+<script src="assets/prefs.js?v=1"></script>
 <script>
   OFF.mount("search.html");
   const params = new URLSearchParams(location.search);
@@ -105,11 +109,12 @@
     const r = await OFF.search(q, { page, pageSize: 24, sort: document.getElementById("sort").value, facets, flags });
     const list = (r.products || []);
     res.innerHTML = list.length ? list.map(OFF.tile).join("") : '<div class="card" style="grid-column:1/-1;text-align:center"><h3>${OFF.t("Aucun résultat")}</h3><p>${OFF.t("Essayez un autre terme, ou")} <a href="contribute.html" style="color:var(--orange-dark);font-weight:700">${OFF.t("ajoutez ce produit")}</a>.</p></div>';
-    document.getElementById("count").innerHTML = r.offline ? `<b>${list.length}</b> ${OFF.t("produits (mode hors-ligne, données de démonstration)")}` : `<b>${(r.count || 0).toLocaleString(OFF.locale)}</b> ${OFF.t("produits")}${q ? ` ${OFF.t("pour")} « ${OFF.esc(q)} »` : ""}`;
+    document.getElementById("count").innerHTML = r.offline ? `<b>${list.length}</b> ${OFF.t("produits (mode hors-ligne, données de démonstration)")}` : `<b>${(r.count || 0).toLocaleString(OFF.numLocale)}</b> ${OFF.t("produits")}${q ? ` ${OFF.t("pour")} « ${OFF.esc(q)} »` : ""}`;
     const pages = Math.min(r.pages || 1, 20), pg = document.getElementById("pagination");
     pg.innerHTML = pages > 1 ? Array.from({ length: Math.min(pages, 7) }, (_, i) => `<button class="${i + 1 === page ? "active" : ""}" data-p="${i + 1}">${i + 1}</button>`).join("") + (pages > 7 ? `<button data-p="${page + 1}">›</button>` : "") : "";
     pg.querySelectorAll("button").forEach(b => b.addEventListener("click", () => { page = +b.dataset.p; run(); scrollTo({ top: 0, behavior: "smooth" }); }));
     history.replaceState(null, "", "search.html" + (q ? "?q=" + encodeURIComponent(q) : ""));
+    const ml = document.getElementById("mapLink"); if (ml) ml.href = "map.html" + (q ? "?q=" + encodeURIComponent(q) : "");
   }
   document.getElementById("searchForm").addEventListener("submit", e => { e.preventDefault(); e.stopImmediatePropagation(); const v = qInput.value.trim(); if (/^\d{8,14}$/.test(v)) return location.href = "product.html?code=" + v; page = 1; run(); }, true);
   document.querySelectorAll("#filters input").forEach(i => i.addEventListener("change", () => { if ((i.name === "ns" || i.name === "nova") && i.checked) document.querySelectorAll(`input[name="${i.name}"]`).forEach(o => { if (o !== i) o.checked = false; }); page = 1; run(); }));

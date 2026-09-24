@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Signaler un problème | Open Food Facts</title>
+<link rel="icon" href="https://static.openfoodfacts.org/images/logos/off-logo-vertical-light.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=17">
+<style>
+  .rp{max-width:760px;margin:0 auto;padding:0 20px 72px}
+  .rp-product{display:flex;gap:16px;align-items:center;padding:14px 16px;border:1px solid var(--line-2);border-radius:16px;background:#fff;margin-top:24px}
+  .rp-product .im{width:72px;height:72px;border-radius:12px;background:var(--sand);display:grid;place-items:center;flex:none;overflow:hidden}
+  .rp-product .im img{max-height:64px;width:auto}
+  .rp-product b{display:block;color:var(--brand);font-family:var(--font-head);font-size:1.05rem}
+  .rp-product small{color:var(--muted)}
+  .rp-product a{margin-left:auto;font-weight:600;color:var(--orange-dark);font-size:.9rem;white-space:nowrap}
+  .reasons{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px}
+  @media(max-width:600px){.reasons{grid-template-columns:1fr}}
+  .reason{position:relative;display:block;padding:18px 18px 18px 52px;border:2px solid var(--line);border-radius:16px;background:#fff;cursor:pointer;transition:.15s}
+  .reason:hover{border-color:var(--beige)}
+  .reason input{position:absolute;left:18px;top:21px;width:20px;height:20px;margin:0;accent-color:var(--orange)}
+  .reason b{display:block;color:var(--brand);font-size:1rem;margin-bottom:3px}
+  .reason span{font-size:.88rem;color:var(--ink-2)}
+  .reason:has(input:checked){border-color:var(--orange);background:var(--orange-soft);box-shadow:0 0 0 3px rgba(255,135,20,.15)}
+  .reason.on{border-color:var(--orange);background:var(--orange-soft)}
+  .rp label.lbl{display:block;font-weight:700;color:var(--brand);margin:28px 0 8px}
+  .rp label.lbl small{font-weight:500;color:var(--muted);margin-left:6px}
+  .rp textarea{width:100%;min-height:140px;padding:14px 16px;border:2px solid var(--line);border-radius:14px;font:inherit;font-size:.95rem;color:var(--ink);background:#fff;resize:vertical}
+  .rp textarea:focus{outline:0;border-color:var(--orange)}
+  .rp textarea.err{border-color:var(--red)}
+  .rp .hint{font-size:.85rem;color:var(--muted);margin-top:6px}
+  .rp .hint.err{color:#b83232;font-weight:600}
+  .btn[disabled]{opacity:.45;cursor:not-allowed;box-shadow:none;transform:none}
+  .rp-success{text-align:center;padding:48px 24px;border-radius:var(--r-lg);background:var(--green-soft);border:1px solid #bfe3c6;margin-top:24px}
+  .rp-success .ic{width:72px;height:72px;border-radius:50%;background:var(--green);color:#fff;display:grid;place-items:center;margin:0 auto 18px}
+  .rp-success .ic svg{width:36px;height:36px}
+  .rp-success h2{font-size:1.7rem;margin-bottom:10px}
+  .rp-success p{color:var(--ink-2)}
+</style>
+</head>
+<body>
+<div id="site-header"></div>
+
+<div class="page-hero" style="padding:40px 0 28px">
+  <div class="container">
+    <nav class="breadcrumb" aria-label="Fil d'Ariane" style="margin-bottom:14px">
+      <a href="index.html">Accueil</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 6 6 6-6 6"/></svg>
+      <a id="bc-product" href="product.html">Produit</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 6 6 6-6 6"/></svg>
+      <span>Signaler un problème</span>
+    </nav>
+    <span class="eyebrow">Modération</span>
+    <h1 style="font-size:clamp(2rem,4vw,3rem)">Signaler un problème</h1>
+    <p class="lead">Une donnée fausse que vous ne pouvez pas corriger, un contenu inapproprié, un code-barres erroné : dites-le-nous, un modérateur bénévole s'en occupe.</p>
+  </div>
+</div>
+
+<div class="rp">
+  <div class="rp-product" id="rp-product">
+    <div class="im"><span class="skeleton" style="width:48px;height:48px;display:block"></span></div>
+    <div><b><span class="skeleton" style="display:inline-block;width:120px;height:18px"></span></b><small>Code-barres <span id="rp-code"></span></small></div>
+  </div>
+
+  <form id="rp-form" novalidate>
+    <label class="lbl" style="margin-top:32px">Quel est le problème ?</label>
+    <div class="reasons" role="radiogroup" aria-label="Raison du signalement">
+      <label class="reason"><input type="radio" name="reason" value="incorrect"><b>Certaines données sont incorrectes</b><span>Nom, marque, ingrédients ou valeurs nutritionnelles ne correspondent pas à l'emballage.</span></label>
+      <label class="reason"><input type="radio" name="reason" value="missing"><b>Des données manquent</b><span>Photo, tableau nutritionnel ou catégorie absents, et vous n'avez pas le produit sous la main.</span></label>
+      <label class="reason"><input type="radio" name="reason" value="barcode"><b>Le code-barres est faux</b><span>Le code-barres de cette fiche ne correspond pas au produit affiché.</span></label>
+      <label class="reason"><input type="radio" name="reason" value="other"><b>Autre problème</b><span>Vandalisme, contenu inapproprié, doublon, question de droit d'image…</span></label>
+    </div>
+
+    <label class="lbl" for="rp-text">Décrivez le problème <small id="rp-opt">(optionnel)</small></label>
+    <textarea id="rp-text" placeholder="Ce que vous avez constaté, et si possible ce que devrait indiquer la fiche."></textarea>
+    <div class="hint" id="rp-hint">Le signalement est anonyme. N'écrivez pas d'informations personnelles.</div>
+
+    <div class="row mt-4" style="gap:12px">
+      <button class="btn btn-primary btn-lg" type="submit" id="rp-send" disabled>Envoyer</button>
+      <a class="btn btn-ghost" id="rp-back" href="product.html">Annuler</a>
+    </div>
+  </form>
+
+  <div class="rp-success" id="rp-success" hidden>
+    <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></svg></div>
+    <h2>Merci, l'équipe de modération va regarder</h2>
+    <p>Les signalements sont traités par des bénévoles, en général sous quelques jours. Vous pouvez aussi corriger vous-même la fiche si vous avez le produit.</p>
+    <div class="row mt-3" style="justify-content:center;gap:12px">
+      <a class="btn btn-brand" id="rp-back2" href="product.html">Retour à la fiche</a>
+      <a class="btn btn-outline" id="rp-edit" href="edit.html">Modifier la fiche</a>
+    </div>
+  </div>
+</div>
+
+<div id="site-footer"></div>
+<script src="assets/locale.js?v=1"></script>
+<script src="assets/app.js?v=9"></script>
+<script src="assets/i18n-es.js?v=3"></script>
+<script src="assets/i18n.js?v=10"></script>
+<script src="assets/prefs.js?v=1"></script>
+<script src="assets/product-common.js?v=1"></script>
+<script>
+  OFF.mount(null);
+  const PP = OFF.productPage, T = PP.T, code = PP.code();
+  document.getElementById("rp-code").textContent = code;
+  ["bc-product", "rp-back", "rp-back2"].forEach(id => document.getElementById(id).href = "product.html?code=" + code);
+  document.getElementById("rp-edit").href = PP.editUrl(code);
+
+  function product(p) {
+    const img = PP.image(p), n = PP.name(p);
+    document.getElementById("rp-product").innerHTML = `<div class="im">${img ? `<img src="${OFF.esc(img)}" alt="">` : PP.I.camera}</div><div><b>${OFF.esc(n)}</b><small>${OFF.esc(OFF.brandOf(p) || "")}${p.quantity ? " · " + OFF.esc(p.quantity) : ""} · ${T("Code-barres")} ${code}</small></div><a href="product.html?code=${code}">${T("Voir la fiche")} ›</a>`;
+  }
+  (async () => {
+    try { product(await PP.load(code)); }
+    catch (e) {
+      if (e.code === "not_found") { document.getElementById("rp-product").innerHTML = `<div class="im">${PP.I.camera}</div><div><b>${T("Produit inconnu")}</b><small>${T("Code-barres")} ${code} – ${T("aucune fiche à signaler.")}</small></div><a href="edit.html?code=${code}&new=1">${T("Ajouter ce produit")} ›</a>`; }
+      else product(Object.assign({}, PP.DEMO, { code }));
+    }
+  })();
+
+  // Formulaire
+  const form = document.getElementById("rp-form"), send = document.getElementById("rp-send"), ta = document.getElementById("rp-text"), hint = document.getElementById("rp-hint"), opt = document.getElementById("rp-opt");
+  const reason = () => (form.querySelector('input[name="reason"]:checked') || {}).value || "";
+  function update() {
+    const r = reason();
+    form.querySelectorAll(".reason").forEach(l => l.classList.toggle("on", l.querySelector("input").checked));
+    send.disabled = !r;
+    opt.textContent = r === "other" ? T("(obligatoire)") : T("(optionnel)");
+    if (r !== "other" || ta.value.trim()) { ta.classList.remove("err"); hint.classList.remove("err"); hint.textContent = T("Le signalement est anonyme. N'écrivez pas d'informations personnelles."); }
+  }
+  form.addEventListener("change", update); ta.addEventListener("input", update);
+  form.addEventListener("submit", e => {
+    e.preventDefault();
+    const r = reason(); if (!r) return;
+    if (r === "other" && !ta.value.trim()) { ta.classList.add("err"); hint.classList.add("err"); hint.textContent = T("Décrivez le problème pour que la modération puisse agir."); ta.focus(); return; }
+    OFF.toast(T("Maquette : l'écriture nécessite un compte Open Food Facts"));
+    form.hidden = true; document.getElementById("rp-success").hidden = false;
+    document.getElementById("rp-success").scrollIntoView({ behavior: "smooth", block: "center" });
+  });
+  update();
+</script>
+</body>
+</html>

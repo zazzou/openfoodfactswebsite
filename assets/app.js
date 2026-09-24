@@ -1,7 +1,7 @@
 /* Open Food Facts - refonte : helpers partagés (header, footer, badges, API) */
 (function () {
   const LOGO = "https://static.openfoodfacts.org/images/logos/off-logo-horizontal-light.svg";
-  const API = "https://world.openfoodfacts.org";
+  const API = (window.OFF && OFF.locale && OFF.locale.api) ? OFF.locale.api() : "https://world.openfoodfacts.org";
   const SEARCH = "https://search.openfoodfacts.org";
 
   const I = {
@@ -23,6 +23,33 @@
     ["discover.html", "À propos"],
   ];
 
+  function localeButton(mode) {
+    const L = OFF.locale || { country: "world", lang: "fr", info: () => ["world", "Monde"], LANGUAGES: { fr: "Français", en: "English" } };
+    const c = L.info(L.country), id = mode === "mobile" ? "localeBtnM" : "localeBtn";
+    return `<div class="localewrap"><button class="country" type="button" id="${id}" aria-haspopup="dialog" aria-expanded="false"><span class="cc">${L.country.toUpperCase()}</span> ${c[1]} <span class="sep">·</span> ${L.LANGUAGES[L.lang] || L.lang} ${I.chev}</button></div>`;
+  }
+  function localeMenu() {
+    const L = OFF.locale; if (!L) return "";
+    const c = L.info(L.country);
+    const fmt = n => n.toLocaleString(OFF.locale && OFF.numLocale || "fr-FR");
+    const countries = L.COUNTRIES.map(x => `<button type="button" role="option" data-cc="${x[0]}" class="${x[0] === L.country ? "on" : ""}"><span class="cc">${x[0].toUpperCase()}</span><span class="nm">${x[1]}</span><span class="n">${fmt(x[2])}</span></button>`).join("");
+    const suggested = [...new Set([...(c[3] || []), "en"])];
+    const rank = l => suggested.includes(l) ? 0 : L.UI_LANGS.includes(l) ? 1 : 2;
+    const langs = Object.keys(L.LANGUAGES).sort((a, b) => (rank(a) - rank(b)) || L.LANGUAGES[a].localeCompare(L.LANGUAGES[b]));
+    const langBtn = l => `<button type="button" role="option" data-lang="${l}" class="${l === L.lang ? "on" : ""}"><span class="cc">${l.toUpperCase()}</span><span class="nm">${L.LANGUAGES[l]}</span>${L.UI_LANGS.includes(l) ? '<span class="ui" title="Interface traduite">UI</span>' : ""}${suggested.includes(l) ? '<span class="sug">' + (l === "en" && !(c[3] || []).includes("en") ? "toujours proposé" : "langue du pays") + "</span>" : ""}</button>`;
+    return `<div class="locale-menu" id="localeMenu" role="dialog" aria-label="Pays et langue">
+      <div class="col">
+        <h4>Pays <small>filtre les produits</small></h4>
+        <input type="search" id="localeSearch" placeholder="Rechercher un pays…" aria-label="Rechercher un pays">
+        <div class="list" id="localeCountries">${countries}</div>
+      </div>
+      <div class="col">
+        <h4>Langue <small>interface et contenus</small></h4>
+        <div class="list" id="localeLangs">${langs.map(langBtn).join("")}</div>
+        <p class="hint">Les deux réglages sont indépendants : vous pouvez lire les produits vendus en Allemagne en français. L'interface de cette maquette est traduite en FR, EN et ES ; les contenus produits suivent la langue choisie.</p>
+      </div>
+    </div>`;
+  }
   function header(active) {
     const links = NAV.map(([h, l]) => `<a href="${h}" class="${h === active ? "active" : ""}">${l}</a>`).join("");
     return `
@@ -31,14 +58,14 @@
     <a class="logo" href="index.html" aria-label="Open Food Facts"><img src="${LOGO}" alt="Open Food Facts"></a>
     <nav class="nav" aria-label="Navigation principale">${links}</nav>
     <div class="topbar-actions">
-      <div class="langwrap" style="position:relative"><button class="country" type="button" id="langBtn" aria-haspopup="true">${I.globe} <span>${(window.OFF && OFF.lang === "en") ? "English" : "Français"}</span> ${I.chev}</button><div class="lang-menu" id="langMenu" role="menu"><button data-l="fr" role="menuitem"><b style="font-size:.7rem;background:var(--beige);padding:2px 6px;border-radius:5px">FR</b> Français</button><button data-l="en" role="menuitem"><b style="font-size:.7rem;background:var(--beige);padding:2px 6px;border-radius:5px">EN</b> English</button></div></div>
-      <a class="btn btn-ghost" href="#">${I.user} Se connecter</a>
-      <a class="btn btn-primary btn-sm" href="contribute.html">${I.plus} Ajouter</a>
+      ${localeButton()}
+      ${(() => { let u = null; try { u = JSON.parse(localStorage.getItem("off_user") || "null"); } catch (e) { } return u && u.name ? `<a class="btn btn-ghost" href="profile.html?user=${encodeURIComponent(u.name)}">${I.user} ${esc(u.name)}</a>` : `<a class="btn btn-ghost" href="signin.html">${I.user} Se connecter</a>`; })()}
+      <a class="btn btn-primary btn-sm" href="edit.html?new=1">${I.plus} Ajouter</a>
       <button class="btn btn-icon btn-outline burger" type="button" aria-label="Menu" id="burger">${I.menu}</button>
     </div>
   </div>
 </header>
-<nav class="mobile-nav" id="mobileNav">${links}<a href="#">Se connecter</a><div class="row" style="padding:14px 16px;gap:8px"><button class="chip" data-l="fr">FR · Français</button><button class="chip" data-l="en">EN · English</button></div></nav>`;
+${localeMenu()}<nav class="mobile-nav" id="mobileNav">${links}<a href="signin.html">Se connecter</a><div style="padding:14px 16px">${localeButton("mobile")}</div></nav>`;
   }
 
   function footer() {
@@ -56,10 +83,10 @@
           <a href="#" aria-label="Slack"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 15.1a2.5 2.5 0 1 1-2.5-2.5H5v2.5Zm1.3 0a2.5 2.5 0 0 1 5 0v6.4a2.5 2.5 0 0 1-5 0v-6.4ZM8.8 5a2.5 2.5 0 1 1 2.5-2.5V5H8.8Zm0 1.3a2.5 2.5 0 0 1 0 5H2.5a2.5 2.5 0 0 1 0-5h6.3ZM19 8.8a2.5 2.5 0 1 1 2.5 2.5H19V8.8Zm-1.3 0a2.5 2.5 0 0 1-5 0V2.5a2.5 2.5 0 0 1 5 0v6.3ZM15.2 19a2.5 2.5 0 1 1-2.5 2.5V19h2.5Zm0-1.3a2.5 2.5 0 0 1 0-5h6.3a2.5 2.5 0 0 1 0 5h-6.3Z"/></svg></a>
         </div>
       </div>
-      <div><h4>Découvrir</h4><ul><li><a href="discover.html">Qui sommes-nous</a></li><li><a href="discover.html#mission">Vision, mission, valeurs</a></li><li><a href="scores.html">Nutri-Score</a></li><li><a href="scores.html#nova">NOVA</a></li><li><a href="scores.html#green">Green-Score</a></li></ul></div>
-      <div><h4>Contribuer</h4><ul><li><a href="contribute.html">Ajouter des produits</a></li><li><a href="contribute.html#app">Application mobile</a></li><li><a href="contribute.html#hunger">Hunger Games</a></li><li><a href="contribute.html#dev">Développer</a></li><li><a href="contribute.html#donate">Faire un don</a></li></ul></div>
-      <div><h4>Données</h4><ul><li><a href="data.html">Données ouvertes</a></li><li><a href="data.html#api">API</a></li><li><a href="data.html#sdk">SDK</a></li><li><a href="data.html#exports">Exports</a></li><li><a href="#">Wiki</a></li></ul></div>
-      <div><h4>Organisation</h4><ul><li><a href="#">Presse</a></li><li><a href="#">Partenaires</a></li><li><a href="#">Mentions légales</a></li><li><a href="#">Confidentialité</a></li><li><a href="#">Code de conduite</a></li></ul></div>
+      <div><h4>Découvrir</h4><ul><li><a href="discover.html">Qui sommes-nous</a></li><li><a href="scores.html">Nutri-Score, NOVA, Green-Score</a></li><li><a href="guides.html">Guides</a></li><li><a href="facets.html">Parcourir par facette</a></li><li><a href="countries.html">Pays et carte</a></li><li><a href="compare.html">Comparer des produits</a></li></ul></div>
+      <div><h4>Contribuer</h4><ul><li><a href="edit.html?new=1">Ajouter un produit</a></li><li><a href="hunger.html">Hunger Games</a></li><li><a href="leaderboard.html">Classement des contributeurs</a></li><li><a href="changes.html">Dernières modifications</a></li><li><a href="contribute.html#dev">Développer</a></li><li><a href="contribute.html#donate">Faire un don</a></li></ul></div>
+      <div><h4>Données</h4><ul><li><a href="data.html">Données ouvertes</a></li><li><a href="data.html#api">API</a></li><li><a href="data.html#sdk">SDK</a></li><li><a href="data.html#exports">Exports</a></li><li><a href="properties.html">Propriétés (folksonomie)</a></li></ul></div>
+      <div><h4>Mon compte</h4><ul><li><a href="signin.html">Se connecter</a></li><li><a href="signup.html">Créer un compte</a></li><li><a href="preferences.html">Mes préférences alimentaires</a></li><li><a href="profile.html?user=teolemon">Mon profil</a></li><li><a href="#">Mentions légales</a></li><li><a href="#">Confidentialité</a></li></ul></div>
     </div>
     <div class="foot-bottom">
       <div>© 2012 – 2026 Open Food Facts · Données sous licence ODbL · Association loi 1901</div>
@@ -176,13 +203,23 @@
     document.getElementById("site-footer").outerHTML = footer();
     const b = document.getElementById("burger"), m = document.getElementById("mobileNav");
     b && b.addEventListener("click", () => m.classList.toggle("open"));
-    const lb = document.getElementById("langBtn"), lm = document.getElementById("langMenu");
-    if (lb) {
-      lb.addEventListener("click", e => { e.stopPropagation(); lm.classList.toggle("open"); });
+    const lm = document.getElementById("localeMenu");
+    if (lm && OFF.locale) {
+      const open = (btn) => {
+        const r = btn.getBoundingClientRect();
+        if (innerWidth < 720) { lm.style.cssText = "position:fixed;left:12px;right:12px;top:" + Math.min(r.bottom + 8, innerHeight - 380) + "px;width:auto;max-height:calc(100vh - 96px);overflow:auto"; }
+        else { const w = Math.min(680, innerWidth - 24); lm.style.cssText = "position:absolute;top:" + (r.bottom + 8 + scrollY) + "px;left:" + Math.max(12, Math.min(r.left, innerWidth - w - 12)) + "px;width:" + w + "px"; }
+        lm.classList.add("open"); btn.setAttribute("aria-expanded", "true"); const q = document.getElementById("localeSearch"); q && q.focus();
+      };
+      ["localeBtn", "localeBtnM"].forEach(id => { const b = document.getElementById(id); b && b.addEventListener("click", e => { e.stopPropagation(); lm.classList.contains("open") ? lm.classList.remove("open") : open(b); }); });
+      lm.addEventListener("click", e => e.stopPropagation());
       document.addEventListener("click", () => lm.classList.remove("open"));
-      lm.querySelectorAll("button").forEach(x => x.classList.toggle("on", x.dataset.l === (OFF.lang || "fr")));
+      document.addEventListener("keydown", e => { if (e.key === "Escape") lm.classList.remove("open"); });
+      lm.querySelectorAll("[data-cc]").forEach(b => b.addEventListener("click", () => OFF.locale.set({ country: b.dataset.cc })));
+      lm.querySelectorAll("[data-lang]").forEach(b => b.addEventListener("click", () => OFF.locale.set({ lang: b.dataset.lang })));
+      const q = document.getElementById("localeSearch");
+      q && q.addEventListener("input", () => { const v = q.value.trim().toLowerCase(); lm.querySelectorAll("[data-cc]").forEach(b => b.hidden = v && !b.textContent.toLowerCase().includes(v)); });
     }
-    document.querySelectorAll("[data-l]").forEach(x => x.addEventListener("click", () => OFF.setLang && OFF.setLang(x.dataset.l)));
     document.querySelectorAll('a[href="#"]').forEach(a => a.addEventListener("click", e => { e.preventDefault(); toast(OFF.t ? OFF.t("Maquette : lien non câblé") : "Maquette : lien non câblé"); }));
     reveal(); counters();
     // Formulaires de recherche -> search.html
@@ -203,5 +240,5 @@
       el.addEventListener("mouseleave", () => { el.style.transform = ""; });
     });
   }
-  window.OFF = { tilt, I, LOGO, header, footer, ns, nova, eco, tile, esc, search, product, mount, toast, brandOf };
+  window.OFF = Object.assign(window.OFF || {}, { tilt, I, LOGO, header, footer, ns, nova, eco, tile, esc, search, product, mount, toast, brandOf });
 })();

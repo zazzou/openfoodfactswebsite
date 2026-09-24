@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Comparer des produits | Open Food Facts</title>
+<link rel="icon" href="https://static.openfoodfacts.org/images/logos/off-logo-vertical-light.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=17">
+<style>
+  .match{display:inline-flex;align-items:center;gap:8px;padding:4px 10px 4px 4px;border-radius:999px;background:#fff;border:1.5px solid var(--line);font-size:.8rem;font-weight:600;color:var(--ink-2)} .match b{display:inline-grid;place-items:center;min-width:44px;height:26px;padding:0 8px;border-radius:999px;background:var(--c);color:#fff;font-family:var(--font-head)} .match.lg{font-size:.95rem;padding:6px 14px 6px 6px} .match.lg b{height:34px;min-width:60px;font-size:1.05rem}
+  .cmp-head{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;justify-content:space-between;padding:36px 0 20px}
+  .cmp-head h1{font-size:clamp(2rem,4vw,3rem)}
+  .cmp-head .n{color:var(--ink-2);font-weight:600;margin-top:6px}
+  .cmp-head .n b{font-family:var(--font-head);font-size:2.4rem;color:var(--brand);line-height:1;margin-right:6px;vertical-align:-3px}
+  .cmp-tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+  .addbox{display:flex;align-items:center;background:#fff;border:2px solid var(--beige);border-radius:999px;padding:4px 4px 4px 14px;gap:6px;min-width:0}
+  .addbox:focus-within{border-color:var(--orange)}
+  .addbox svg{width:18px;height:18px;color:var(--muted);flex:none}
+  .addbox input{border:0;outline:0;font:inherit;font-size:.95rem;padding:8px 6px;min-width:0;width:220px;background:transparent;color:var(--ink)}
+  .modebar{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;margin:8px 0 18px}
+  .modebar .lbl{font-weight:600;color:var(--ink-2);font-size:.9rem;margin-right:4px}
+  .crit{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:#fff;border:1px solid var(--line-2);border-radius:var(--r);padding:12px 16px;font-size:.9rem;color:var(--ink-2)}
+  .crit b{color:var(--brand)}
+  .crit a{color:var(--orange-dark);font-weight:700;margin-left:auto}
+  .cmp-wrap{background:#fff;border:1px solid var(--line-2);border-radius:var(--r-lg);box-shadow:var(--shadow-sm)}
+  table.cmp{width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed;font-size:.95rem}
+  .cmp th,.cmp td{padding:12px 14px;border-bottom:1px solid var(--line-2);vertical-align:top;text-align:left;background:#fff}
+  .cmp thead th{position:sticky;top:72px;z-index:3;background:#fff;border-bottom:2px solid var(--beige)}
+  .cmp .lbl{width:190px;font-weight:600;color:var(--ink-2);position:sticky;left:0;z-index:2;background:#fff}
+  .cmp thead .lbl{z-index:4;border-radius:var(--r-lg) 0 0 0}
+  .cmp .lbl.sub{padding-left:30px;font-weight:500}
+  .cmp tr.sect th{background:var(--sand);font-family:var(--font-head);font-weight:800;color:var(--brand);font-size:1rem;padding:10px 14px;position:sticky;left:0;z-index:2}
+  .cmp td.num{font-variant-numeric:tabular-nums;font-weight:600;color:var(--ink)}
+  .cmp td.best{background:var(--green-soft);box-shadow:inset 3px 0 0 var(--ns-a)}
+  .cmp td.worst{background:var(--red-soft);box-shadow:inset 3px 0 0 var(--ns-e)}
+  .cmp .diff{display:block;font-size:.78rem;font-weight:600;color:var(--muted);margin-top:2px}
+  .cmp .diff.pos{color:#b83232}.cmp .diff.neg{color:var(--green-dark)}
+  .cmp .diff.better{color:var(--green-dark)}.cmp .diff.worse{color:#b83232}
+  .cmp .na{color:var(--muted);font-weight:500}
+  .pcol{position:relative;padding-right:32px}
+  .pcol .img{height:120px;display:grid;place-items:center;background:#fff;border-radius:12px;overflow:hidden;margin-bottom:10px}
+  .pcol .img img{max-height:120px;width:auto;object-fit:contain}
+  .pcol .img.empty{background:var(--sand);color:var(--muted);font-size:.78rem;font-weight:600}
+  .pcol .name{font-family:var(--font-head);font-weight:800;color:var(--brand);font-size:1.05rem;line-height:1.2;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .pcol .brand{font-size:.82rem;color:var(--ink-2);margin:3px 0 8px;font-weight:500}
+  .pcol .rm{position:absolute;top:10px;right:10px;width:30px;height:30px;border-radius:50%;background:var(--sand);color:var(--brand);display:grid;place-items:center;font-size:1.1rem;font-weight:700;line-height:1}
+  .pcol .rm:hover{background:var(--red-soft);color:#b83232}
+  .tagrow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:6px}
+  .note{font-size:.85rem;color:var(--ink-2);margin-top:14px}
+  details.diffs{margin-top:24px;background:#fff;border:1px solid var(--line-2);border-radius:var(--r-lg);padding:0 22px}
+  details.diffs summary{cursor:pointer;padding:18px 0;font-family:var(--font-head);font-weight:800;color:var(--brand);font-size:1.05rem;list-style:none;display:flex;align-items:center;gap:10px}
+  details.diffs summary::-webkit-details-marker{display:none}
+  details.diffs summary svg{width:18px;height:18px;transition:transform .2s;color:var(--orange-dark)}
+  details.diffs[open] summary svg{transform:rotate(90deg)}
+  details.diffs .body{padding:0 0 18px;overflow-x:auto}
+  table.attrs{width:100%;border-collapse:collapse;font-size:.9rem}
+  .attrs th,.attrs td{padding:8px 10px;border-bottom:1px solid var(--line-2);text-align:left;vertical-align:top}
+  .attrs th{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+  .attrs td:first-child{font-weight:600;color:var(--ink-2);white-space:nowrap}
+  .attrs tr.same td{color:var(--muted)}
+  .attrs .yes{color:var(--green-dark);font-weight:700}.attrs .no{color:#b83232;font-weight:700}.attrs .maybe{color:var(--orange-dark);font-weight:700}
+  .empty{background:#fff;border:1px dashed var(--line);border-radius:var(--r-lg);padding:56px 24px;text-align:center}
+  .empty h2{font-size:1.5rem;margin-bottom:8px}
+  .empty p{color:var(--ink-2);max-width:48ch;margin:0 auto 18px}
+  .sk-table{display:grid;gap:12px;padding:20px}
+  @media(max-width:700px){
+    .cmp-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+    table.cmp{min-width:640px}
+    .cmp thead th{position:static}
+    .cmp .lbl{position:sticky;left:0;width:130px;font-size:.85rem;box-shadow:2px 0 0 var(--line-2)}
+    .cmp tr.sect th{position:sticky;left:0}
+    .cmp th.pcol{min-width:170px}
+    .addbox input{width:150px}
+    .cmp-head .n b{font-size:2rem}
+  }
+</style>
+</head>
+<body>
+<div id="site-header"></div>
+
+<div class="container">
+  <nav class="breadcrumb" aria-label="Fil d'Ariane" style="padding-top:24px">
+    <a href="index.html">Accueil</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 6 6 6-6 6"/></svg>
+    <a href="search.html">Explorer</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 6 6 6-6 6"/></svg>
+    <span>Comparer</span>
+  </nav>
+
+  <div class="cmp-head">
+    <div>
+      <span class="eyebrow">Côte à côte</span>
+      <h1 style="margin-top:10px">Comparer</h1>
+      <div class="n" id="count"><b>0</b> produit sélectionné</div>
+    </div>
+    <div class="cmp-tools">
+      <form class="addbox" id="addForm">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="text" id="addInput" placeholder="Code-barres ou nom" aria-label="Ajouter un produit par code-barres ou nom">
+        <button class="btn btn-primary btn-sm" type="submit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg> Ajouter un produit</button>
+      </form>
+      <button class="btn btn-outline btn-sm" type="button" id="shareBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg> Partager</button>
+      <button class="btn btn-ghost btn-sm" type="button" id="clearBtn">Tout effacer</button>
+    </div>
+  </div>
+
+  <div class="modebar">
+    <div class="row" style="gap:8px">
+      <span class="lbl">Afficher :</span>
+      <div class="tabs" id="modeTabs" role="tablist">
+        <button type="button" class="active" data-mode="abs" role="tab">Valeurs absolues</button>
+        <button type="button" data-mode="first" role="tab">par rapport au premier</button>
+        <button type="button" data-mode="best" role="tab">par rapport au meilleur</button>
+      </div>
+    </div>
+    <div id="demoTag"></div>
+  </div>
+
+  <div class="crit" id="crit"></div>
+
+  <div id="main" style="margin-top:18px"></div>
+
+  <p class="note">Le sodium n'est pas affiché : c'est le sel divisé par 2,5, la même mesure deux fois. Les glucides totaux ne sont pas jugés (ni meilleur ni pire) : seuls les sucres comptent dans le Nutri-Score.</p>
+  <p class="note" style="margin-top:8px">Pour trouver <em>lequel</em> choisir dans toute une catégorie, utilisez <a href="ranking.html?category=breakfast-cereals" style="color:var(--orange-dark);font-weight:700">Mon classement personnalisé</a>.</p>
+</div>
+
+<div id="site-footer"></div>
+<script src="assets/locale.js?v=1"></script>
+<script src="assets/app.js?v=9"></script>
+<script src="assets/i18n-es.js?v=3"></script>
+<script src="assets/i18n.js?v=10"></script>
+<script src="assets/prefs.js?v=1"></script>
+<script>
+  OFF.mount("search.html");
+  const API = "https://world.openfoodfacts.org/api/v2/product/";
+  const FIELDS = "code,product_name,product_name_fr,brands,quantity,image_front_small_url,image_front_url,nutriscore_grade,ecoscore_grade,environmental_score_grade,nova_group,nova_groups_markers,additives_n,additives_tags,nutriments,allergens_tags,traces_tags,labels_tags,ingredients_analysis_tags," + OFF.prefs.FIELDS;
+  const MAX = 4;
+  const DEFAULT_CODES = ["3017620422003", "5449000214911", "3274080005003"];
+
+  /* Repli statique (données de démonstration) pour les 3 produits par défaut */
+  const DEMO = {
+    "3017620422003": { code: "3017620422003", product_name: "Nutella", brands: "Ferrero", quantity: "400 g", image_front_small_url: "https://images.openfoodfacts.org/images/products/301/762/042/2003/front_en.879.200.jpg", nutriscore_grade: "e", ecoscore_grade: "d", nova_group: 4, nova_groups_markers: { 4: [["additives", "en:e322"], ["ingredients", "en:flavouring"]] }, additives_n: 1, additives_tags: ["en:e322"], nutrient_levels: { fat: "high", "saturated-fat": "high", sugars: "high", salt: "low" }, nutriments: { "energy-kcal_100g": 539, fat_100g: 30.9, "saturated-fat_100g": 10.6, carbohydrates_100g: 57.5, sugars_100g: 56.3, fiber_100g: 0, proteins_100g: 6.3, salt_100g: 0.107 }, allergens_tags: ["en:milk", "en:nuts", "en:soybeans"], traces_tags: [], labels_tags: ["en:gluten-free", "en:vegetarian"], ingredients_analysis_tags: ["en:palm-oil", "en:non-vegan", "en:vegetarian"], ingredients_text: "Sucre, huile de palme, noisettes 13 %, cacao maigre 7,4 %, lait écrémé en poudre 6,6 %, lactosérum en poudre, émulsifiants : lécithines [soja], vanilline." },
+    "5449000214911": { code: "5449000214911", product_name: "Coca-Cola", brands: "Coca-Cola", quantity: "330 ml", image_front_small_url: "https://images.openfoodfacts.org/images/products/544/900/021/4911/front_hi.242.200.jpg", nutriscore_grade: "e", ecoscore_grade: "b", nova_group: 4, nova_groups_markers: { 4: [["additives", "en:e150d"], ["additives", "en:e338"], ["ingredients", "en:flavouring"]] }, additives_n: 3, additives_tags: ["en:e150d", "en:e290", "en:e338"], nutrient_levels: { fat: "low", "saturated-fat": "low", sugars: "high", salt: "low" }, nutriments: { "energy-kcal_100g": 42, fat_100g: 0, "saturated-fat_100g": 0, carbohydrates_100g: 10.6, sugars_100g: 10.6, fiber_100g: 0, proteins_100g: 0, salt_100g: 0 }, allergens_tags: [], traces_tags: [], labels_tags: [], ingredients_analysis_tags: ["en:palm-oil-free", "en:vegan", "en:vegetarian"], ingredients_text: "Eau gazéifiée, sucre, colorant : caramel E150d, acidifiant : acide phosphorique, arômes naturels (extraits végétaux), dont caféine." },
+    "3274080005003": { code: "3274080005003", product_name: "Eau de source", brands: "Cristaline", quantity: "1,5 L", image_front_small_url: "https://images.openfoodfacts.org/images/products/327/408/000/5003/front_fr.994.200.jpg", nutriscore_grade: "a", ecoscore_grade: "b", nova_group: 1, nova_groups_markers: {}, additives_n: 0, additives_tags: [], nutrient_levels: { fat: "low", "saturated-fat": "low", sugars: "low", salt: "low" }, nutriments: { "energy-kcal_100g": 0, fat_100g: 0, "saturated-fat_100g": 0, carbohydrates_100g: 0, sugars_100g: 0, fiber_100g: 0, proteins_100g: 0, salt_100g: 0.002 }, allergens_tags: [], traces_tags: [], labels_tags: ["en:vegan", "en:vegetarian"], ingredients_analysis_tags: ["en:palm-oil-free", "en:vegan", "en:vegetarian"], ingredients_text: "Eau de source." },
+  };
+
+  const NUTR = [
+    { k: "energy-kcal", label: "Énergie", unit: "kcal", dir: -1 },
+    { k: "fat", label: "Matières grasses", unit: "g", dir: -1 },
+    { k: "saturated-fat", label: "dont acides gras saturés", unit: "g", dir: -1, sub: true },
+    { k: "carbohydrates", label: "Glucides", unit: "g", dir: 0 },
+    { k: "sugars", label: "dont sucres", unit: "g", dir: -1, sub: true },
+    { k: "fiber", label: "Fibres", unit: "g", dir: 1 },
+    { k: "proteins", label: "Protéines", unit: "g", dir: 1 },
+    { k: "salt", label: "Sel", unit: "g", dir: -1 },
+  ];
+  const GR = { a: 1, b: 2, c: 3, d: 4, e: 5 }, ECO = { "a-plus": 0, a: 1, b: 2, c: 3, d: 4, e: 5 };
+
+  let codes = (new URLSearchParams(location.search).get("codes") || "").split(",").map(s => s.trim()).filter(s => /^\d{8,14}$/.test(s));
+  if (!codes.length && !new URLSearchParams(location.search).has("codes")) codes = DEFAULT_CODES.slice();
+  codes = [...new Set(codes)].slice(0, MAX);
+  let products = [], mode = "abs", demo = false;
+
+  const T = OFF.t, esc = OFF.esc;
+  const fmt = v => v == null || isNaN(v) ? "–" : (+v).toLocaleString(OFF.locale || "fr-FR", { maximumFractionDigits: 1 });
+  const sfmt = v => (v > 0 ? "+" : v < 0 ? "−" : "±") + fmt(Math.abs(v));
+  const nameOf = p => p["product_name_" + OFF.lang] || p.product_name || p.product_name_fr || T("Produit sans nom");
+  const nutr = (p, k) => { const n = p.nutriments || {}; let v = n[k + "_100g"]; if (v == null && k === "energy-kcal" && n.energy_100g != null) v = n.energy_unit === "kcal" ? n.energy_100g : n.energy_100g / 4.184; return v == null || v === "" ? null : +v; };
+
+  function syncUrl() { history.replaceState(null, "", "compare.html" + (codes.length ? "?codes=" + codes.join(",") : "")); }
+
+  async function fetchOne(code) {
+    const r = await fetch(`${API}${code}.json?lc=${OFF.lang || "fr"}&fields=${FIELDS}`);
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    const d = await r.json(); if (d.status !== 1 || !d.product) throw new Error("not found");
+    if (!d.product.ecoscore_grade && d.product.environmental_score_grade) d.product.ecoscore_grade = d.product.environmental_score_grade;
+    return d.product;
+  }
+  async function load() {
+    syncUrl();
+    const main = document.getElementById("main");
+    if (!codes.length) { products = []; render(); return; }
+    main.innerHTML = `<div class="cmp-wrap sk-table">${Array.from({ length: 6 }, (_, i) => `<div class="skeleton" style="height:${i ? 40 : 160}px"></div>`).join("")}</div>`;
+    const res = await Promise.allSettled(codes.map(c => products.find(p => p.code === c && !p._demo) || fetchOne(c)));
+    const next = []; demo = false;
+    res.forEach((r, i) => {
+      const code = codes[i];
+      if (r.status === "fulfilled") next.push(r.value);
+      else if (DEMO[code]) { const p = Object.assign({ _demo: true }, DEMO[code]); next.push(p); demo = true; }
+      else OFF.toast(T("Produit introuvable, retiré de la comparaison :") + " " + code);
+    });
+    products = next; codes = next.map(p => p.code); syncUrl();
+    render();
+  }
+
+  function bestWorst(vals, dir) {
+    const idx = vals.map((v, i) => v == null ? null : i).filter(i => i != null);
+    if (!dir || idx.length < 2) return { best: -1, worst: -1, ref: null };
+    const sorted = idx.slice().sort((a, b) => (vals[a] - vals[b]) * -dir);
+    if (vals[sorted[0]] === vals[sorted[sorted.length - 1]]) return { best: -1, worst: -1, ref: vals[sorted[0]] };
+    return { best: sorted[0], worst: sorted[sorted.length - 1], ref: vals[sorted[0]] };
+  }
+  function relRow(vals, dir, unit) {
+    const bw = bestWorst(vals, dir);
+    const ref = mode === "first" ? vals[0] : (bw.ref != null ? bw.ref : (dir ? null : Math.min(...vals.filter(v => v != null))));
+    return vals.map((v, i) => {
+      let cls = "num"; if (i === bw.best) cls += " best"; if (i === bw.worst) cls += " worst";
+      if (v == null) return `<td class="num na">–</td>`;
+      let diff = "";
+      if (mode !== "abs" && ref != null && !(mode === "first" && i === 0) && v !== ref) {
+        const d = v - ref, better = dir ? d * dir > 0 : null;
+        diff = `<span class="diff ${better == null ? "" : better ? "better" : "worse"}">${sfmt(d)} ${unit}</span>`;
+      }
+      return `<td class="${cls}">${fmt(v)} ${unit}${diff}</td>`;
+    }).join("");
+  }
+  function gradeRow(vals, html, labels) {
+    const bw = bestWorst(vals, -1);
+    return vals.map((v, i) => `<td class="${i === bw.best ? "best" : i === bw.worst ? "worst" : ""}">${html[i]}<div class="tagrow">${i === bw.best ? `<span class="tag ok">${T("Meilleur")}</span>` : i === bw.worst ? `<span class="tag warn">${T("Pire")}</span>` : ""}${labels && labels[i] ? `<span class="tag">${labels[i]}</span>` : ""}</div></td>`).join("");
+  }
+
+  function col(p, i) {
+    const img = p.image_front_small_url || p.image_front_url;
+    return `<th class="pcol"><button class="rm" type="button" data-rm="${p.code}" aria-label="${T("Retirer")} ${esc(nameOf(p))}" title="${T("Retirer de la comparaison")}">×</button>
+      <a href="product.html?code=${p.code}"><div class="img ${img ? "" : "empty"}">${img ? `<img src="${img}" alt="${esc(nameOf(p))}">` : T("Pas de photo")}</div>
+      <div class="name">${esc(nameOf(p))}</div></a>
+      <div class="brand">${esc(OFF.brandOf(p) || "–")}${p.quantity ? " · " + esc(p.quantity) : ""}</div>
+      ${OFF.prefs.badge(p)}</th>`;
+  }
+
+  function attrsSection() {
+    const n = products.length, rows = [];
+    const union = key => [...new Set(products.flatMap(p => p[key] || []))];
+    const nice = t => t.replace(/^[a-z]{2}:/, "").replace(/-/g, " ");
+    const YES = `<span class="yes">✓ ${T("oui")}</span>`, NO = `<span class="no">✗ ${T("non")}</span>`, UNK = `<span class="muted">?</span>`;
+    union("allergens_tags").forEach(t => rows.push({ g: T("Allergène"), name: nice(t), vals: products.map(p => (p.allergens_tags || []).includes(t) ? T("contient") : (p.traces_tags || []).includes(t) ? T("traces") : "–") }));
+    union("traces_tags").filter(t => !union("allergens_tags").includes(t)).forEach(t => rows.push({ g: T("Traces"), name: nice(t), vals: products.map(p => (p.traces_tags || []).includes(t) ? T("traces possibles") : "–") }));
+    union("labels_tags").slice(0, 12).forEach(t => rows.push({ g: T("Label"), name: nice(t), vals: products.map(p => (p.labels_tags || []).includes(t) ? YES : NO) }));
+    const ia = (p, yes, no, maybe) => { const t = p.ingredients_analysis_tags || []; return t.includes(yes) ? YES : t.includes(no) ? NO : t.includes(maybe) ? `<span class="maybe">${T("peut-être")}</span>` : UNK; };
+    rows.push({ g: T("Régime"), name: T("Végan"), vals: products.map(p => ia(p, "en:vegan", "en:non-vegan", "en:maybe-vegan")) });
+    rows.push({ g: T("Régime"), name: T("Végétarien"), vals: products.map(p => ia(p, "en:vegetarian", "en:non-vegetarian", "en:maybe-vegetarian")) });
+    rows.push({ g: T("Régime"), name: T("Sans huile de palme"), vals: products.map(p => ia(p, "en:palm-oil-free", "en:palm-oil", "en:may-contain-palm-oil")) });
+    rows.forEach(r => r.same = r.vals.every(v => v === r.vals[0]));
+    const diff = rows.filter(r => !r.same), same = rows.filter(r => r.same);
+    const tr = r => `<tr class="${r.same ? "same" : ""}"><td>${r.g} · ${esc(r.name)}</td>${r.vals.map(v => `<td>${v}</td>`).join("")}</tr>`;
+    return `<details class="diffs"><summary><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg>${T("Allergènes, labels et régime :")} ${diff.length} ${T("diffèrent")}, ${same.length} ${T("identiques")}</summary>
+      <div class="body"><table class="attrs"><thead><tr><th>${T("Critère")}</th>${products.map(p => `<th>${esc(nameOf(p))}</th>`).join("")}</tr></thead><tbody>${diff.map(tr).join("")}${same.map(tr).join("")}</tbody></table></div></details>`;
+  }
+
+  function render() {
+    const n = products.length;
+    document.getElementById("count").innerHTML = `<b>${n}</b> ${n > 1 ? T("produits sélectionnés") : T("produit sélectionné")}`;
+    document.getElementById("demoTag").innerHTML = demo ? `<span class="tag warn">${T("données de démonstration")}</span>` : "";
+    const crit = OFF.prefs.active();
+    document.getElementById("crit").innerHTML = crit.length ? `<b>${T("Vos")} ${crit.length} ${crit.length > 1 ? T("critères") : T("critère")} :</b> ${crit.map(c => `<span class="tag">${T(c.label)} · ${T(OFF.prefs.IMPORTANCE[c.importance])}</span>`).join("")}<a href="preferences.html">${T("Modifier mes préférences")}</a>` : `<b>${T("Aucun critère actif")}</b> — ${T("la pastille de correspondance apparaîtra quand vous en aurez choisi.")} <a href="preferences.html">${T("Choisir mes préférences")}</a>`;
+    const main = document.getElementById("main");
+    if (!n) { main.innerHTML = `<div class="empty"><h2>${T("Aucun produit à comparer")}</h2><p>${T("Ajoutez jusqu'à 4 produits par code-barres ou par nom, ou partez d'une sélection prête à l'emploi.")}</p><div class="row" style="justify-content:center"><button class="btn btn-primary" type="button" id="loadDefaults">${T("Comparer Nutella, Coca-Cola et Cristaline")}</button><a class="btn btn-outline" href="search.html">${T("Explorer les produits")}</a></div></div>`; document.getElementById("loadDefaults").addEventListener("click", () => { codes = DEFAULT_CODES.slice(); load(); }); return; }
+    const P = products;
+    const ns = P.map(p => GR[p.nutriscore_grade] ?? null), ec = P.map(p => ECO[p.ecoscore_grade] ?? null), nv = P.map(p => p.nova_group ? +p.nova_group : null), ad = P.map(p => p.additives_n == null ? null : +p.additives_n);
+    const NOVAL = { 1: "Non transformé", 2: "Ingrédient culinaire", 3: "Transformé", 4: "Ultra-transformé" };
+    const markers = P.map(p => { const m = p.nova_groups_markers && p.nova_group ? p.nova_groups_markers[p.nova_group] : null; return m && m.length ? m.length + " " + (m.length > 1 ? T("marqueurs") : T("marqueur")) : null; });
+    let html = `<div class="cmp-wrap"><table class="cmp"><thead><tr><th class="lbl"><span class="eyebrow">${n} / ${MAX}</span></th>${P.map(col).join("")}</tr></thead><tbody>`;
+    html += `<tr class="sect"><th colspan="${n + 1}">${T("Scores")}</th></tr>`;
+    html += `<tr><td class="lbl">Nutri-Score</td>${gradeRow(ns, P.map(p => OFF.ns(p.nutriscore_grade)))}</tr>`;
+    html += `<tr><td class="lbl">Green-Score</td>${gradeRow(ec, P.map(p => OFF.eco(p.ecoscore_grade)))}</tr>`;
+    html += `<tr><td class="lbl">NOVA</td>${gradeRow(nv, P.map(p => OFF.nova(p.nova_group)), P.map((p, i) => (NOVAL[p.nova_group] ? T(NOVAL[p.nova_group]) : "") + (markers[i] ? " · " + markers[i] : "")))}</tr>`;
+    html += `<tr><td class="lbl">${T("Nombre d'additifs")}</td>${relRow(ad, -1, "")}</tr>`;
+    html += `<tr class="sect"><th colspan="${n + 1}">${T("Nutriments / 100 g")}</th></tr>`;
+    NUTR.forEach(r => { html += `<tr><td class="lbl ${r.sub ? "sub" : ""}">${T(r.label)}</td>${relRow(P.map(p => nutr(p, r.k)), r.dir, r.unit)}</tr>`; });
+    html += `</tbody></table></div>` + attrsSection();
+    main.innerHTML = html;
+    main.querySelectorAll("[data-rm]").forEach(b => b.addEventListener("click", () => { codes = codes.filter(c => c !== b.dataset.rm); products = products.filter(p => p.code !== b.dataset.rm); syncUrl(); render(); }));
+  }
+
+  /* Ajouter un produit : code-barres direct, sinon 1er résultat de recherche */
+  document.getElementById("addForm").addEventListener("submit", async e => {
+    e.preventDefault();
+    const inp = document.getElementById("addInput"), q = inp.value.trim(); if (!q) return;
+    if (codes.length >= MAX) return OFF.toast(T("4 produits maximum : retirez-en un d'abord"));
+    let code = /^\d{8,14}$/.test(q) ? q : null;
+    if (!code) { OFF.toast(T("Recherche de") + " « " + q + " »…"); const r = await OFF.search(q, { pageSize: 1 }); code = r.products && r.products[0] && r.products[0].code; }
+    if (!code) return OFF.toast(T("Aucun produit trouvé"));
+    if (codes.includes(String(code))) return OFF.toast(T("Ce produit est déjà dans la comparaison"));
+    codes.push(String(code)); inp.value = ""; load();
+  });
+  document.getElementById("shareBtn").addEventListener("click", async () => { try { await navigator.clipboard.writeText(location.href); OFF.toast(T("Lien copié")); } catch (e) { prompt(T("Copiez ce lien :"), location.href); } });
+  document.getElementById("clearBtn").addEventListener("click", () => { codes = []; products = []; demo = false; syncUrl(); render(); });
+  document.querySelectorAll("#modeTabs button").forEach(b => b.addEventListener("click", () => { document.querySelectorAll("#modeTabs button").forEach(x => x.classList.remove("active")); b.classList.add("active"); mode = b.dataset.mode; render(); }));
+  addEventListener("storage", e => { if (!e.key || e.key === "off_prefs") render(); });
+  load();
+</script>
+</body>
+</html>

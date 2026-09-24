@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Produits d'une facette | Open Food Facts</title>
+<link rel="icon" href="https://static.openfoodfacts.org/images/logos/off-logo-vertical-light.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=17">
+<style>
+  .match{display:inline-flex;align-items:center;gap:8px;padding:4px 10px 4px 4px;border-radius:999px;background:#fff;border:1.5px solid var(--line);font-size:.8rem;font-weight:600;color:var(--ink-2)}
+  .match b{display:inline-grid;place-items:center;min-width:44px;height:26px;padding:0 8px;border-radius:999px;background:var(--c);color:#fff;font-family:var(--font-head)}
+  .match.lg{font-size:.95rem;padding:6px 14px 6px 6px}
+  .match.lg b{height:34px;min-width:60px;font-size:1.05rem}
+  .hero-row{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap}
+  .hero-row .big{font-family:var(--font-head);font-weight:800;font-size:clamp(2.4rem,4vw,3.4rem);letter-spacing:-.03em;line-height:1;color:var(--brand);font-variant-numeric:tabular-nums}
+  .hero-row .big small{display:block;font-family:var(--font-body);font-size:.9rem;font-weight:600;color:var(--ink-2);letter-spacing:0;margin-top:6px}
+  .prefband{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:#fff;border:1.5px solid var(--line);border-left:5px solid var(--orange);border-radius:16px;padding:14px 18px;margin:28px 0 20px;font-size:.92rem;color:var(--ink-2)}
+  .prefband .ico{width:36px;height:36px;border-radius:10px;background:var(--orange-soft);color:var(--orange-dark);display:grid;place-items:center;flex:none}
+  .prefband .ico svg{width:20px;height:20px}
+  .prefband b{color:var(--brand)}
+  .prefband .edit{margin-left:auto;font-weight:700;color:var(--orange-dark);display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+  .prefband .edit svg{width:16px;height:16px}
+  .toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+  .toolbar .row{gap:8px}
+  .refine{margin:0 0 22px}
+  .refine .chips{margin-top:8px}
+  .refine .lbl{font-size:.8rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+  .group-h{grid-column:1/-1;display:flex;align-items:center;gap:12px;margin:14px 0 -2px;font-family:var(--font-head);font-weight:800;font-size:1.15rem;color:var(--brand)}
+  .group-h:first-child{margin-top:0}
+  .group-h i{width:12px;height:12px;border-radius:50%;background:var(--c);flex:none}
+  .group-h span{font-family:var(--font-body);font-weight:500;font-size:.85rem;color:var(--muted)}
+  .ptile{position:relative}
+  .ptile .tile{height:100%}
+  .ptile .badge{margin-top:2px}
+  .ptile .cmp{position:absolute;top:10px;left:10px;z-index:2;display:none;align-items:center;justify-content:center;width:30px;height:30px;border-radius:9px;background:#fff;border:1.5px solid var(--line);box-shadow:var(--shadow-sm);cursor:pointer}
+  .ptile .cmp input{width:16px;height:16px;accent-color:var(--orange);margin:0;cursor:pointer}
+  body.comparing .ptile .cmp{display:flex}
+  body.comparing .ptile.sel .tile{border-color:var(--orange);box-shadow:0 0 0 3px rgba(255,135,20,.25)}
+  .tile .scans{font-size:.75rem;color:var(--muted);display:flex;align-items:center;gap:5px}
+  .tile .scans svg{width:13px;height:13px}
+  .float-cmp{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(120%);transition:transform .3s;z-index:60;display:flex;gap:10px;align-items:center;background:var(--brand);color:#fff;padding:10px 10px 10px 20px;border-radius:999px;box-shadow:var(--shadow-lg);font-weight:600;font-size:.95rem;max-width:calc(100vw - 32px)}
+  .float-cmp.show{transform:translateX(-50%)}
+  .float-cmp .btn-primary{padding:11px 18px}
+  .float-cmp .x{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;color:rgba(255,255,255,.8)}
+  .float-cmp .x:hover{background:rgba(255,255,255,.12);color:#fff}
+  .float-cmp .x svg{width:16px;height:16px}
+  .side-links{display:flex;gap:10px;flex-wrap:wrap}
+  .empty{grid-column:1/-1;text-align:center;padding:48px 20px}
+  @media(max-width:600px){.hero-row .big{font-size:2.4rem}.prefband .edit{margin-left:0}}
+</style>
+</head>
+<body>
+<div id="site-header"></div>
+
+<div class="page-hero" style="padding-bottom:28px">
+  <div class="container">
+    <div class="breadcrumb"><a href="index.html">Accueil</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m9 6 6 6-6 6"/></svg><a href="facets.html">Facettes</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m9 6 6 6-6 6"/></svg><a id="crumbFacet" href="facet-values.html">…</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m9 6 6 6-6 6"/></svg><span id="crumbValue">…</span></div>
+    <div class="hero-row">
+      <div>
+        <span class="eyebrow mt-3" id="eyebrow">Catégorie</span>
+        <h1 id="title" style="font-size:clamp(2rem,4.2vw,3.2rem)">…</h1>
+      </div>
+      <div class="big"><span id="count"><span class="skeleton" style="display:inline-block;width:120px;height:40px;vertical-align:middle"></span></span><small id="countLbl">produits dans cette catégorie</small></div>
+    </div>
+    <div class="side-links mt-3">
+      <a class="btn btn-outline btn-sm" id="rankLink" href="ranking.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Mon classement personnalisé</a>
+      <button class="btn btn-outline btn-sm" id="cmpToggle" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="4" width="7" height="16" rx="2"/><rect x="14" y="4" width="7" height="16" rx="2"/></svg>Comparer la sélection</button>
+      <a class="btn btn-ghost btn-sm" id="mapLink" href="countries.html" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>Voir tous les pays sur la carte</a>
+    </div>
+  </div>
+</div>
+
+<div class="container" style="margin-bottom:64px">
+  <div class="prefband" id="prefband"></div>
+
+  <div class="refine" id="refine" hidden>
+    <span class="lbl">Affiner</span>
+    <div class="chips" id="refineChips" style="margin-top:8px"></div>
+  </div>
+
+  <div class="toolbar">
+    <div class="row" id="status"><span class="tag info">Chargement…</span></div>
+    <div class="row">
+      <label for="sort" class="muted" style="font-size:.85rem;font-weight:600">Trier</label>
+      <select class="sort" id="sort" aria-label="Trier">
+        <option value="prefs">Selon mes préférences</option>
+        <option value="unique_scans_n">Les plus scannés</option>
+        <option value="nutriscore_score">Meilleur Nutri-Score</option>
+        <option value="ecoscore_score">Meilleur Green-Score</option>
+        <option value="created_t">Ajoutés récemment</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="results" id="results"></div>
+</div>
+
+<div class="float-cmp" id="floatCmp">
+  <span id="floatTxt">0 produit sélectionné</span>
+  <a class="btn btn-primary btn-sm" id="floatGo" href="compare.html">Comparer</a>
+  <button class="x" id="floatX" type="button" aria-label="Annuler"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+</div>
+
+<div id="site-footer"></div>
+<script src="assets/locale.js?v=1"></script>
+<script src="assets/app.js?v=9"></script>
+<script src="assets/i18n-es.js?v=3"></script>
+<script src="assets/i18n.js?v=10"></script>
+<script src="assets/prefs.js?v=1"></script>
+<script>
+  OFF.mount("search.html");
+  const T = OFF.t, n = x => (+x || 0).toLocaleString(OFF.numLocale || "fr-FR"), esc = OFF.esc;
+  const FACETS = {
+    categories: { l: "Catégories", one: "Catégorie", in: "produits dans cette catégorie", param: "categories_tags", prefix: "en:" },
+    labels: { l: "Labels", one: "Label", in: "produits portant ce label", param: "labels_tags", prefix: "en:" },
+    brands: { l: "Marques", one: "Marque", in: "produits de cette marque", param: "brands_tags", prefix: "" },
+    countries: { l: "Pays", one: "Pays", in: "produits vendus dans ce pays", param: "countries_tags", prefix: "en:" },
+    additives: { l: "Additifs", one: "Additif", in: "produits contenant cet additif", param: "additives_tags", prefix: "en:" },
+    allergens: { l: "Allergènes", one: "Allergène", in: "produits contenant cet allergène", param: "allergens_tags", prefix: "en:" },
+    traces: { l: "Traces", one: "Trace", in: "produits avec cette trace", param: "traces_tags", prefix: "en:" },
+    packaging: { l: "Emballages", one: "Emballage", in: "produits avec cet emballage", param: "packaging_tags", prefix: "en:" },
+    origins: { l: "Origines des ingrédients", one: "Origine", in: "produits avec cette origine", param: "origins_tags", prefix: "en:" },
+    "nutrition-grades": { l: "Nutri-Score", one: "Nutri-Score", in: "produits avec ce Nutri-Score", param: "nutrition_grades_tags", prefix: "" },
+    "nova-groups": { l: "Groupes NOVA", one: "Groupe NOVA", in: "produits dans ce groupe", param: "nova_groups_tags", prefix: "" },
+    ecoscore: { l: "Green-Score", one: "Green-Score", in: "produits avec ce Green-Score", param: "ecoscore_tags", prefix: "" },
+  };
+  const SUBS = { // sous-catégories statiques (affinage)
+    "breakfast-cereals": [["mueslis", "Mueslis"], ["porridges", "Porridge"], ["cereal-flakes", "Flocons"], ["puffed-cereals", "Céréales soufflées"], ["chocolate-cereals", "Céréales au chocolat"], ["cereals-with-fruits", "Céréales aux fruits"], ["cereals-with-nuts", "Céréales aux noix"], ["honey-cereals", "Céréales au miel"], ["filled-cereals", "Céréales fourrées"], ["granolas", "Granolas"]],
+    "plant-based-foods-and-beverages": [["plant-based-foods", "Aliments d'origine végétale"], ["plant-based-beverages", "Boissons végétales"], ["fruits-and-vegetables-based-foods", "À base de fruits et légumes"], ["legumes-and-their-products", "Légumineuses"], ["cereals-and-their-products", "Céréales"]],
+    "snacks": [["sweet-snacks", "Snacks sucrés"], ["salty-snacks", "Snacks salés"], ["biscuits-and-cakes", "Biscuits et gâteaux"], ["chocolates", "Chocolats"], ["confectioneries", "Confiseries"], ["chips-and-fries", "Chips"]],
+    "sweet-snacks": [["biscuits-and-cakes", "Biscuits et gâteaux"], ["chocolates", "Chocolats"], ["confectioneries", "Confiseries"], ["cocoa-and-its-products", "Cacao"], ["bars", "Barres"]],
+    "beverages": [["non-alcoholic-beverages", "Sans alcool"], ["alcoholic-beverages", "Alcoolisées"], ["fruit-juices", "Jus de fruits"], ["waters", "Eaux"], ["sodas", "Sodas"], ["plant-based-beverages", "Boissons végétales"]],
+    "dairies": [["cheeses", "Fromages"], ["yogurts", "Yaourts"], ["milks", "Laits"], ["butters", "Beurres"], ["creams", "Crèmes"], ["dairy-desserts", "Desserts lactés"]],
+    "meats": [["prepared-meats", "Charcuteries"], ["poultries", "Volailles"], ["beef", "Bœuf"], ["pork", "Porc"], ["sausages", "Saucisses"]],
+  };
+  const params = new URLSearchParams(location.search);
+  const facet = FACETS[params.get("facet")] ? params.get("facet") : "categories";
+  const meta = FACETS[facet];
+  const value = (params.get("value") || "breakfast-cereals").replace(/^[a-z]{2}:/, "");
+  const humanize = v => { const s = v.replace(/-/g, " "); return s.charAt(0).toUpperCase() + s.slice(1); };
+  const name = params.get("name") || humanize(value);
+
+  document.title = `${name} | Open Food Facts`;
+  document.getElementById("crumbFacet").textContent = T(meta.l);
+  document.getElementById("crumbFacet").href = facet === "countries" ? "countries.html" : `facet-values.html?facet=${facet}`;
+  document.getElementById("crumbValue").textContent = name;
+  document.getElementById("eyebrow").textContent = T(meta.one);
+  document.getElementById("title").textContent = name;
+  document.getElementById("countLbl").textContent = T(meta.in);
+  document.getElementById("rankLink").href = `ranking.html?${facet === "categories" ? "category" : "facet=" + facet + "&value"}=${encodeURIComponent(value)}`;
+  if (facet === "countries") document.getElementById("mapLink").hidden = false;
+
+  // Bandeau préférences
+  function prefBand() {
+    const a = OFF.prefs.active();
+    const el = document.getElementById("prefband");
+    const ico = `<span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg></span>`;
+    const edit = `<a class="edit" href="preferences.html">${T("Modifier")} <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>`;
+    el.innerHTML = a.length
+      ? `${ico}<div>${T("Trié selon vos préférences")} : <b>${a.length} ${T(a.length > 1 ? "critères" : "critère")}</b> <span class="muted">(${a.map(c => T(c.label).toLowerCase()).join(", ")})</span></div>${edit}`
+      : `${ico}<div>${T("Aucune préférence alimentaire enregistrée : les produits sont triés par popularité.")}</div>${edit.replace(T("Modifier"), T("Définir mes préférences"))}`;
+    return a.length;
+  }
+  const hasPrefs = prefBand();
+  const sortEl = document.getElementById("sort");
+  if (!hasPrefs) sortEl.value = "unique_scans_n";
+
+  // Affiner
+  const subs = facet === "categories" ? SUBS[value] : null;
+  if (subs) {
+    document.getElementById("refine").hidden = false;
+    document.getElementById("refineChips").innerHTML = subs.map(([id, l]) => `<a class="chip" href="facet.html?facet=categories&value=${id}&name=${encodeURIComponent(l)}">${l}</a>`).join("");
+  }
+
+  // Chargement
+  const results = document.getElementById("results"), status = document.getElementById("status");
+  let products = [], demo = false, total = 0;
+  const FIELDS = "code,product_name,product_name_fr,brands,quantity,image_front_small_url,nutriscore_grade,nova_group,ecoscore_grade,unique_scans_n," + OFF.prefs.FIELDS;
+  function skeleton() {
+    results.innerHTML = Array.from({ length: 8 }, () => '<div class="tile"><div class="skeleton" style="height:150px"></div><div class="skeleton" style="height:16px;width:80%"></div><div class="skeleton" style="height:12px;width:50%"></div></div>').join("");
+  }
+  async function load() {
+    skeleton();
+    const sort = sortEl.value === "prefs" ? "unique_scans_n" : sortEl.value;
+    try {
+      const u = new URL("https://world.openfoodfacts.org/api/v2/search");
+      u.searchParams.set(meta.param, meta.prefix + value);
+      u.searchParams.set("page_size", 48); u.searchParams.set("fields", FIELDS); u.searchParams.set("sort_by", sort);
+      u.searchParams.set("lc", OFF.lang || "fr");
+      const ctrl = new AbortController(); const to = setTimeout(() => ctrl.abort(), 15000);
+      const r = await fetch(u, { signal: ctrl.signal }); clearTimeout(to);
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      const d = await r.json();
+      if (!Array.isArray(d.products)) throw new Error("bad payload");
+      products = d.products; total = d.count || products.length; demo = false;
+    } catch (e) {
+      demo = true;
+      products = await fetch("assets/sample.json").then(r => r.json()).catch(() => []);
+      total = products.length;
+      // tri local en repli
+      const k = { unique_scans_n: p => -(p.unique_scans_n || 0), nutriscore_score: p => "abcde".indexOf(p.nutriscore_grade || "z") < 0 ? 9 : "abcde".indexOf(p.nutriscore_grade), ecoscore_score: p => ["a-plus", "a", "b", "c", "d", "e"].indexOf(p.ecoscore_grade) < 0 ? 9 : ["a-plus", "a", "b", "c", "d", "e"].indexOf(p.ecoscore_grade), created_t: p => -(p.created_t || 0) }[sort];
+      if (k) products.sort((a, b) => k(a) - k(b));
+    }
+    document.getElementById("count").textContent = n(total);
+    status.innerHTML = demo
+      ? `<span class="tag warn" title="${T("L'API n'a pas répondu : produits de démonstration")}">${T("données de démonstration")}</span>`
+      : `<span class="tag ok">${products.length} ${T("produits affichés sur")} ${n(total)}</span>`;
+    render();
+  }
+
+  // Tuiles
+  const selected = new Set();
+  function tile(p) {
+    const img = p.image_front_small_url || p.image_front_url;
+    const L = OFF.lang || "fr"; const nm = p["product_name_" + L] || p.product_name || p.product_name_fr || T("Produit sans nom");
+    const sel = selected.has(p.code);
+    return `<div class="ptile ${sel ? "sel" : ""}" data-code="${p.code}">
+      <label class="cmp" title="${T("Sélectionner pour comparer")}"><input type="checkbox" ${sel ? "checked" : ""} aria-label="${T("Comparer")} ${esc(nm)}"></label>
+      <a class="tile" href="product.html?code=${p.code}">
+        <div class="img ${img ? "" : "empty"}">${img ? `<img loading="lazy" src="${img}" alt="${esc(nm)}">` : T("Pas de photo")}</div>
+        <div class="name">${esc(nm)}</div>
+        <div class="brand">${esc(OFF.brandOf(p))}${p.quantity ? " · " + esc(p.quantity) : ""}</div>
+        ${p.unique_scans_n ? `<div class="scans"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2M7 8v8M11 8v8M15 8v8M18 8v8"/></svg>${n(p.unique_scans_n)} ${T("scans")}</div>` : ""}
+        <div class="scores">${OFF.ns(p.nutriscore_grade)}${OFF.nova(p.nova_group)}${OFF.eco(p.ecoscore_grade)}</div>
+        ${hasPrefs ? `<div class="badge">${OFF.prefs.badge(p)}</div>` : ""}
+      </a>
+    </div>`;
+  }
+  const GROUPS = [
+    ["very_good", "Très bonne correspondance", "var(--ns-a)"], ["good", "Bonne correspondance", "var(--ns-b)"], ["poor", "Faible correspondance", "var(--ns-d)"],
+    ["very_poor", "Très faible correspondance", "var(--ns-e)"], ["does_not_match", "Ne correspond pas", "var(--ns-e)"], ["unknown", "Données insuffisantes", "#9a8b84"],
+  ];
+  function render() {
+    if (!products.length) { results.innerHTML = `<div class="card empty"><h3>${T("Aucun produit")}</h3><p>${T("Cette valeur n'a pas encore de produit, ou l'API n'a pas répondu.")} <a href="contribute.html" style="color:var(--orange-dark);font-weight:700">${T("Ajoutez-en un")}</a>.</p></div>`; return; }
+    if (sortEl.value === "prefs" && hasPrefs) {
+      const scored = products.map(p => ({ p, s: OFF.prefs.score(p) }));
+      scored.sort((a, b) => (b.s.pct ?? -1) - (a.s.pct ?? -1));
+      let html = "";
+      GROUPS.forEach(([st, label, col]) => {
+        const items = scored.filter(x => x.s.status === st || (st === "unknown" && x.s.status === "none"));
+        if (!items.length) return;
+        html += `<div class="group-h" style="--c:${col}"><i></i>${T(label)} <span>· ${items.length}</span></div>` + items.map(x => tile(x.p)).join("");
+      });
+      results.innerHTML = html;
+    } else results.innerHTML = products.map(tile).join("");
+    results.querySelectorAll(".cmp input").forEach(cb => cb.addEventListener("change", () => {
+      const code = cb.closest(".ptile").dataset.code;
+      if (cb.checked) { if (selected.size >= 3) { cb.checked = false; OFF.toast(T("Trois produits maximum à comparer")); return; } selected.add(code); }
+      else selected.delete(code);
+      cb.closest(".ptile").classList.toggle("sel", cb.checked);
+      syncFloat();
+    }));
+  }
+
+  // Comparaison
+  const float = document.getElementById("floatCmp");
+  function syncFloat() {
+    const k = selected.size;
+    document.getElementById("floatTxt").textContent = k ? `${T("Comparer")} ${k} ${T(k > 1 ? "produits" : "produit")}` : T("Cochez jusqu'à 3 produits");
+    const go = document.getElementById("floatGo");
+    go.href = "compare.html?codes=" + [...selected].join(",");
+    go.style.display = k >= 2 ? "" : "none";
+    float.classList.toggle("show", document.body.classList.contains("comparing"));
+  }
+  document.getElementById("cmpToggle").addEventListener("click", () => {
+    document.body.classList.toggle("comparing");
+    if (!document.body.classList.contains("comparing")) { selected.clear(); results.querySelectorAll(".ptile").forEach(t => { t.classList.remove("sel"); const c = t.querySelector("input"); if (c) c.checked = false; }); }
+    syncFloat();
+  });
+  document.getElementById("floatX").addEventListener("click", () => { document.body.classList.remove("comparing"); selected.clear(); results.querySelectorAll(".ptile").forEach(t => { t.classList.remove("sel"); const c = t.querySelector("input"); if (c) c.checked = false; }); syncFloat(); });
+  sortEl.addEventListener("change", () => { if (sortEl.value === "prefs" && !demo) render(); else load(); });
+  load();
+</script>
+</body>
+</html>

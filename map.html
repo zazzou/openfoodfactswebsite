@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Résultats sur une carte | Open Food Facts</title>
+<link rel="icon" href="https://static.openfoodfacts.org/images/logos/off-logo-vertical-light.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="stylesheet" href="assets/style.css?v=17">
+<style>
+  .maplayout{display:grid;grid-template-columns:1fr 320px;gap:24px;align-items:start;margin:28px auto 40px}
+  @media(max-width:960px){.maplayout{grid-template-columns:1fr}}
+  #map{height:520px;border-radius:var(--r-lg);border:1px solid var(--line-2);background:#f3ece6;z-index:0}
+  @media(max-width:600px){#map{height:360px}}
+  .leaflet-tile-pane{filter:grayscale(1) brightness(1.04) contrast(.9);opacity:.75}
+  .leaflet-container{font-family:var(--font-body)}
+  .leaflet-popup-content-wrapper{border-radius:12px;box-shadow:var(--shadow-lg)}
+  .leaflet-popup-content{margin:12px 16px;font-size:.9rem}
+  .leaflet-popup-content b{font-family:var(--font-head);font-size:1.15rem;color:var(--brand);display:block}
+  .leaflet-popup-content a{color:var(--orange-dark);font-weight:700}
+  .legend{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:12px;font-size:.92rem;color:var(--ink-2)}
+  .legend b{color:var(--brand);font-family:var(--font-head);font-size:1.15rem}
+  .legend .dot{display:inline-block;width:14px;height:14px;border-radius:50%;background:rgba(0,100,200,.45);border:2px solid var(--blue);vertical-align:middle;margin-right:6px}
+  .aside{display:flex;flex-direction:column;gap:16px}
+  .what{background:var(--blue-soft);border-left:4px solid var(--blue);border-radius:14px;padding:18px 20px;color:var(--ink-2);font-size:.92rem}
+  .what h3{font-size:1rem;margin:0 0 6px;color:var(--brand)}
+  .clist{background:#fff;border:1px solid var(--line-2);border-radius:var(--r-lg);overflow:hidden}
+  .clist .h{padding:14px 18px;font-family:var(--font-head);font-weight:800;color:var(--brand);border-bottom:1px solid var(--line-2);display:flex;justify-content:space-between;align-items:baseline}
+  .clist .h span{font-family:var(--font-body);font-weight:500;font-size:.8rem;color:var(--muted)}
+  .crow{display:grid;grid-template-columns:1fr auto;grid-template-areas:"name num" "bar bar";column-gap:12px;row-gap:5px;align-items:center;padding:10px 18px;border-top:1px solid var(--line-2)}
+  .crow:hover{background:var(--cream)}
+  .crow .name{grid-area:name;font-weight:600;color:var(--brand);font-size:.92rem}
+  .crow .num{grid-area:num;font-family:var(--font-head);font-weight:800;font-variant-numeric:tabular-nums;color:var(--ink)}
+  .crow .track{grid-area:bar;height:5px;border-radius:999px;background:var(--sand);overflow:hidden}
+  .crow .fill{height:100%;background:var(--blue);border-radius:999px}
+  .clist .empty{padding:18px;color:var(--ink-2);font-size:.9rem}
+  .plist{margin-bottom:64px}
+  .plist h2{font-size:1.4rem;margin-bottom:14px}
+  .tile .ctry{font-size:.75rem;color:var(--muted);display:flex;gap:5px;align-items:center}
+  .tile .ctry svg{width:13px;height:13px;flex:none}
+</style>
+</head>
+<body>
+<div id="site-header"></div>
+
+<div class="page-hero" style="padding-bottom:28px">
+  <div class="container">
+    <div class="breadcrumb"><a href="index.html">Accueil</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m9 6 6 6-6 6"/></svg><a href="search.html" id="crumbSearch">Explorer</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m9 6 6 6-6 6"/></svg><span>Sur une carte</span></div>
+    <span class="eyebrow blue mt-3">Géographie</span>
+    <h1 style="font-size:clamp(1.9rem,3.6vw,2.8rem)">Résultats sur une carte</h1>
+    <form class="searchbar mt-3" role="search" id="mapForm" style="max-width:820px">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input type="search" id="q" placeholder="Camembert, muesli, une marque…" aria-label="Rechercher">
+      <button type="submit" class="btn btn-primary"><span>Chercher</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+    </form>
+    <div class="chips"><span>Essayez :</span><a class="chip" href="map.html?q=camembert">Camembert</a><a class="chip" href="map.html?q=nutella">Nutella</a><a class="chip" href="map.html?q=coca-cola">Coca-Cola</a><a class="chip" href="map.html?q=muesli">Muesli</a><a class="chip" href="map.html?q=oreo">Oreo</a><a class="chip" href="search.html" id="listLink" style="margin-left:auto">Voir en liste</a></div>
+  </div>
+</div>
+
+<div class="container maplayout">
+  <div>
+    <div id="map" role="img" aria-label="Carte du monde : un cercle par pays de vente des produits trouvés"></div>
+    <div class="legend" id="legend"><span class="dot"></span><span><span class="skeleton" style="display:inline-block;width:220px;height:14px;vertical-align:middle"></span></span></div>
+  </div>
+  <aside class="aside">
+    <div class="what">
+      <h3>Ce qu'est un point</h3>
+      Un point est un pays où le produit est vendu d'après l'étiquette, pas une usine ni une ferme. Sa taille suit le nombre de produits du résultat vendus dans ce pays.
+    </div>
+    <div class="clist" id="clist"><div class="h">Par pays <span>…</span></div></div>
+    <a class="btn btn-outline" href="countries.html" style="justify-content:center"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>Toute la base par pays</a>
+  </aside>
+</div>
+
+<div class="container plist">
+  <div class="results-head"><h2 id="plistTitle">Produits</h2><span id="demoTag"></span></div>
+  <div class="results" id="results"></div>
+</div>
+
+<div id="site-footer"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="assets/locale.js?v=1"></script>
+<script src="assets/app.js?v=9"></script>
+<script src="assets/i18n-es.js?v=3"></script>
+<script src="assets/i18n.js?v=10"></script>
+<script src="assets/prefs.js?v=1"></script>
+<script>
+  OFF.mount("search.html");
+  const T = OFF.t, n = x => (+x || 0).toLocaleString(OFF.numLocale || "fr-FR"), esc = OFF.esc;
+  const GEO = {
+    "en:france": ["France", 46.6, 2.4], "en:united-states": ["États-Unis", 39.8, -98.5], "en:germany": ["Allemagne", 51.1, 10.4], "en:spain": ["Espagne", 40.3, -3.7], "en:italy": ["Italie", 42.5, 12.5],
+    "en:united-kingdom": ["Royaume-Uni", 54, -2.5], "en:canada": ["Canada", 56.1, -106.3], "en:netherlands": ["Pays-Bas", 52.2, 5.3], "en:switzerland": ["Suisse", 46.8, 8.2], "en:belgium": ["Belgique", 50.6, 4.5],
+    "en:ireland": ["Irlande", 53.3, -8], "en:australia": ["Australie", -25.3, 133.8], "en:mexico": ["Mexique", 23.6, -102.5], "en:russia": ["Russie", 61.5, 105.3], "en:poland": ["Pologne", 52, 19.5],
+    "en:portugal": ["Portugal", 39.6, -8.2], "en:austria": ["Autriche", 47.5, 14.5], "en:sweden": ["Suède", 62, 15], "en:brazil": ["Brésil", -14.2, -51.9], "en:japan": ["Japon", 36.2, 138.3],
+    "en:czech-republic": ["Tchéquie", 49.8, 15.5], "en:denmark": ["Danemark", 56.3, 9.5], "en:india": ["Inde", 20.6, 79], "en:romania": ["Roumanie", 45.9, 25], "en:hungary": ["Hongrie", 47.2, 19.5],
+    "en:argentina": ["Argentine", -38.4, -63.6], "en:norway": ["Norvège", 64.5, 11], "en:new-zealand": ["Nouvelle-Zélande", -41, 174], "en:bulgaria": ["Bulgarie", 42.7, 25.5], "en:croatia": ["Croatie", 45.1, 15.2],
+    "en:greece": ["Grèce", 39, 22], "en:luxembourg": ["Luxembourg", 49.8, 6.1], "en:finland": ["Finlande", 64, 26], "en:turkey": ["Turquie", 39, 35], "en:south-africa": ["Afrique du Sud", -30.6, 22.9],
+    "en:morocco": ["Maroc", 31.8, -7.1], "en:algeria": ["Algérie", 28, 1.7], "en:tunisia": ["Tunisie", 34, 9.5], "en:slovenia": ["Slovénie", 46.2, 14.8], "en:slovakia": ["Slovaquie", 48.7, 19.7],
+    "en:chile": ["Chili", -35.7, -71.5], "en:serbia": ["Serbie", 44, 21], "en:israel": ["Israël", 31.5, 34.9], "en:thailand": ["Thaïlande", 15.9, 101], "en:china": ["Chine", 35.9, 104.2],
+    "en:colombia": ["Colombie", 4.6, -74.3], "en:indonesia": ["Indonésie", -2.5, 118], "en:saudi-arabia": ["Arabie saoudite", 24, 45], "en:united-arab-emirates": ["Émirats arabes unis", 24, 54], "en:egypt": ["Égypte", 26.8, 30.8],
+    "en:lithuania": ["Lituanie", 55.2, 23.9], "en:latvia": ["Lettonie", 56.9, 24.6], "en:estonia": ["Estonie", 58.6, 25], "en:ukraine": ["Ukraine", 48.4, 31.2], "en:south-korea": ["Corée du Sud", 36.5, 127.9],
+    "en:singapore": ["Singapour", 1.35, 103.8], "en:malaysia": ["Malaisie", 4.2, 102], "en:philippines": ["Philippines", 12.9, 121.8], "en:peru": ["Pérou", -9.2, -75], "en:vietnam": ["Viêt Nam", 14.1, 108.3],
+    "en:pakistan": ["Pakistan", 30.4, 69.3], "en:nigeria": ["Nigeria", 9.1, 8.7], "en:kenya": ["Kenya", -0.02, 37.9], "en:iceland": ["Islande", 65, -19], "en:hong-kong": ["Hong Kong", 22.3, 114.2], "en:taiwan": ["Taïwan", 23.7, 121],
+  };
+  // Pays de démonstration (repli hors-ligne : sample.json n'a pas de countries_tags)
+  const DEMO_C = [["en:france"], ["en:france", "en:belgium", "en:switzerland"], ["en:france", "en:germany", "en:spain", "en:italy", "en:united-states"], ["en:spain"], ["en:united-states", "en:canada"], ["en:france", "en:united-kingdom"], ["en:germany", "en:austria"], ["en:france", "en:morocco", "en:algeria"]];
+
+  const params = new URLSearchParams(location.search);
+  const qInput = document.getElementById("q");
+  qInput.value = params.get("q") || "";
+  const map = L.map("map", { worldCopyJump: true, minZoom: 1, maxZoom: 7, scrollWheelZoom: false }).setView([30, 10], 2);
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>', maxZoom: 19 }).addTo(map);
+  const layer = L.layerGroup().addTo(map);
+  const nameOf = id => (GEO[id] && T(GEO[id][0])) || id.replace(/^[a-z]{2}:/, "").replace(/-/g, " ");
+  const FIELDS = "code,product_name,product_name_fr,product_name_en,brands,quantity,nutriscore_grade,nova_group,ecoscore_grade,image_front_small_url,countries_tags";
+
+  async function fetchProducts(q) {
+    // 1) recherche texte avec countries_tags (cgi/search.pl, CORS ouvert)
+    try {
+      const u = new URL("https://world.openfoodfacts.org/cgi/search.pl");
+      u.searchParams.set("search_terms", q); u.searchParams.set("json", "1"); u.searchParams.set("action", "process");
+      u.searchParams.set("page_size", 100); u.searchParams.set("fields", FIELDS); u.searchParams.set("lc", OFF.lang || "fr");
+      const ctrl = new AbortController(); const to = setTimeout(() => ctrl.abort(), 15000);
+      const r = await fetch(u, { signal: ctrl.signal }); clearTimeout(to);
+      if (r.ok) { const d = await r.json(); if (Array.isArray(d.products)) return { products: d.products, count: d.count || d.products.length }; }
+    } catch (e) { /* repli */ }
+    // 2) repli : OFF.search (peut renvoyer les données locales) + pays de démonstration
+    const r = await OFF.search(q, { pageSize: 100 });
+    const products = (r.products || []).map((p, i) => Object.assign({}, p, { countries_tags: p.countries_tags && p.countries_tags.length ? p.countries_tags : DEMO_C[i % DEMO_C.length] }));
+    return { products, count: r.count || products.length, demo: true };
+  }
+
+  function tile(p) {
+    const c = (p.countries_tags || []).filter(t => t !== "en:world");
+    const lbl = c.length ? c.slice(0, 2).map(nameOf).join(", ") + (c.length > 2 ? ` +${c.length - 2}` : "") : T("pays inconnu");
+    return OFF.tile(p).replace('<div class="scores">', `<div class="ctry"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 21s-7-6-7-12a7 7 0 0 1 14 0c0 6-7 12-7 12Z"/><circle cx="12" cy="9" r="2.5"/></svg>${esc(lbl)}</div><div class="scores">`);
+  }
+
+  async function run() {
+    const q = qInput.value.trim();
+    document.title = (q ? `« ${q} » ${T("sur une carte")}` : T("Résultats sur une carte")) + " | Open Food Facts";
+    document.getElementById("listLink").href = "search.html" + (q ? "?q=" + encodeURIComponent(q) : "");
+    document.getElementById("crumbSearch").href = document.getElementById("listLink").href;
+    const results = document.getElementById("results");
+    results.innerHTML = Array.from({ length: 8 }, () => '<div class="tile"><div class="skeleton" style="height:150px"></div><div class="skeleton" style="height:16px;width:80%"></div><div class="skeleton" style="height:12px;width:50%"></div></div>').join("");
+    document.getElementById("clist").innerHTML = `<div class="h">${T("Par pays")} <span>${T("chargement…")}</span></div>` + Array.from({ length: 5 }, () => '<div class="crow"><div class="skeleton" style="height:12px;width:60%"></div><div class="skeleton" style="height:12px;width:30px"></div><div class="skeleton" style="grid-area:bar;height:5px"></div></div>').join("");
+    layer.clearLayers();
+    const { products, count, demo } = await fetchProducts(q);
+    document.getElementById("demoTag").innerHTML = demo ? `<span class="tag warn">${T("données de démonstration")}</span>` : "";
+
+    // Agrégation par pays
+    const agg = {}; let withCountry = 0;
+    products.forEach(p => { const c = (p.countries_tags || []).filter(t => t !== "en:world"); if (c.length) withCountry++; c.forEach(t => agg[t] = (agg[t] || 0) + 1); });
+    const list = Object.entries(agg).sort((a, b) => b[1] - a[1]);
+    const max = list.length ? list[0][1] : 1;
+    let unmapped = 0;
+    list.forEach(([id, k]) => {
+      const g = GEO[id]; if (!g) { unmapped++; return; }
+      L.circleMarker([g[1], g[2]], { radius: Math.max(6, 6 + 22 * Math.sqrt(k / max)), color: "#0064c8", weight: 1.5, fillColor: "#0064c8", fillOpacity: .4 })
+        .bindPopup(`<b>${esc(nameOf(id))}</b>${k} ${T(k > 1 ? "produits" : "produit")} ${T("vendus ici")}<br><a href="facet.html?facet=countries&value=${encodeURIComponent(id.replace(/^[a-z]{2}:/, ""))}&name=${encodeURIComponent(nameOf(id))}">${T("Tous les produits du pays")} →</a>`)
+        .addTo(layer);
+    });
+    if (list.length) { const b = list.filter(([id]) => GEO[id]).map(([id]) => [GEO[id][1], GEO[id][2]]); if (b.length > 1) map.fitBounds(b, { padding: [30, 30], maxZoom: 4 }); else if (b.length === 1) map.setView(b[0], 4); }
+    document.getElementById("legend").innerHTML = `<span class="dot"></span><span><b>${n(count)}</b> ${T("produits correspondent")}${count > products.length ? ` (${products.length} ${T("chargés")})` : ""}, ${T("dont")} <b>${withCountry}</b> ${T("ont un pays de vente connu")}${unmapped ? ` · ${unmapped} ${T("pays sans coordonnées")}` : ""}</span>`;
+    document.getElementById("clist").innerHTML = `<div class="h">${T("Par pays")} <span>${list.length} ${T("pays")}</span></div>` + (list.length ? list.slice(0, 15).map(([id, k]) => `<a class="crow" href="facet.html?facet=countries&value=${encodeURIComponent(id.replace(/^[a-z]{2}:/, ""))}&name=${encodeURIComponent(nameOf(id))}"><span class="name">${esc(nameOf(id))}</span><span class="num">${k}</span><span class="track"><span class="fill" style="width:${Math.round(100 * k / max)}%"></span></span></a>`).join("") : `<div class="empty">${T("Aucun pays de vente connu pour ces produits.")}</div>`);
+    document.getElementById("plistTitle").textContent = q ? `${T("Produits pour")} « ${q} »` : T("Produits");
+    results.innerHTML = products.length ? products.map(tile).join("") : `<div class="card" style="grid-column:1/-1;text-align:center"><h3>${T("Aucun résultat")}</h3><p>${T("Essayez un autre terme.")}</p></div>`;
+    history.replaceState(null, "", "map.html" + (q ? "?q=" + encodeURIComponent(q) : ""));
+  }
+  document.getElementById("mapForm").addEventListener("submit", e => { e.preventDefault(); e.stopImmediatePropagation(); run(); }, true);
+  run();
+</script>
+</body>
+</html>

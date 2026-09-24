@@ -13,7 +13,7 @@
 <link rel="preload" as="image" href="https://images.openfoodfacts.org/images/products/544/900/021/4911/front_hi.242.400.jpg">
 <link rel="preload" as="image" href="https://images.openfoodfacts.org/images/products/730/040/048/1588/front.7.400.jpg">
 <link rel="preconnect" href="https://images.openfoodfacts.org">
-<link rel="stylesheet" href="assets/style.css?v=12">
+<link rel="stylesheet" href="assets/style.css?v=17">
 <style>
   /* Hero "rayon de nuit" — spécifique à l'accueil */
   .night{position:relative;color:#fff;overflow:hidden;background:#1b0d05;isolation:isolate}
@@ -28,9 +28,9 @@
   .night .topbar .btn-ghost:hover{background:rgba(255,255,255,.1)}
   .night .topbar .burger{background:rgba(255,255,255,.1);border-color:transparent;color:#fff}
   .night .lang-menu{color:var(--ink)}
-  .night-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center;padding:72px 0 96px}
-  @media(max-width:960px){.night-grid{grid-template-columns:1fr;padding:48px 0 64px}}
-  .night h1{color:#fff;font-size:clamp(3rem,7.2vw,6.2rem);line-height:.95;letter-spacing:-.04em}
+  .night-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:40px;align-items:center;padding-block:72px 96px}
+  @media(max-width:960px){.night-grid{grid-template-columns:minmax(0,1fr);padding-block:48px 64px;gap:32px}}
+  .night h1{color:#fff;font-size:clamp(2.1rem,7.2vw,6.2rem);line-height:1;letter-spacing:-.035em;overflow-wrap:break-word}
   .night h1 .w{display:inline-block;opacity:0;transform:translateY(.5em) rotate(2deg);animation:wordin .8s cubic-bezier(.2,.8,.2,1) forwards}
   .night h1 .accent{color:var(--orange)}
   .night h1 .outline{color:transparent;-webkit-text-stroke:2px rgba(255,255,255,.9)}
@@ -57,7 +57,7 @@
   .ticker-bar .sep{color:rgba(255,255,255,.55);font-size:.9rem}
   .why{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
   @media(max-width:900px){.why{grid-template-columns:1fr}}
-  .why .w{position:relative;border-radius:var(--r-lg);overflow:hidden;min-height:400px;display:flex;flex-direction:column;justify-content:flex-end;padding:26px;color:#fff;isolation:isolate}
+  .why .w{position:relative;border-radius:var(--r-lg);overflow:hidden;min-height:min(400px,58vw);display:flex;flex-direction:column;justify-content:flex-end;padding:26px;color:#fff;isolation:isolate}
   .why .w img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transition:transform .6s}
   .why .w:hover img{transform:scale(1.05)}
   .why .w::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(0,0,0,0) 30%,rgba(20,8,0,.9))}
@@ -215,17 +215,17 @@
   <div class="container">
     <div class="row between reveal" style="margin-bottom:24px">
       <div><span class="eyebrow blue">Explorer</span><h2 style="margin-top:10px">Par rayon</h2></div>
-      <a class="btn btn-outline" href="search.html">Tout le catalogue</a>
+      <a class="btn btn-outline" href="facets.html">Toutes les facettes</a>
     </div>
     <div class="bento reveal">
-      <a class="big photo" href="search.html?q=petit-déjeuner"><img src="https://images.unsplash.com/photo-1506617420156-8e4536971650?w=1200&q=70&fit=crop" alt="">Petit-déjeuner<small>Céréales, tartinables, biscottes</small></a>
-      <a href="search.html?q=boisson" style="--bg:linear-gradient(135deg,#0064c8,#003c7a)"><img src="https://images.openfoodfacts.org/images/products/544/900/021/4911/front_hi.242.200.jpg" alt="">Boissons<small>Sodas, jus, eaux</small></a>
-      <a href="search.html?q=chocolat" style="--bg:linear-gradient(135deg,#5a2a10,#2a0e00)"><img src="https://images.openfoodfacts.org/images/products/304/692/002/2606/front_fr.235.200.jpg" alt="">Chocolats<small>Tablettes, pâtes à tartiner</small></a>
-      <a href="search.html?q=biscuits" style="--bg:linear-gradient(135deg,#cc6500,#8c3c00)"><img src="https://images.openfoodfacts.org/images/products/762/221/044/9283/front_es.590.200.jpg" alt="">Biscuits & snacks<small>Sucrés, salés, apéritif</small></a>
-      <a href="search.html?q=végan" style="--bg:linear-gradient(135deg,#00961e,#00641e)"><img src="https://images.openfoodfacts.org/images/products/541/118/811/2709/front_de.572.200.jpg" alt="">Végan & végétal<small>Laits, alternatives</small></a>
-      <a class="wide photo" href="search.html?q=bio"><img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=1200&q=70&fit=crop" alt="">Bio & labels<small>AB, Label Rouge, commerce équitable, MSC</small></a>
-      <a href="search.html?q=fruits secs" style="--bg:linear-gradient(135deg,#846f66,#52443d)"><img src="https://images.openfoodfacts.org/images/products/20724696/front_en.301.200.jpg" alt="">Fruits secs<small>Amandes, noix, cajou</small></a>
-      <a href="search.html?q=eau" style="--bg:linear-gradient(135deg,#3595f6,#0064c8)"><img src="https://images.openfoodfacts.org/images/products/327/408/000/5003/front_fr.994.200.jpg" alt="">Eaux<small>Source, minérale, gazeuse</small></a>
+      <a class="big photo" href="facet.html?facet=categories&value=breakfast-cereals"><img src="https://images.unsplash.com/photo-1506617420156-8e4536971650?w=1200&q=70&fit=crop" alt="">Petit-déjeuner<small>Céréales, tartinables, biscottes</small></a>
+      <a href="facet.html?facet=categories&value=beverages" style="--bg:linear-gradient(135deg,#0064c8,#003c7a)"><img src="https://images.openfoodfacts.org/images/products/544/900/021/4911/front_hi.242.200.jpg" alt="">Boissons<small>Sodas, jus, eaux</small></a>
+      <a href="facet.html?facet=categories&value=chocolates" style="--bg:linear-gradient(135deg,#5a2a10,#2a0e00)"><img src="https://images.openfoodfacts.org/images/products/304/692/002/2606/front_fr.235.200.jpg" alt="">Chocolats<small>Tablettes, pâtes à tartiner</small></a>
+      <a href="facet.html?facet=categories&value=biscuits-and-cakes" style="--bg:linear-gradient(135deg,#cc6500,#8c3c00)"><img src="https://images.openfoodfacts.org/images/products/762/221/044/9283/front_es.590.200.jpg" alt="">Biscuits & snacks<small>Sucrés, salés, apéritif</small></a>
+      <a href="facet.html?facet=labels&value=vegan" style="--bg:linear-gradient(135deg,#00961e,#00641e)"><img src="https://images.openfoodfacts.org/images/products/541/118/811/2709/front_de.572.200.jpg" alt="">Végan & végétal<small>Laits, alternatives</small></a>
+      <a class="wide photo" href="facet.html?facet=labels&value=organic"><img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=1200&q=70&fit=crop" alt="">Bio & labels<small>AB, Label Rouge, commerce équitable, MSC</small></a>
+      <a href="facet.html?facet=categories&value=nuts" style="--bg:linear-gradient(135deg,#846f66,#52443d)"><img src="https://images.openfoodfacts.org/images/products/20724696/front_en.301.200.jpg" alt="">Fruits secs<small>Amandes, noix, cajou</small></a>
+      <a href="facet.html?facet=categories&value=waters" style="--bg:linear-gradient(135deg,#3595f6,#0064c8)"><img src="https://images.openfoodfacts.org/images/products/327/408/000/5003/front_fr.994.200.jpg" alt="">Eaux<small>Source, minérale, gazeuse</small></a>
     </div>
   </div>
 </section>
@@ -238,7 +238,7 @@
       <span class="eyebrow" style="color:var(--orange)">Fait par tout le monde, pour tout le monde</span>
       <h2 style="margin:12px 0 14px;max-width:16ch">Chaque photo que vous prenez sert à des millions de gens</h2>
       <p style="max-width:52ch;font-size:1.05rem">Scannez, prenez trois photos, validez. Notre IA lit l'étiquette, la communauté vérifie, les scores sont calculés dans la seconde. Et c'est ouvert pour toujours.</p>
-      <div class="row mt-4"><a class="btn btn-primary btn-lg" href="contribute.html">Je contribue</a><a class="btn btn-white btn-lg" href="contribute.html#app">Télécharger l'app</a></div>
+      <div class="row mt-4"><a class="btn btn-primary btn-lg" href="hunger.html">Jouer aux Hunger Games</a><a class="btn btn-white btn-lg" href="edit.html?new=1">Ajouter un produit</a><a class="btn btn-white btn-lg" href="contribute.html">Toutes les façons d'aider</a></div>
     </div>
   </div>
 </section>
@@ -251,6 +251,7 @@
         <span class="eyebrow">L'application</span>
         <h2 style="margin:12px 0 14px">Le scanner dans votre poche</h2>
         <p class="lead">Définissez vos préférences (allergènes, végétarien, sans huile de palme…) et l'app vous dit en rayon si un produit vous correspond. Hors-ligne, libre, sans pub ni traqueur.</p>
+        <p class="mt-2"><a class="btn btn-outline" href="preferences.html">Régler mes préférences sur le site</a></p>
         <div class="store-btns">
           <a class="store" href="#"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.4 12.6c0-2.6 2.1-3.8 2.2-3.9-1.2-1.8-3.1-2-3.7-2-1.6-.2-3.1.9-3.9.9-.8 0-2-.9-3.4-.9-1.7 0-3.3 1-4.2 2.6-1.8 3.1-.5 7.8 1.3 10.3.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.4-.8 1.6 0 2 .8 3.4.8 1.4 0 2.3-1.3 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9-.1 0-2.8-1-2.8-4.2ZM13.9 5c.7-.9 1.2-2 1-3.2-1 0-2.3.7-3 1.6-.7.8-1.2 2-1.1 3.1 1.2.1 2.4-.6 3.1-1.5Z"/></svg><span><small>Télécharger sur</small><b>App Store</b></span></a>
           <a class="store" href="#"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.6 2.3 13.4 12l-9.8 9.7c-.3-.2-.5-.6-.5-1.1V3.4c0-.5.2-.9.5-1.1Zm11.3 11.2 2.5 2.5-9.1 5.2 6.6-7.7Zm3.9-3.6 3 1.7c.8.5.8 1.3 0 1.8l-3 1.7-2.8-2.6 2.8-2.6ZM8.3 2.8l9.1 5.2-2.5 2.5-6.6-7.7Z"/></svg><span><small>Disponible sur</small><b>Google Play</b></span></a>
@@ -291,8 +292,11 @@
 <div id="site-footer"></div>
 <div class="bigmark" aria-hidden="true">open food facts</div>
 
-<script src="assets/app.js?v=6"></script>
-<script src="assets/i18n.js?v=6"></script>
+<script src="assets/locale.js?v=1"></script>
+<script src="assets/app.js?v=9"></script>
+<script src="assets/i18n-es.js?v=3"></script>
+<script src="assets/i18n.js?v=10"></script>
+<script src="assets/prefs.js?v=1"></script>
 <script>
   OFF.mount("index.html");
   document.querySelectorAll(".scores[data-ns]").forEach(el => el.innerHTML = OFF.ns(el.dataset.ns) + OFF.nova(el.dataset.nova));

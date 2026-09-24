@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guides | Open Food Facts</title>
+<meta name="description" content="Huit guides écrits par Open Food Facts : Green-Score, Nutri-Score, ultra-transformation et les projets frères.">
+<link rel="icon" href="https://static.openfoodfacts.org/images/logos/off-logo-vertical-light.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=17">
+<style>
+  .gcards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .gcards.four{grid-template-columns:repeat(4,1fr)}
+  @media(max-width:960px){.gcards,.gcards.four{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:600px){.gcards,.gcards.four{grid-template-columns:1fr}}
+  .gcard{position:relative;border-radius:var(--r-lg);overflow:hidden;min-height:330px;display:flex;flex-direction:column;justify-content:flex-end;padding:24px;color:#fff;isolation:isolate;transition:transform .25s}
+  .gcard:hover{transform:translateY(-4px)}
+  .gcard img.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transition:transform .6s}
+  .gcard:hover img.bg{transform:scale(1.05)}
+  .gcard::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,var(--tint,rgba(20,8,0,.05)) 0%,rgba(20,8,0,.35) 40%,rgba(20,8,0,.92) 100%)}
+  .gcard .badge{position:absolute;top:18px;left:18px;height:56px;background:#fff;padding:6px 8px;border-radius:12px;box-shadow:var(--shadow)}
+  .gcard .logo-chip{position:absolute;top:18px;left:18px;background:#fff;color:var(--brand);font-family:var(--font-head);font-weight:800;font-size:.85rem;padding:8px 12px;border-radius:10px;box-shadow:var(--shadow)}
+  .gcard .kicker{font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.75)}
+  .gcard h3{color:#fff;font-size:1.35rem;margin:8px 0 6px}
+  .gcard p{color:rgba(255,255,255,.85);font-size:.92rem}
+  .gcard .meta{display:flex;gap:12px;align-items:center;margin-top:14px;font-size:.8rem;font-weight:600;color:rgba(255,255,255,.8)}
+  .gcard .meta svg{width:14px;height:14px;vertical-align:-2px;margin-right:4px}
+  .gcard .go{margin-left:auto;width:34px;height:34px;border-radius:50%;background:#fff;color:var(--brand);display:grid;place-items:center}
+  .gcard .go svg{width:16px;height:16px;margin:0}
+  .gcards.four .gcard{min-height:270px}
+  .where{display:grid;grid-template-columns:1fr 1fr;gap:20px;background:#fff;border:1px solid var(--line-2);border-radius:var(--r-lg);padding:32px}
+  @media(max-width:760px){.where{grid-template-columns:1fr}}
+  .where .col{padding:20px;border-radius:14px}
+  .where .col.before{background:var(--sand)}
+  .where .col.after{background:var(--green-soft)}
+  .where .col b{display:block;font-family:var(--font-head);font-size:1.05rem;color:var(--brand);margin-bottom:8px}
+  .where .col p{color:var(--ink-2);font-size:.95rem}
+</style>
+</head>
+<body>
+<div id="site-header"></div>
+
+<div class="page-hero">
+  <div class="container">
+    <nav class="breadcrumb"><a href="index.html">Accueil</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 6 6 6-6 6"/></svg><a href="scores.html">Scores</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 6 6 6-6 6"/></svg><span>Guides</span></nav>
+    <span class="eyebrow mt-3">Pour comprendre, pas seulement scanner</span>
+    <h1>Guides</h1>
+    <p class="lead">Huit guides écrits par Open Food Facts. Les méthodes derrière les scores, expliquées sans jargon, et une porte d'entrée vers chaque projet de la famille.</p>
+  </div>
+</div>
+
+<section style="padding-top:16px">
+  <div class="container">
+    <div class="row between reveal" style="margin-bottom:22px"><div><span class="eyebrow green">Scores et méthodes</span><h2 style="margin-top:10px;font-size:1.7rem">Ce que veulent dire les lettres</h2></div><a class="btn btn-outline btn-sm" href="scores.html">Le résumé des trois scores</a></div>
+    <div class="gcards reveal">
+      <a class="gcard" href="guide.html?g=green-score" style="--tint:rgba(0,100,30,.25)">
+        <img class="bg" src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=900&q=60&fit=crop" alt="">
+        <img class="badge" src="https://static.openfoodfacts.org/images/attributes/dist/green-score-a.svg" alt="Green-Score A">
+        <span class="kicker">Green-Score</span>
+        <h3>Qu'est-ce que le Green-Score ?</h3>
+        <p>L'analyse du cycle de vie Agribalyse, les bonus et malus, et pourquoi l'origine et l'emballage changent tout.</p>
+        <div class="meta"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>7 min</span><span>5 sections</span><span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+      </a>
+      <a class="gcard" href="guide.html?g=nutri-score" style="--tint:rgba(3,129,65,.25)">
+        <img class="bg" src="https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=900&q=60&fit=crop" alt="">
+        <img class="badge" src="https://static.openfoodfacts.org/images/attributes/dist/nutriscore-a-new-en.svg" alt="Nutri-Score A">
+        <span class="kicker">Nutri-Score</span>
+        <h3>Le Nutri-Score évolue : explications</h3>
+        <p>La formule 2024 : céréales complètes, poissons gras, huiles, boissons sucrées et édulcorants. Ce qui monte, ce qui descend.</p>
+        <div class="meta"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>6 min</span><span>5 sections</span><span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+      </a>
+      <a class="gcard" href="guide.html?g=ultra-processed" style="--tint:rgba(255,0,0,.18)">
+        <img class="bg" src="https://images.unsplash.com/photo-1601599561213-832382fd07ba?w=900&q=60&fit=crop" alt="">
+        <img class="badge" src="https://static.openfoodfacts.org/images/attributes/dist/nova-group-4.svg" alt="NOVA 4">
+        <span class="kicker">Aliments ultra-transformés</span>
+        <h3>Qu'est-ce que l'ultra-transformation ?</h3>
+        <p>La classification NOVA, les marqueurs qui trahissent un produit industriel, et ce que disent vraiment les études.</p>
+        <div class="meta"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>7 min</span><span>6 sections</span><span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="container">
+    <div class="section-head reveal" style="margin-bottom:22px"><span class="eyebrow blue">Découvrir le projet</span><h2 style="font-size:1.7rem">Bienvenue dans la famille</h2></div>
+    <div class="gcards four reveal">
+      <a class="gcard" href="guide.html?g=off" style="--tint:rgba(255,135,20,.3)">
+        <img class="bg" src="https://images.unsplash.com/photo-1543168256-418811576931?w=800&q=60&fit=crop" alt="">
+        <span class="logo-chip">Open Food Facts</span>
+        <h3>Bienvenue sur Open Food Facts</h3>
+        <p>La mission, ce qu'on y trouve, comment contribuer.</p>
+        <div class="meta"><span>3 min</span><span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+      </a>
+      <a class="gcard" href="guide.html?g=obf" style="--tint:rgba(192,53,93,.45)">
+        <img class="bg" src="https://images.unsplash.com/photo-1506617420156-8e4536971650?w=800&q=60&fit=crop" alt="">
+        <span class="logo-chip" style="color:#c0355d">Open Beauty Facts</span>
+        <h3>Bienvenue sur Open Beauty Facts</h3>
+        <p>Cosmétiques, ingrédients INCI, allergènes et périodes après ouverture.</p>
+        <div class="meta"><span>3 min</span><span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+      </a>
+      <a class="gcard" href="guide.html?g=opff" style="--tint:rgba(138,90,43,.45)">
+        <img class="bg" src="https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=800&q=60&fit=crop" alt="">
+        <span class="logo-chip" style="color:#8a5a2b">Open Pet Food Facts</span>
+        <h3>Bienvenue sur Open Pet Food Facts</h3>
+        <p>Croquettes, pâtées et friandises : les mêmes règles de transparence pour les animaux.</p>
+        <div class="meta"><span>3 min</span><span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+      </a>
+      <a class="gcard" href="guide.html?g=opf" style="--tint:rgba(58,58,138,.45)">
+        <img class="bg" src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&q=60&fit=crop" alt="">
+        <span class="logo-chip" style="color:#3a3a8a">Open Products Facts</span>
+        <h3>Bienvenue sur Open Products Facts</h3>
+        <p>Tout ce qui a un code-barres et ne se mange pas : réparabilité, matériaux, recyclage.</p>
+        <div class="meta"><span>3 min</span><span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+      </a>
+      <a class="gcard" href="guide.html?g=prices" style="--tint:rgba(0,100,200,.45)">
+        <img class="bg" src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=60&fit=crop" alt="">
+        <span class="logo-chip" style="color:var(--blue)">Open Prices</span>
+        <h3>Bienvenue sur Open Prices</h3>
+        <p>Une base ouverte des prix en rayon, à partir de vos tickets de caisse et de vos photos d'étiquettes.</p>
+        <div class="meta"><span>3 min</span><span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="container">
+    <div class="where reveal">
+      <div style="grid-column:1/-1"><span class="eyebrow">Pourquoi cette page</span><h2 style="margin-top:10px;font-size:1.5rem">Où lire un guide aujourd'hui</h2></div>
+      <div class="col before"><b>Avant</b><p>Dans l'app, un par un depuis la FAQ, sans index. Sur le web, ils n'existaient pas : les explications étaient dispersées entre le blog, le wiki et les pages de scores.</p></div>
+      <div class="col after"><b>Maintenant</b><p>Un index unique, lisible sur mobile et sur ordinateur, avec un sommaire par guide, un temps de lecture et des liens vers les fiches produits pour vérifier par vous-même.</p></div>
+    </div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+<script src="assets/locale.js?v=1"></script>
+<script src="assets/app.js?v=9"></script>
+<script src="assets/i18n-es.js?v=3"></script>
+<script src="assets/i18n.js?v=10"></script>
+<script src="assets/prefs.js?v=1"></script>
+<script>
+  OFF.mount("scores.html");
+  OFF.tilt(".gcard", 5);
+</script>
+</body>
+</html>

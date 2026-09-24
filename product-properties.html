@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Propriétés du produit | Open Food Facts</title>
+<link rel="icon" href="https://static.openfoodfacts.org/images/logos/off-logo-vertical-light.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=17">
+<style>
+  .back{display:inline-flex;align-items:center;gap:8px;font-weight:700;color:var(--brand);font-size:.95rem}
+  .back:hover{color:var(--orange-dark)}
+  .back svg{width:18px;height:18px}
+  .pband{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:20px;align-items:center;background:#fff;border:1px solid var(--line-2);border-radius:var(--r-lg);padding:18px 22px;box-shadow:var(--shadow-sm);margin-top:16px}
+  .pband .im{width:84px;height:84px;border-radius:14px;background:var(--sand);display:grid;place-items:center;overflow:hidden}
+  .pband .im img{max-height:84px;width:auto;object-fit:contain}
+  .pband .im.empty{color:var(--muted);font-size:.65rem;font-weight:700;text-align:center;line-height:1.1;padding:6px}
+  .pband h1{font-size:clamp(1.3rem,2.6vw,1.9rem);line-height:1.15}
+  .pband .meta{display:flex;flex-wrap:wrap;gap:6px 14px;color:var(--ink-2);font-size:.92rem;margin-top:6px;align-items:center}
+  .pband .meta code{font-family:ui-monospace,Menlo,Consolas,monospace;background:var(--sand);padding:2px 8px;border-radius:6px;color:var(--brand);font-size:.85rem}
+  .pband .side{display:flex;flex-direction:column;gap:8px;align-items:flex-end}
+  @media(max-width:720px){.pband{grid-template-columns:auto minmax(0,1fr)}.pband .side{grid-column:1/-1;flex-direction:row;flex-wrap:wrap;align-items:center}}
+  .phead{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;margin:36px 0 18px}
+  .phead h2{font-size:1.6rem}
+  .phead .sub{color:var(--ink-2);margin-top:4px}
+  .phead .sub b{color:var(--brand)}
+  .addform{background:#fff;border:2px solid var(--orange);border-radius:var(--r-lg);padding:24px;margin-bottom:18px;display:none;box-shadow:var(--shadow)}
+  .addform.open{display:block}
+  .addform .fields{display:grid;grid-template-columns:1fr 1.4fr;gap:14px}
+  @media(max-width:640px){.addform .fields{grid-template-columns:1fr}}
+  .addform label{display:block;font-size:.8rem;font-weight:700;color:var(--ink-2);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em}
+  .addform input{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;font:inherit;font-size:.98rem;background:#fff;color:var(--ink)}
+  .addform input:focus{outline:0;border-color:var(--orange);box-shadow:0 0 0 4px rgba(255,135,20,.15)}
+  .addform input.err{border-color:var(--red)}
+  .addform .help{font-size:.82rem;color:var(--ink-2);margin-top:6px}
+  .addform .help.err{color:#b83232;font-weight:600}
+  .addform input[name=k]{font-family:ui-monospace,Menlo,Consolas,monospace}
+  .sugg{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+  .groups{display:grid;gap:14px}
+  .grp{background:#fff;border:1px solid var(--line-2);border-radius:var(--r-lg);overflow:hidden}
+  .grp header{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:16px 20px;background:var(--sand)}
+  .grp header h3{font-size:1.05rem;display:flex;gap:10px;align-items:center}
+  .grp header h3 span{font-weight:600;font-size:.8rem;color:var(--ink-2);font-family:var(--font-body)}
+  .grp header code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.8rem;color:var(--ink-2)}
+  .prop{display:grid;grid-template-columns:52px minmax(0,.9fr) minmax(0,1.4fr) auto;gap:14px;align-items:center;padding:14px 20px;border-top:1px solid var(--line-2)}
+  .prop:first-child{border-top:0}
+  .prop .lg{display:inline-grid;place-items:center;height:26px;min-width:38px;padding:0 8px;border-radius:7px;background:var(--blue-soft);color:var(--blue);font-weight:800;font-size:.72rem;letter-spacing:.06em;font-family:var(--font-head)}
+  .prop .lg.none{background:transparent}
+  .prop .k{min-width:0}
+  .prop .k code{font-family:ui-monospace,Menlo,Consolas,monospace;color:var(--brand);font-size:.85rem;word-break:break-all}
+  .prop .k small{display:block;color:var(--ink-2);font-size:.82rem}
+  .prop .v{color:var(--ink);font-size:.98rem;overflow-wrap:anywhere;min-width:0}
+  .prop .v[dir=auto]{unicode-bidi:plaintext}
+  .prop .v .ed{width:100%;border:1.5px solid var(--orange);border-radius:10px;padding:8px 10px;font:inherit}
+  .prop .v .meta{display:block;font-size:.78rem;color:var(--muted);margin-top:3px}
+  .prop .acts{display:flex;gap:6px}
+  .prop .acts button{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;color:var(--brand);background:var(--sand)}
+  .prop .acts button:hover{background:var(--beige)}
+  .prop .acts button.del:hover{background:var(--red-soft);color:#b83232}
+  .prop .acts svg{width:16px;height:16px}
+  .prop .acts .save{width:auto;padding:0 12px;font-weight:700;font-size:.85rem;background:var(--orange);color:var(--brand)}
+  @media(max-width:700px){.prop{grid-template-columns:auto minmax(0,1fr) auto;gap:10px 12px}.prop .v{grid-column:1/-1}}
+  .empty-state{background:#fff;border:1px solid var(--line-2);border-radius:var(--r-xl);padding:48px 32px;text-align:center;box-shadow:var(--shadow-sm);max-width:720px;margin:0 auto}
+  .empty-state svg.illu{width:180px;height:140px;margin:0 auto 18px;display:block}
+  .empty-state h2{font-size:1.9rem;margin-bottom:10px}
+  .empty-state p{color:var(--ink-2);max-width:50ch;margin:0 auto}
+  .empty-state .ex{display:inline-flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;margin:20px auto;padding:12px 16px;border-radius:14px;background:var(--sand);font-size:.92rem}
+  .empty-state .ex code{font-family:ui-monospace,Menlo,Consolas,monospace;background:#fff;padding:3px 8px;border-radius:6px;color:var(--brand);font-weight:700}
+  .empty-state .ex svg{width:18px;height:18px;color:var(--orange-dark)}
+  .empty-state .first{font-weight:700;color:var(--brand);margin-top:6px}
+  .sk-band{height:120px;border-radius:var(--r-lg)}
+</style>
+</head>
+<body>
+<div id="site-header"></div>
+
+<div class="container" style="padding-top:24px">
+  <a class="back" id="back" href="product.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg> Fiche produit</a>
+  <div id="band" class="pband">
+    <div class="im"><span class="skeleton" style="width:100%;height:100%"></span></div>
+    <div><div class="skeleton" style="height:24px;width:60%"></div><div class="skeleton mt-1" style="height:14px;width:40%"></div></div>
+    <div class="side"><span class="skeleton" style="height:32px;width:150px"></span></div>
+  </div>
+
+  <div id="main"></div>
+</div>
+
+<div id="site-footer"></div>
+<script src="assets/locale.js?v=1"></script>
+<script src="assets/app.js?v=9"></script>
+<script src="assets/i18n-es.js?v=3"></script>
+<script src="assets/i18n.js?v=10"></script>
+<script src="assets/prefs.js?v=1"></script>
+<script src="assets/folk.js?v=1"></script>
+<script>
+  OFF.mount(null);
+  const F = OFF.folk, esc = OFF.esc;
+  const CODE = (new URLSearchParams(location.search).get("code") || "4009300524588").replace(/\D/g, "") || "4009300524588";
+  document.getElementById("back").href = "product.html?code=" + CODE;
+  const I = {
+    pen: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>',
+    bin: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>',
+    plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
+    x: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>',
+    arrow: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
+    hist: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5M12 7v5l3 2"/></svg>',
+  };
+  const FALLBACK_PROPS = {
+    "4009300524588": [["can_be_opened_with", "hands"], ["contact:phone:israel", "1-700-70-93-70"], ["contact:website", "www.teekanne.com", 3], ["contact:website:israel", "www.sch.co.il"], ["contact:whatsapp", "0527992000"], ["importer_information:gb", "Imported by S. Schestowitz Ltd, 10 Alon Hatavor St., Caesarea 3088900."], ["importer_information:israel", "יבואן: ש. שסטוביץ בע''מ, אלון התבור 10, קיסריה 3088900."], ["instructions:he", "המלצה להכנה: יש להוסיף שקיק חליטה לתוך ספל מים רותחים ולהמתין 5-8 דקות."], ["producer_information:en", "Produced by: TEEKANNE GmbH & Co. KG. Manufacturer: Teekanne GmbH & Co. KG, 21-23 Kevelaerer St., Dusseldorf 40549, Germany."], ["producer_information:he", "יצרן: טיקנה ג׳י.אמ.בי.אייג׳ אנד קו קיי.ג׳י, רחוב קוולרר 21-23 דיסלדרוף 40549, גרמניה."], ["storage_conditions:en", "Store in a cool and dry place."], ["storage_conditions:he", "יש לשמור במקום קריר ויבש"]].map(([k, v, version]) => ({ k, v, editor: "libra", version: version || 1, last_edit: "2026-07-12T13:37:22" })),
+  };
+  const FALLBACK_PRODUCT = {
+    "4009300524588": { product_name: "Pompadour – infusion fruits des bois, sans caféine", brands: "Pompadour, Teekanne", quantity: "3 × 20 g", image_front_small_url: "https://images.openfoodfacts.org/images/products/400/930/052/4588/front_en.12.200.jpg" },
+    "3838700072136": { product_name: "Special toast", brands: "Žito", quantity: "" },
+    "3017620422003": { product_name: "Nutella", brands: "Ferrero", quantity: "400 g", image_front_small_url: "https://images.openfoodfacts.org/images/products/301/762/042/2003/front_en.879.200.jpg" },
+  };
+  const ORDER = ["storage_conditions", "conservation", "producer_information", "contact", "importer_information", "distributor_information", "instructions", "packaging", "weight", "nutrition_facts", "ingredient_list", "ingredients"];
+  let props = [], keysList = null, demo = false;
+
+  function band(p, missing) {
+    const name = missing ? OFF.t("Produit") + " " + CODE : F.nameOf(p, CODE);
+    document.title = `${OFF.t("Propriétés")} · ${name} | Open Food Facts`;
+    document.getElementById("band").innerHTML = `
+      <div class="im ${p.image_front_small_url ? "" : "empty"}">${p.image_front_small_url ? `<img src="${esc(p.image_front_small_url)}" alt="">` : OFF.t("Pas de photo")}</div>
+      <div style="min-width:0"><h1>${esc(name)}</h1><div class="meta">${p.brands ? `<span>${esc(p.brands)}</span>` : ""}${p.quantity ? `<span>${esc(p.quantity)}</span>` : ""}<code>${CODE}</code>${missing ? `<span class="tag warn">${OFF.t("fiche non trouvée dans Open Food Facts")}</span>` : ""}</div></div>
+      <div class="side"><a class="btn btn-outline btn-sm" href="changes.html?code=${CODE}">${I.hist} ${OFF.t("Historique des modifications")}</a><a class="btn btn-ghost btn-sm" href="product.html?code=${CODE}">${OFF.t("Fiche complète")} ${I.arrow}</a></div>`;
+  }
+
+  function formHTML() {
+    return `<form class="addform" id="addform" novalidate>
+      <div class="row between" style="margin-bottom:14px"><h3 style="font-size:1.1rem">${OFF.t("Nouvelle propriété")}</h3><button type="button" class="btn btn-ghost btn-sm" id="closeForm">${I.x} ${OFF.t("Fermer")}</button></div>
+      <div class="fields">
+        <div><label for="fk">${OFF.t("Clé")}</label><input id="fk" name="k" list="keysdl" placeholder="storage_conditions:fr" autocomplete="off" spellcheck="false"><datalist id="keysdl"></datalist><div class="help" id="hk">${OFF.t("Minuscules, chiffres, _ et : (ex. conservation:shelf_life). Terminez par :fr pour un texte en français.")}</div></div>
+        <div><label for="fv">${OFF.t("Valeur")}</label><input id="fv" name="v" placeholder="${OFF.t("À conserver dans un endroit frais et sec.")}" autocomplete="off"><div class="help" id="hv">${OFF.t("Texte libre, un nombre, une date… tel que lu sur l'emballage.")}</div></div>
+      </div>
+      <div class="sugg" id="sugg"></div>
+      <div class="row mt-3" style="gap:10px"><button type="submit" class="btn btn-primary">${OFF.t("Enregistrer")}</button><button type="button" class="btn btn-outline" id="cancelForm">${OFF.t("Annuler")}</button><span class="muted" style="font-size:.85rem">${OFF.t("L'enregistrement nécessite un compte Open Food Facts.")}</span></div>
+    </form>`;
+  }
+
+  function render() {
+    const main = document.getElementById("main");
+    if (!props.length) {
+      main.innerHTML = `
+      <div class="empty-state mt-4 reveal in">
+        <svg class="illu" viewBox="0 0 180 140" fill="none" aria-hidden="true">
+          <rect x="30" y="22" width="120" height="96" rx="14" fill="#fff" stroke="#ede0db" stroke-width="2.5"/>
+          <rect x="46" y="44" width="52" height="8" rx="4" fill="#ede0db"/><rect x="46" y="62" width="88" height="8" rx="4" fill="#f6ede6"/><rect x="46" y="80" width="70" height="8" rx="4" fill="#f6ede6"/>
+          <circle cx="132" cy="106" r="24" fill="#ff8714"/><path d="M132 94v24M120 106h24" stroke="#341100" stroke-width="4" stroke-linecap="round"/>
+          <path d="M14 34c8-10 20-10 28 0M138 12c6-6 14-6 20 0" stroke="#ede0db" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <h2>${OFF.t("Aucune propriété")}</h2>
+        <p>${OFF.t("En ajoutant des propriétés (clé/valeur) à un produit, vous l'enrichissez.")}</p>
+        <div class="ex"><span>${OFF.t("Exemple")}</span><code>storage_conditions:en</code>${I.arrow}<span>Conserver dans un endroit frais et sec.</span></div>
+        <p>${OFF.t("Personne n'a encore rien enregistré sur ce produit.")}</p>
+        <p class="first">${OFF.t("Vous seriez le premier.")}</p>
+        <div class="row mt-4" style="justify-content:center"><button type="button" class="btn btn-primary btn-lg" data-add>${I.plus} ${OFF.t("Ajouter une propriété")}</button><a class="btn btn-outline btn-lg" href="properties.html">${OFF.t("Voir ce que les autres enregistrent")}</a></div>
+        ${demo ? `<div class="mt-3"><span class="tag warn">${OFF.t("données de démonstration")}</span></div>` : ""}
+      </div>
+      <div id="formSlot" style="max-width:720px;margin:18px auto 0"></div>`;
+      return;
+    }
+    const groups = new Map();
+    props.forEach(p => { const g = F.groupOf(F.base(p.k)); if (!groups.has(g)) groups.set(g, []); groups.get(g).push(p); });
+    const arr = [...groups.entries()].sort((a, b) => { const ia = ORDER.indexOf(a[0]), ib = ORDER.indexOf(b[0]); return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib) || a[0].localeCompare(b[0]); });
+    main.innerHTML = `
+      <div class="phead">
+        <div><h2>${OFF.t("Propriétés du produit")}</h2><p class="sub"><b>${F.num(props.length)}</b> ${OFF.t(props.length > 1 ? "propriétés" : "propriété")} ${OFF.t("dans")} <b>${F.num(arr.length)}</b> ${OFF.t(arr.length > 1 ? "groupes" : "groupe")}${demo ? ` · <span class="tag warn">${OFF.t("données de démonstration")}</span>` : ""}</p></div>
+        <button type="button" class="btn btn-primary" data-add>${I.plus} ${OFF.t("Ajouter une propriété")}</button>
+      </div>
+      <div id="formSlot"></div>
+      <div class="groups">${arr.map(([g, list]) => `
+        <section class="grp">
+          <header><h3>${esc(F.groupLabel(g))} <span>${list.length} ${OFF.t(list.length > 1 ? "propriétés" : "propriété")}</span></h3><code>${esc(g)}${list.some(x => x.k !== g) ? ":*" : ""}</code></header>
+          ${list.sort((a, b) => a.k.localeCompare(b.k)).map(p => {
+            const l = F.lang(p.k), pv = F.prettyValue(p.k, p.v);
+            return `<div class="prop" data-k="${esc(p.k)}">
+              <span class="lg ${l ? "" : "none"}" title="${l ? esc(F.langName(l)) : ""}">${l ? l.toUpperCase() : ""}</span>
+              <div class="k"><code>${esc(p.k)}</code><small>${esc(F.label(p.k))}</small></div>
+              <div class="v" dir="auto"><span class="txt">${esc(p.v)}${pv ? ` <span class="muted">(${esc(pv)})</span>` : ""}</span><span class="meta">${p.editor ? `${OFF.t("par")} ${esc(p.editor)} · ` : ""}${p.last_edit ? F.date(p.last_edit) + " · " : ""}${OFF.t("version")} ${p.version || 1}</span></div>
+              <div class="acts"><button type="button" class="ed" title="${OFF.t("Modifier")}" aria-label="${OFF.t("Modifier")}">${I.pen}</button><button type="button" class="del" title="${OFF.t("Supprimer")}" aria-label="${OFF.t("Supprimer")}">${I.bin}</button></div>
+            </div>`;
+          }).join("")}
+        </section>`).join("")}
+      </div>
+      <p class="muted mt-3" style="font-size:.85rem">${OFF.t("Ces propriétés libres viennent du Folksonomy Engine, en complément de la fiche. Toute personne connectée peut les compléter ou les corriger.")} <a href="properties.html" style="color:var(--orange-dark);font-weight:700">${OFF.t("Toutes les propriétés")} →</a></p>`;
+  }
+
+  /* --- Interactions --- */
+  const NOACC = () => OFF.toast(OFF.t("Maquette : l'écriture nécessite un compte Open Food Facts"));
+  document.getElementById("main").addEventListener("click", e => {
+    const add = e.target.closest("[data-add]");
+    if (add) { openForm(); return; }
+    const ed = e.target.closest(".prop .ed"), del = e.target.closest(".prop .del"), save = e.target.closest(".prop .save"), cancel = e.target.closest(".prop .cancel");
+    if (del) { NOACC(); return; }
+    if (ed) {
+      const row = ed.closest(".prop"), v = row.querySelector(".v"), txt = row.querySelector(".txt").textContent;
+      v.dataset.orig = v.innerHTML;
+      v.innerHTML = `<input class="ed" value="${esc(props.find(p => p.k === row.dataset.k)?.v ?? txt)}" aria-label="${OFF.t("Nouvelle valeur")}">`;
+      row.querySelector(".acts").innerHTML = `<button type="button" class="save">${OFF.t("Enregistrer")}</button><button type="button" class="cancel" title="${OFF.t("Annuler")}" aria-label="${OFF.t("Annuler")}">${I.x}</button>`;
+      v.querySelector("input").focus(); return;
+    }
+    if (save || cancel) {
+      const row = (save || cancel).closest(".prop"), v = row.querySelector(".v");
+      if (save) { if (!v.querySelector("input").value.trim()) { OFF.toast(OFF.t("La valeur ne peut pas être vide")); return; } NOACC(); }
+      v.innerHTML = v.dataset.orig;
+      row.querySelector(".acts").innerHTML = `<button type="button" class="ed" title="${OFF.t("Modifier")}">${I.pen}</button><button type="button" class="del" title="${OFF.t("Supprimer")}">${I.bin}</button>`;
+    }
+  });
+  function openForm() {
+    const slot = document.getElementById("formSlot"); if (!slot) return;
+    if (!slot.querySelector("form")) { slot.innerHTML = formHTML(); wireForm(); }
+    slot.querySelector("form").classList.add("open"); slot.scrollIntoView({ behavior: "smooth", block: "center" });
+    setTimeout(() => document.getElementById("fk").focus(), 300);
+  }
+  function wireForm() {
+    const f = document.getElementById("addform"), fk = document.getElementById("fk"), fv = document.getElementById("fv"), hk = document.getElementById("hk"), hv = document.getElementById("hv");
+    const close = () => f.classList.remove("open");
+    document.getElementById("closeForm").addEventListener("click", close); document.getElementById("cancelForm").addEventListener("click", close);
+    const RX = /^[a-z0-9_]+(:[a-z0-9_]+)*$/;
+    const helpK = hk.textContent, helpV = hv.textContent;
+    fk.addEventListener("input", () => { fk.value = fk.value.toLowerCase(); fk.classList.remove("err"); hk.className = "help"; hk.textContent = helpK; fillDatalist(fk.value); });
+    fv.addEventListener("input", () => { fv.classList.remove("err"); hv.className = "help"; hv.textContent = helpV; });
+    f.addEventListener("submit", e => {
+      e.preventDefault(); let ok = true; const k = fk.value.trim(), v = fv.value.trim();
+      if (!RX.test(k)) { ok = false; fk.classList.add("err"); hk.className = "help err"; hk.textContent = OFF.t("Clé invalide : minuscules, chiffres, _ et : uniquement (ex. storage_conditions:fr)."); }
+      else if (props.some(p => p.k === k)) { ok = false; fk.classList.add("err"); hk.className = "help err"; hk.textContent = OFF.t("Cette clé existe déjà sur ce produit : modifiez-la dans la liste."); }
+      if (!v) { ok = false; fv.classList.add("err"); hv.className = "help err"; hv.textContent = OFF.t("La valeur est obligatoire."); }
+      if (!ok) return;
+      NOACC();
+    });
+    const sugg = document.getElementById("sugg");
+    ["storage_conditions:fr", "conservation:shelf_life", "producer_information:fr", "contact:website", "weight:net", "packaging:has_character", "instructions:fr"].forEach(k => {
+      const b = document.createElement("button"); b.type = "button"; b.className = "chip"; b.textContent = k; b.addEventListener("click", () => { fk.value = k; fv.focus(); }); sugg.appendChild(b);
+    });
+    fillDatalist("");
+  }
+  async function fillDatalist(prefix) {
+    const dl = document.getElementById("keysdl"); if (!dl) return;
+    if (!keysList) { try { keysList = await F.keys(); } catch (e) { keysList = F.KEYS_FALLBACK; } }
+    const p = prefix.toLowerCase();
+    dl.innerHTML = keysList.filter(x => !p || x.k.includes(p)).slice(0, 40).map(x => `<option value="${esc(x.k)}">${F.num(x.count)} ${OFF.t("produits")}</option>`).join("");
+  }
+
+  /* --- Chargement --- */
+  (async () => {
+    const [pr, fo] = await Promise.allSettled([F.lite(CODE), F.ofProduct(CODE)]);
+    if (pr.status === "fulfilled") band(pr.value, false);
+    else band(FALLBACK_PRODUCT[CODE] || {}, !FALLBACK_PRODUCT[CODE]);
+    if (fo.status === "fulfilled" && Array.isArray(fo.value)) props = fo.value.filter(x => x && x.k);
+    else { props = FALLBACK_PROPS[CODE] || []; demo = true; if (!FALLBACK_PROPS[CODE]) OFF.toast(OFF.t("API Folksonomy indisponible")); }
+    render();
+  })();
+</script>
+</body>
+</html>

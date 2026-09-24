@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Créer un compte | Open Food Facts</title>
+<link rel="icon" href="https://static.openfoodfacts.org/images/logos/off-logo-vertical-light.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=17">
+<style>
+  /* ---- Mise en page authentification (commune signin / signup / reset) ---- */
+  .auth{display:grid;grid-template-columns:1fr;min-height:calc(100vh - 72px)}
+  @media(min-width:900px){.auth{grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr)}}
+  .auth-main{display:flex;align-items:flex-start;justify-content:center;padding:48px 20px 64px;background:linear-gradient(180deg,#fff7ef,var(--cream) 40%)}
+  .auth-card{width:100%;max-width:520px;background:#fff;border:1px solid var(--line-2);border-radius:var(--r-lg);padding:36px;box-shadow:var(--shadow)}
+  @media(max-width:480px){.auth-card{padding:26px 20px}}
+  .auth-card h1{font-size:clamp(1.9rem,4vw,2.4rem);margin:10px 0 10px}
+  .auth-card .lead{font-size:1rem;margin-bottom:26px}
+  .field{display:flex;flex-direction:column;gap:6px;margin-bottom:18px}
+  .field label{font-weight:700;font-size:.9rem;color:var(--brand)}
+  .field label small{font-weight:500;color:var(--muted);margin-left:6px}
+  .field .in{display:flex;align-items:center;background:#fff;border:2px solid var(--beige);border-radius:14px;transition:border-color .15s,box-shadow .15s}
+  .field .in:focus-within{border-color:var(--orange);box-shadow:0 0 0 4px rgba(255,135,20,.15)}
+  .field.invalid .in{border-color:var(--red);box-shadow:0 0 0 4px rgba(235,87,87,.12)}
+  .field.valid .in{border-color:var(--green)}
+  .field input{flex:1;min-width:0;border:0;outline:0;background:transparent;font:inherit;font-size:1rem;padding:13px 14px;color:var(--ink)}
+  .field input::placeholder{color:#a3928a}
+  .field .eye{width:44px;height:44px;display:grid;place-items:center;color:var(--muted);border-radius:12px;margin-right:2px}
+  .field .eye:hover{background:var(--sand);color:var(--brand)}
+  .field .eye svg{width:20px;height:20px}
+  .field .ok-ic{width:44px;display:none;place-items:center;color:var(--green-dark)}
+  .field .ok-ic svg{width:20px;height:20px}
+  .field.valid .ok-ic{display:grid}
+  .field .hint{font-size:.8rem;color:var(--ink-2)}
+  .field .err{display:none;font-size:.82rem;font-weight:600;color:#b83232;align-items:center;gap:6px}
+  .field .err svg{width:14px;height:14px;flex:none}
+  .field.invalid .err{display:flex}
+  .form-msg{display:none;padding:12px 14px;border-radius:12px;background:var(--red-soft);color:#b83232;font-weight:600;font-size:.9rem;margin-bottom:18px}
+  .form-msg.show{display:block}
+  .auth-links{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:20px;font-size:.92rem;font-weight:600;color:var(--ink-2)}
+  .auth-links a{color:var(--orange-dark)}
+  .auth-links a:hover{text-decoration:underline}
+  /* Force du mot de passe */
+  .strength{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:4px}
+  .strength i{height:6px;border-radius:999px;background:var(--sand);transition:background .2s}
+  .strength[data-s="1"] i:nth-child(-n+1){background:var(--ns-e)}
+  .strength[data-s="2"] i:nth-child(-n+2){background:var(--ns-d)}
+  .strength[data-s="3"] i:nth-child(-n+3){background:var(--ns-b)}
+  .strength[data-s="4"] i:nth-child(-n+4){background:var(--ns-a)}
+  .strength-label{font-size:.8rem;font-weight:600;color:var(--ink-2);min-height:1.2em}
+  /* Cases à cocher */
+  .check{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border:1.5px solid var(--line);border-radius:14px;margin-bottom:10px;cursor:pointer;font-size:.92rem;color:var(--ink-2);transition:border-color .15s,background .15s}
+  .check:hover{border-color:var(--beige);background:var(--cream)}
+  .check input{width:20px;height:20px;accent-color:var(--orange);margin:1px 0 0;flex:none}
+  .check.invalid{border-color:var(--red);background:var(--red-soft)}
+  .check b{color:var(--brand)}
+  .producer-box{display:none;margin:-2px 0 14px;padding:14px 14px 4px;border-radius:14px;background:var(--blue-soft)}
+  .producer-box.open{display:block}
+  .producer-box .field label{color:var(--blue)}
+  .callout.less{margin-top:24px}
+  .callout.less b{display:block;font-family:var(--font-head);color:var(--brand);font-size:1rem;margin-bottom:6px}
+  .callout.less ul{margin:6px 0 0;padding-left:18px}
+  .callout.less li{margin-bottom:3px}
+  /* Panneau latéral */
+  .auth-side{position:relative;isolation:isolate;color:#fff;display:flex;flex-direction:column;justify-content:flex-end;padding:48px 40px;min-height:420px;overflow:hidden}
+  @media(min-width:900px){.auth-side{position:sticky;top:72px;height:calc(100vh - 72px)}}
+  .auth-side img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+  .auth-side::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(52,17,0,.15),rgba(52,17,0,.9) 70%)}
+  .auth-side h2{color:#fff;font-size:clamp(1.5rem,2.6vw,2rem);margin:10px 0 18px}
+  .auth-side .eyebrow{color:var(--orange)}
+  .args{list-style:none;padding:0;margin:0;display:grid;gap:12px}
+  .args li{display:flex;gap:12px;align-items:flex-start;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:12px 14px;font-size:.95rem;font-weight:600;backdrop-filter:blur(6px)}
+  .args li i{flex:none;width:30px;height:30px;border-radius:9px;background:var(--orange);color:var(--brand);display:grid;place-items:center;font-style:normal}
+  .args li i svg{width:16px;height:16px}
+  @media(max-width:899px){.auth-side{padding:32px 20px;min-height:0}.auth-side h2{font-size:1.4rem}}
+</style>
+</head>
+<body>
+<div id="site-header"></div>
+
+<div class="auth">
+  <div class="auth-main">
+    <form class="auth-card" id="signupForm" novalidate>
+      <span class="eyebrow">Compte contributeur</span>
+      <h1>Créer un compte</h1>
+      <p class="lead">Gratuit, sans publicité. Un compte sert uniquement à créditer vos contributions.</p>
+
+      <div class="form-msg" id="formMsg" role="alert"></div>
+
+      <div class="field" id="f-name">
+        <label for="name">Nom</label>
+        <div class="in"><input id="name" type="text" autocomplete="name" placeholder="Pierre Slamich" required></div>
+        <span class="err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>Indiquez votre nom.</span>
+      </div>
+
+      <div class="field" id="f-email">
+        <label for="email">E-mail</label>
+        <div class="in"><input id="email" type="email" autocomplete="email" placeholder="vous@exemple.fr" required></div>
+        <span class="hint">Jamais affiché publiquement. Sert à récupérer votre mot de passe.</span>
+        <span class="err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>Saisissez une adresse e-mail valide.</span>
+      </div>
+
+      <div class="field" id="f-username">
+        <label for="username">Nom d'utilisateur <small>public</small></label>
+        <div class="in">
+          <input id="username" type="text" autocomplete="username" placeholder="teolemon" required spellcheck="false" autocapitalize="off">
+          <span class="ok-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></svg></span>
+        </div>
+        <span class="hint">Sans espaces, majuscules ni caractères spéciaux. C'est le nom qui apparaîtra sur vos contributions.</span>
+        <span class="err" id="usernameErr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg><span>Utilisez uniquement des minuscules, des chiffres, « - » ou « _ ».</span></span>
+      </div>
+
+      <div class="field" id="f-pass">
+        <label for="pass">Mot de passe <small>6 caractères minimum</small></label>
+        <div class="in">
+          <input id="pass" type="password" autocomplete="new-password" placeholder="••••••••" required minlength="6">
+          <button class="eye" type="button" id="eye" aria-label="Afficher le mot de passe" aria-pressed="false">
+            <svg class="i-show" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg class="i-hide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M3 3l18 18M10.6 10.6a3 3 0 0 0 4.2 4.2M9.9 5.2A10.5 10.5 0 0 1 12 5c6.5 0 10 7 10 7a17 17 0 0 1-3.2 4.2M6.2 6.2A17.5 17.5 0 0 0 2 12s3.5 7 10 7a10 10 0 0 0 4.4-1"/></svg>
+          </button>
+        </div>
+        <div class="strength" id="strength" data-s="0" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+        <span class="strength-label" id="strengthLabel"></span>
+        <span class="err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>Le mot de passe doit contenir au moins 6 caractères.</span>
+      </div>
+
+      <div class="field" id="f-confirm">
+        <label for="confirm">Confirmer le mot de passe</label>
+        <div class="in">
+          <input id="confirm" type="password" autocomplete="new-password" placeholder="••••••••" required>
+          <span class="ok-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></svg></span>
+        </div>
+        <span class="err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>Les deux mots de passe ne sont pas identiques.</span>
+      </div>
+
+      <label class="check" id="c-terms"><input type="checkbox" id="terms"><span>J'accepte les <a href="#" style="color:var(--orange-dark);font-weight:600">conditions d'utilisation et de contribution</a> <b>(obligatoire)</b></span></label>
+      <label class="check"><input type="checkbox" id="producer"><span>Je suis un producteur <span class="muted">— fabricant, marque ou distributeur</span></span></label>
+      <div class="producer-box" id="producerBox">
+        <div class="field" id="f-org">
+          <label for="org">Producteur / marque</label>
+          <div class="in"><input id="org" type="text" placeholder="Nom de l'entreprise ou de la marque"></div>
+          <span class="hint">Vos modifications sur vos propres produits seront signalées comme officielles.</span>
+        </div>
+      </div>
+      <label class="check"><input type="checkbox" id="newsletter"><span>Recevoir la lettre d'information <span class="muted">— une par mois, désinscription en un clic</span></span></label>
+
+      <button class="btn btn-primary btn-lg mt-2" type="submit" style="width:100%">Créer mon compte</button>
+      <div class="auth-links">Déjà un compte ? <a href="signin.html">Se connecter</a></div>
+
+      <div class="callout blue less">
+        <b>Ce que ce formulaire ne demande plus</b>
+        La langue, le pays, les équipes et les options d'affichage ne sont plus demandés à l'inscription :
+        <ul>
+          <li>la langue et le pays sont déduits de votre navigateur ;</li>
+          <li>les équipes et les options d'affichage se règlent plus tard, dans votre compte.</li>
+        </ul>
+      </div>
+    </form>
+  </div>
+
+  <aside class="auth-side" aria-label="Ce que change un compte">
+    <img src="https://images.unsplash.com/photo-1543168256-418811576931?w=1200&q=60&fit=crop" alt="">
+    <span class="eyebrow">Ce que change un compte</span>
+    <h2>Vos contributions, à votre nom, partout.</h2>
+    <ul class="args">
+      <li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></svg></i>Vos modifications sont créditées à votre nom</li>
+      <li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></svg></i>Vos contributions sont comptées sur tous vos appareils</li>
+      <li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg></i>Scanner, chercher et régler ses préférences ne demande aucun compte</li>
+    </ul>
+  </aside>
+</div>
+
+<div id="site-footer"></div>
+<script src="assets/locale.js?v=1"></script>
+<script src="assets/app.js?v=9"></script>
+<script src="assets/i18n-es.js?v=3"></script>
+<script src="assets/i18n.js?v=10"></script>
+<script src="assets/prefs.js?v=1"></script>
+<script>
+  OFF.mount(null);
+  const $ = id => document.getElementById(id);
+  const F = id => $("f-" + id);
+  const setState = (id, ok, touched = true) => { const f = F(id); f.classList.toggle("invalid", touched && !ok); f.classList.toggle("valid", touched && ok); return ok; };
+
+  // Œil
+  const eye = $("eye"), pass = $("pass");
+  eye.addEventListener("click", () => {
+    const show = pass.type === "password";
+    pass.type = show ? "text" : "password"; $("confirm").type = pass.type;
+    eye.setAttribute("aria-pressed", String(show));
+    eye.setAttribute("aria-label", show ? OFF.t("Masquer le mot de passe") : OFF.t("Afficher le mot de passe"));
+    eye.querySelector(".i-show").style.display = show ? "none" : "";
+    eye.querySelector(".i-hide").style.display = show ? "" : "none";
+  });
+
+  // Validateurs
+  const RE_USER = /^[a-z0-9_-]{3,20}$/;
+  const vName = () => setState("name", $("name").value.trim().length >= 2);
+  const vEmail = () => setState("email", /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test($("email").value.trim()));
+  function vUsername() {
+    const v = $("username").value;
+    const errEl = $("usernameErr").querySelector("span");
+    let m = "";
+    if (!v) m = OFF.t("Choisissez un nom d'utilisateur.");
+    else if (/\s/.test(v)) m = OFF.t("Pas d'espaces.");
+    else if (/[A-Z]/.test(v)) m = OFF.t("Pas de majuscules.");
+    else if (!RE_USER.test(v)) m = v.length < 3 ? OFF.t("3 caractères minimum.") : v.length > 20 ? OFF.t("20 caractères maximum.") : OFF.t("Utilisez uniquement des minuscules, des chiffres, « - » ou « _ ».");
+    errEl.textContent = m || OFF.t("Utilisez uniquement des minuscules, des chiffres, « - » ou « _ ».");
+    return setState("username", !m);
+  }
+  function strength(v) {
+    if (!v) return 0;
+    let s = 0;
+    if (v.length >= 6) s++;
+    if (v.length >= 10) s++;
+    if (/[a-z]/.test(v) && /[A-Z]/.test(v)) s++;
+    if (/\d/.test(v) && /[^A-Za-z0-9]/.test(v)) s++;
+    return Math.max(v.length >= 6 ? 1 : 0, Math.min(4, s));
+  }
+  const SLABEL = ["", "Faible", "Moyen", "Bon", "Excellent"];
+  function vPass() {
+    const v = pass.value, s = strength(v);
+    $("strength").dataset.s = v.length < 6 ? (v ? 1 : 0) : s;
+    $("strengthLabel").textContent = v ? (v.length < 6 ? OFF.t("Trop court") : OFF.t(SLABEL[s])) : "";
+    return setState("pass", v.length >= 6);
+  }
+  const vConfirm = () => setState("confirm", $("confirm").value.length > 0 && $("confirm").value === pass.value);
+
+  $("name").addEventListener("input", vName);
+  $("email").addEventListener("input", vEmail);
+  $("username").addEventListener("input", vUsername);
+  pass.addEventListener("input", () => { vPass(); if ($("confirm").value) vConfirm(); });
+  $("confirm").addEventListener("input", vConfirm);
+  // Suggestion de nom d'utilisateur depuis le nom
+  $("name").addEventListener("blur", () => {
+    if ($("username").value) return;
+    const s = $("name").value.trim().toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 20);
+    if (s.length >= 3) { $("username").value = s; vUsername(); }
+  });
+
+  // Producteur : déplie le champ
+  $("producer").addEventListener("change", e => { $("producerBox").classList.toggle("open", e.target.checked); if (e.target.checked) $("org").focus(); });
+  $("terms").addEventListener("change", () => $("c-terms").classList.remove("invalid"));
+
+  // Soumission
+  const form = $("signupForm"), msg = $("formMsg");
+  form.addEventListener("submit", e => {
+    e.preventDefault();
+    const checks = [vName(), vEmail(), vUsername(), vPass(), vConfirm()];
+    const terms = $("terms").checked; $("c-terms").classList.toggle("invalid", !terms);
+    const orgOk = !$("producer").checked || $("org").value.trim().length > 0;
+    F("org").classList.toggle("invalid", !orgOk);
+    if (checks.includes(false) || !terms || !orgOk) {
+      msg.textContent = !checks.includes(false) && !terms ? OFF.t("Vous devez accepter les conditions d'utilisation pour continuer.") : OFF.t("Certains champs sont incomplets : vérifiez les informations en rouge.");
+      msg.classList.add("show");
+      const first = form.querySelector(".invalid input, .invalid"); first && first.focus();
+      return;
+    }
+    msg.classList.remove("show");
+    OFF.toast(OFF.t("Maquette : la création de compte réelle n'est pas câblée"));
+    const name = $("username").value.trim();
+    try { localStorage.setItem("off_user", JSON.stringify({ name, fullName: $("name").value.trim(), producer: $("producer").checked ? $("org").value.trim() : null })); } catch (err) { }
+    form.querySelector("[type=submit]").disabled = true;
+    setTimeout(() => { location.href = "profile.html?user=" + encodeURIComponent(name); }, 900);
+  });
+</script>
+</body>
+</html>

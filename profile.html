@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profil contributeur | Open Food Facts</title>
+<link rel="icon" href="https://static.openfoodfacts.org/images/logos/off-logo-vertical-light.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=17">
+<style>
+  .profile-hero{padding:48px 0 36px;background:linear-gradient(180deg,#fff7ef,var(--cream));border-bottom:1px solid var(--line-2)}
+  .profile-head{display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+  .avatar{width:96px;height:96px;border-radius:28px;background:linear-gradient(135deg,var(--orange),var(--brand-2));color:#fff;display:grid;place-items:center;font-family:var(--font-head);font-weight:800;font-size:2.2rem;letter-spacing:-.02em;box-shadow:var(--shadow);flex:none}
+  .profile-head h1{font-size:clamp(2rem,4.5vw,3rem);margin:0 0 6px}
+  .profile-head .since{display:flex;align-items:center;gap:8px;color:var(--ink-2);font-weight:600;font-size:.95rem}
+  .profile-head .since svg{width:16px;height:16px;color:var(--orange-dark)}
+  .profile-actions{margin-left:auto;display:flex;gap:10px;flex-wrap:wrap}
+  @media(max-width:720px){.profile-actions{margin-left:0;width:100%}.profile-actions .btn{flex:1}}
+  .bigstats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:36px}
+  @media(max-width:900px){.bigstats{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:420px){.bigstats{grid-template-columns:1fr}}
+  .bigstat{background:#fff;border:1px solid var(--line-2);border-radius:var(--r-lg);padding:22px 24px;display:flex;flex-direction:column;gap:6px;border-top:5px solid var(--orange);box-shadow:var(--shadow-sm)}
+  .bigstat:nth-child(2){border-top-color:var(--green)}.bigstat:nth-child(3){border-top-color:var(--blue)}.bigstat:nth-child(4){border-top-color:var(--brand-2)}
+  .bigstat b{font-family:var(--font-head);font-size:clamp(2.6rem,4.2vw,3.4rem);font-weight:800;line-height:1;letter-spacing:-.03em;color:var(--brand);font-variant-numeric:tabular-nums}
+  .bigstat span{color:var(--ink-2);font-weight:600;font-size:.95rem}
+  .bigstat .skeleton{height:44px;width:70%;border-radius:10px}
+  .sec{padding:44px 0 0}
+  .sec:last-of-type{padding-bottom:64px}
+  .sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:18px}
+  .sec-head h2{font-size:1.6rem;display:flex;align-items:center;gap:10px}
+  .sec-head h2 svg{width:24px;height:24px;color:var(--orange-dark)}
+  .sec-head .n{color:var(--ink-2);font-size:.92rem;font-weight:600}
+  .sec-head .more{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:var(--orange-dark);white-space:nowrap}
+  .sec-head .more:hover{text-decoration:underline}
+  .results .sk{height:270px}
+  .demo-tag{display:none}
+  .demo .demo-tag{display:inline-flex}
+  .match{display:inline-flex;align-items:center;gap:8px;padding:4px 10px 4px 4px;border-radius:999px;background:#fff;border:1.5px solid var(--line);font-size:.8rem;font-weight:600;color:var(--ink-2)}
+  .match b{display:inline-grid;place-items:center;min-width:44px;height:26px;padding:0 8px;border-radius:999px;background:var(--c);color:#fff;font-family:var(--font-head)}
+  .match.lg{font-size:.95rem;padding:6px 14px 6px 6px}
+  .match.lg b{height:34px;min-width:60px;font-size:1.05rem}
+</style>
+</head>
+<body>
+<div id="site-header"></div>
+
+<div class="profile-hero">
+  <div class="container">
+    <nav class="breadcrumb" aria-label="Fil d'Ariane" style="margin-bottom:22px">
+      <a href="index.html">Accueil</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 6 6 6-6 6"/></svg>
+      <a href="contribute.html">Contribuer</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 6 6 6-6 6"/></svg>
+      <span id="bcName">Profil</span>
+    </nav>
+    <div class="profile-head">
+      <div class="avatar" id="avatar">TL</div>
+      <div>
+        <div class="row" style="gap:8px;margin-bottom:8px"><span class="tag">Contributeur</span><span class="tag warn demo-tag">données de démonstration</span></div>
+        <h1 id="userName">teolemon</h1>
+        <div class="since"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Contributeur depuis 2012</div>
+      </div>
+      <div class="profile-actions">
+        <a class="btn btn-primary" href="preferences.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2.5"/><circle cx="9" cy="17" r="2.5"/></svg> Mes préférences alimentaires</a>
+        <a class="btn btn-outline" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 19V5M4 19h16M8 15v-4M12 15V8M16 15v-6"/></svg> Tableau de bord Open Prices</a>
+        <button class="btn btn-ghost" type="button" id="logout" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 17l5-5-5-5M15 12H3M21 3v18"/></svg> Se déconnecter</button>
+      </div>
+    </div>
+
+    <div class="bigstats" id="bigstats">
+      <div class="bigstat"><b><span class="skeleton" style="display:block"></span></b><span>Produits créés</span></div>
+      <div class="bigstat"><b><span class="skeleton" style="display:block"></span></b><span>Produits modifiés</span></div>
+      <div class="bigstat"><b><span class="skeleton" style="display:block"></span></b><span>Produits photographiés</span></div>
+      <div class="bigstat"><b><span class="skeleton" style="display:block"></span></b><span>Prix ajoutés</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <section class="sec" id="sec-created">
+    <div class="sec-head">
+      <div><h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg> A créé</h2><span class="n" id="n-created">Les fiches ouvertes par ce contributeur</span></div>
+      <a class="more" href="search.html">Voir tout <span aria-hidden="true">›</span></a>
+    </div>
+    <div class="results" id="grid-created"></div>
+  </section>
+
+  <section class="sec" id="sec-edited">
+    <div class="sec-head">
+      <div><h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg> A modifié</h2><span class="n" id="n-edited">Les fiches complétées ou corrigées</span></div>
+      <a class="more" href="search.html">Voir tout <span aria-hidden="true">›</span></a>
+    </div>
+    <div class="results" id="grid-edited"></div>
+  </section>
+
+  <section class="sec" id="sec-photographed">
+    <div class="sec-head">
+      <div><h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg> A photographié</h2><span class="n" id="n-photographed">Les fiches enrichies d'au moins une photo</span></div>
+      <a class="more" href="search.html">Voir tout <span aria-hidden="true">›</span></a>
+    </div>
+    <div class="results" id="grid-photographed"></div>
+  </section>
+</div>
+
+<div id="site-footer"></div>
+<script src="assets/locale.js?v=1"></script>
+<script src="assets/app.js?v=9"></script>
+<script src="assets/i18n-es.js?v=3"></script>
+<script src="assets/i18n.js?v=10"></script>
+<script src="assets/prefs.js?v=1"></script>
+<script>
+  OFF.mount("contribute.html");
+  const API = "https://world.openfoodfacts.org";
+  const FIELDS = "code,product_name,brands,quantity,nutriscore_grade,nova_group,ecoscore_grade,image_front_small_url";
+  const user = (new URLSearchParams(location.search).get("user") || "teolemon").replace(/[^\w.-]/g, "") || "teolemon";
+  const DEMO_COUNTS = { created: 2881, edited: 454688, photographed: 4422, prices: 1318 };
+  const SECTIONS = [["created", "contributor"], ["edited", "editor"], ["photographed", "photographer"]];
+
+  // En-tête
+  document.title = user + " – " + OFF.t("Profil contributeur") + " | Open Food Facts";
+  document.getElementById("userName").textContent = user;
+  document.getElementById("bcName").textContent = user;
+  document.getElementById("avatar").textContent = initials(user);
+  function initials(u) { const parts = u.split(/[^a-zA-Z0-9]+/).filter(Boolean); const s = parts.length > 1 ? parts[0][0] + parts[1][0] : u.slice(0, 2); return s.toUpperCase(); }
+
+  // Session simulée
+  let session = null; try { session = JSON.parse(localStorage.getItem("off_user") || "null"); } catch (e) { }
+  if (session) {
+    const b = document.getElementById("logout"); b.style.display = "";
+    b.addEventListener("click", () => { try { localStorage.removeItem("off_user"); } catch (e) { } OFF.toast(OFF.t("Vous êtes déconnecté")); setTimeout(() => location.reload(), 500); });
+  }
+
+  // Squelettes
+  SECTIONS.forEach(([k]) => document.getElementById("grid-" + k).innerHTML = Array(6).fill('<div class="skeleton sk"></div>').join(""));
+
+  const fmt = n => (+n).toLocaleString(OFF.locale || "fr-FR");
+  function setCount(i, n) { document.querySelectorAll("#bigstats .bigstat b")[i].innerHTML = fmt(n); }
+  function setCountLabel(k, n) { document.getElementById("n-" + k).textContent = fmt(n) + " " + OFF.t("produits"); }
+
+  let demoUsed = false;
+  let sample = null;
+  async function fallback(k, i) {
+    demoUsed = true;
+    if (!sample) sample = await fetch("assets/sample.json").then(r => r.json()).catch(() => []);
+    const list = sample.slice(i * 6, i * 6 + 6);
+    document.getElementById("grid-" + k).innerHTML = list.map(OFF.tile).join("") || `<p class="muted">${OFF.t("Aucun produit")}</p>`;
+    setCount(i, DEMO_COUNTS[k]); setCountLabel(k, DEMO_COUNTS[k]);
+  }
+  async function load([k, path], i) {
+    try {
+      const r = await fetch(`${API}/${path}/${encodeURIComponent(user)}.json?page_size=6&fields=${FIELDS}`);
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      const d = await r.json();
+      if (!Array.isArray(d.products)) throw new Error("bad payload");
+      if (!d.products.length) { document.getElementById("grid-" + k).innerHTML = `<p class="muted" style="grid-column:1/-1">${OFF.t("Aucun produit pour le moment.")}</p>`; }
+      else document.getElementById("grid-" + k).innerHTML = d.products.map(OFF.tile).join("");
+      setCount(i, d.count || 0); setCountLabel(k, d.count || 0);
+    } catch (e) { await fallback(k, i); }
+  }
+  (async () => {
+    await Promise.all(SECTIONS.map(load));
+    setCount(3, DEMO_COUNTS.prices); // Open Prices : pas d'endpoint public par contributeur, valeur de démonstration
+    if (demoUsed) document.body.classList.add("demo");
+    OFF.tilt(".results .tile", 6);
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valeurs d'une facette | Open Food Facts</title>
+<link rel="icon" href="https://static.openfoodfacts.org/images/logos/off-logo-vertical-light.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=17">
+<style>
+  .fv-layout{display:grid;grid-template-columns:1fr 300px;gap:32px;align-items:start;margin:32px auto 64px}
+  @media(max-width:960px){.fv-layout{grid-template-columns:1fr}}
+  .fv-head{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:16px}
+  .fv-head .n{color:var(--ink-2);font-size:.95rem}
+  .fv-head .n b{color:var(--brand)}
+  .filterbox{display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid var(--line);border-radius:999px;padding:4px 6px 4px 16px;margin-bottom:18px;transition:.15s}
+  .filterbox:focus-within{border-color:var(--orange);box-shadow:0 0 0 4px rgba(255,135,20,.14)}
+  .filterbox svg{width:18px;height:18px;color:var(--muted);flex:none}
+  .filterbox input{flex:1;border:0;outline:0;font:inherit;padding:9px 0;min-width:0;background:transparent;color:var(--ink)}
+  .filterbox .clear{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;color:var(--muted)}
+  .filterbox .clear:hover{background:var(--sand);color:var(--brand)}
+  .vlist{display:flex;flex-direction:column;background:#fff;border:1px solid var(--line-2);border-radius:var(--r-lg);overflow:hidden}
+  .vrow{display:grid;grid-template-columns:1fr auto 24px;grid-template-areas:"name num chev" "bar bar bar";column-gap:14px;row-gap:6px;align-items:center;padding:14px 18px;border-top:1px solid var(--line-2);transition:background .15s}
+  .vrow:first-child{border-top:0}
+  .vrow:hover{background:var(--cream)}
+  .vrow .name{grid-area:name;font-weight:600;color:var(--brand);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .vrow .name mark{background:var(--orange-soft);color:var(--orange-dark);border-radius:3px;padding:0 1px}
+  .vrow .num{grid-area:num;font-family:var(--font-head);font-weight:800;font-variant-numeric:tabular-nums;color:var(--ink);font-size:1.05rem;white-space:nowrap}
+  .vrow .num small{font-family:var(--font-body);font-weight:500;color:var(--muted);font-size:.75rem;margin-left:4px}
+  .vrow .chev{grid-area:chev;color:var(--muted);width:20px;height:20px;transition:transform .15s}
+  .vrow:hover .chev{transform:translateX(3px);color:var(--orange-dark)}
+  .vrow .track{grid-area:bar;height:6px;border-radius:999px;background:var(--sand);overflow:hidden}
+  .vrow .fill{height:100%;border-radius:999px;background:var(--orange);transition:width .6s ease}
+  .vrow.sk{padding:18px}
+  .vrow.sk .skeleton{height:14px}
+  .side{position:sticky;top:96px;display:flex;flex-direction:column;gap:18px}
+  .hg{background:var(--brand);color:#fff;border-radius:var(--r-lg);padding:26px;position:relative;overflow:hidden}
+  .hg::before{content:"";position:absolute;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(255,135,20,.45),transparent 65%);right:-70px;top:-80px}
+  .hg h3{color:#fff;font-size:1.25rem;margin:10px 0 8px;position:relative}
+  .hg p{color:rgba(255,255,255,.78);font-size:.92rem;margin:0 0 18px;position:relative}
+  .hg .eyebrow{color:var(--orange)}
+  .hg .eyebrow::before{background:var(--orange)}
+  .side .card{padding:22px}
+  .side .card h3{margin:0 0 8px;font-size:1.05rem}
+  .side .card p{margin:0}
+  .empty{padding:40px 20px;text-align:center;color:var(--ink-2)}
+  .pagination{flex-wrap:wrap}
+  .pagination .info{display:flex;align-items:center;padding:0 12px;color:var(--ink-2);font-size:.9rem;font-variant-numeric:tabular-nums}
+</style>
+</head>
+<body>
+<div id="site-header"></div>
+
+<div class="page-hero" style="padding-bottom:28px">
+  <div class="container">
+    <div class="breadcrumb" id="crumb"><a href="index.html">Accueil</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m9 6 6 6-6 6"/></svg><a href="facets.html">Facettes</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m9 6 6 6-6 6"/></svg><span id="crumbName">…</span></div>
+    <span class="eyebrow mt-3">Facette</span>
+    <h1 id="title" style="font-size:clamp(2rem,4vw,3rem)">…</h1>
+    <p class="lead" id="desc"></p>
+  </div>
+</div>
+
+<div class="container fv-layout">
+  <main>
+    <div class="fv-head">
+      <div class="n" id="count"><span class="skeleton" style="display:inline-block;width:180px;height:16px;vertical-align:middle"></span></div>
+      <div class="row">
+        <span id="demoTag"></span>
+        <select class="sort" id="sort" aria-label="Trier">
+          <option value="products">Le plus de produits</option>
+          <option value="az">A à Z</option>
+        </select>
+      </div>
+    </div>
+    <label class="filterbox">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input type="search" id="filter" placeholder="Filtrer ces valeurs…" aria-label="Filtrer" autocomplete="off">
+      <button type="button" class="clear" id="clearFilter" aria-label="Effacer" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" width="16" height="16"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    </label>
+    <div class="vlist" id="list"></div>
+    <div class="pagination" id="pagination"></div>
+  </main>
+
+  <aside class="side">
+    <div class="hg">
+      <span class="eyebrow">Hunger Games</span>
+      <h3>Répondez aux questions de Robotoff sur cette facette</h3>
+      <p>Robotoff devine des valeurs à partir des photos ; un humain confirme en un clic. Deux minutes suffisent pour améliorer cette liste.</p>
+      <a class="btn btn-primary" id="hgLink" href="hunger.html">Jouer maintenant <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    </div>
+    <div class="card">
+      <h3>D'où viennent ces nombres ?</h3>
+      <p>Chaque valeur compte les produits qui la portent. Un produit peut avoir plusieurs valeurs (une catégorie et ses parentes, par exemple) : la somme dépasse donc le nombre de produits.</p>
+      <a class="more" href="data.html#api">Obtenir cette liste par l'API <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    </div>
+    <div class="card">
+      <h3>Autres facettes</h3>
+      <div class="chips" style="margin-top:8px" id="otherFacets"></div>
+    </div>
+  </aside>
+</div>
+
+<div id="site-footer"></div>
+<script src="assets/locale.js?v=1"></script>
+<script src="assets/app.js?v=9"></script>
+<script src="assets/i18n-es.js?v=3"></script>
+<script src="assets/i18n.js?v=10"></script>
+<script src="assets/prefs.js?v=1"></script>
+<script>
+  OFF.mount("search.html");
+  const T = OFF.t, n = x => x.toLocaleString(OFF.numLocale || "fr-FR");
+  const FACETS = {
+    categories: { l: "Catégories", one: "catégorie", d: "Du plus général (aliments d'origine végétale) au plus précis (mueslis aux fruits). Un produit hérite des catégories parentes." },
+    labels: { l: "Labels", one: "label", d: "Bio, commerce équitable, sans gluten, appellations… tels qu'ils figurent sur l'emballage." },
+    brands: { l: "Marques", one: "marque", d: "Marques et distributeurs, tels qu'écrits sur l'emballage." },
+    ingredients: { l: "Ingrédients", one: "ingrédient", d: "Chaque ingrédient reconnu dans une liste d'ingrédients." },
+    additives: { l: "Additifs", one: "additif", d: "Additifs détectés dans la liste d'ingrédients, par numéro E." },
+    allergens: { l: "Allergènes", one: "allergène", d: "Allergènes déclarés (en gras sur l'étiquette) ou détectés." },
+    traces: { l: "Traces", one: "trace", d: "Mentions « peut contenir des traces de… »." },
+    packaging: { l: "Emballages", one: "emballage", d: "Matériaux et formes d'emballage déclarés." },
+    "nutrition-grades": { l: "Nutri-Score", one: "grade", d: "Les grades A à E, et le grand nombre de produits pour lesquels il n'est pas calculable." },
+    "nova-groups": { l: "Groupes NOVA", one: "groupe", d: "Degré de transformation, de 1 (non transformé) à 4 (ultra-transformé)." },
+    ecoscore: { l: "Green-Score", one: "grade", d: "Impact environnemental, de A+ à F." },
+    origins: { l: "Origines des ingrédients", one: "origine", d: "Pays ou régions d'origine des ingrédients, d'après l'étiquette." },
+    countries: { l: "Pays", one: "pays", d: "Pays où le produit est vendu." },
+    contributors: { l: "Contributeurs", one: "contributeur" }, states: { l: "États", one: "état" }, teams: { l: "Équipes", one: "équipe" }, "data-sources": { l: "Sources", one: "source" },
+    languages: { l: "Langues", one: "langue" }, "entry-dates": { l: "Dates d'ajout", one: "date" }, "last-edit-dates": { l: "Dates de modification", one: "date" }, "emb-codes": { l: "Codes de traçabilité", one: "code" },
+    "manufacturing-places": { l: "Lieux de fabrication", one: "lieu" }, vitamins: { l: "Vitamines", one: "vitamine" }, minerals: { l: "Minéraux", one: "minéral" }, "amino-acids": { l: "Acides aminés", one: "acide aminé" },
+    nucleotides: { l: "Nucléotides", one: "nucléotide" }, "other-nutritional-substances": { l: "Autres substances", one: "substance" }, misc: { l: "Divers", one: "valeur" }, "purchase-places": { l: "Lieux d'achat", one: "lieu" },
+  };
+  const params = new URLSearchParams(location.search);
+  const facet = FACETS[params.get("facet")] ? params.get("facet") : "categories";
+  const meta = FACETS[facet];
+  document.title = `${meta.l} | Open Food Facts`;
+  document.getElementById("crumbName").textContent = T(meta.l);
+  document.getElementById("title").textContent = T(meta.l);
+  document.getElementById("desc").textContent = meta.d ? T(meta.d) : "";
+  document.getElementById("filter").placeholder = T("Filtrer ces") + " " + T(meta.l).toLowerCase() + "…";
+  document.getElementById("hgLink").href = "hunger.html?type=" + encodeURIComponent(facet);
+  document.getElementById("otherFacets").innerHTML = ["categories", "labels", "brands", "additives", "allergens", "countries", "packaging", "origins"].filter(f => f !== facet).map(f => `<a class="chip" href="${f === "countries" ? "countries.html" : "facet-values.html?facet=" + f}">${T(FACETS[f].l)}</a>`).join("");
+
+  const PAGE = 50;
+  let all = [], view = [], page = 1, demo = false;
+  const list = document.getElementById("list"), pg = document.getElementById("pagination"), countEl = document.getElementById("count");
+  const filterEl = document.getElementById("filter"), sortEl = document.getElementById("sort"), clearBtn = document.getElementById("clearFilter");
+
+  function skeleton() {
+    list.innerHTML = Array.from({ length: 10 }, (_, i) => `<div class="vrow sk"><div class="skeleton" style="width:${40 + (i * 13) % 40}%"></div><div class="skeleton" style="width:64px"></div><span></span><div class="skeleton" style="height:6px"></div></div>`).join("");
+  }
+  const stripLang = id => String(id).replace(/^[a-z]{2}:/, "");
+  function esc(s) { return OFF.esc(s); }
+  function hl(name, q) {
+    if (!q) return esc(name);
+    const i = name.toLowerCase().indexOf(q.toLowerCase());
+    if (i < 0) return esc(name);
+    return esc(name.slice(0, i)) + "<mark>" + esc(name.slice(i, i + q.length)) + "</mark>" + esc(name.slice(i + q.length));
+  }
+  function render() {
+    const q = filterEl.value.trim();
+    view = all.filter(t => !q || (t.name + " " + t.id).toLowerCase().includes(q.toLowerCase()));
+    if (sortEl.value === "az") view.sort((a, b) => a.name.localeCompare(b.name, OFF.numLocale || "fr-FR")); else view.sort((a, b) => b.products - a.products);
+    const max = Math.max(1, ...view.slice(0, 1).map(t => t.products), ...(sortEl.value === "az" ? all.slice(0, 1).map(t => t.products) : []));
+    const pages = Math.max(1, Math.ceil(view.length / PAGE)); page = Math.min(page, pages);
+    const slice = view.slice((page - 1) * PAGE, page * PAGE);
+    const target = facet === "countries" ? "facet.html?facet=countries" : `facet.html?facet=${facet}`;
+    list.innerHTML = slice.length ? slice.map(t => `<a class="vrow" href="${target}&value=${encodeURIComponent(stripLang(t.id))}&name=${encodeURIComponent(t.name)}">
+        <span class="name">${hl(t.name, q)}</span>
+        <span class="num">${n(t.products)}<small>${T("produits")}</small></span>
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg>
+        <span class="track"><span class="fill" style="width:${Math.max(1, Math.round(100 * t.products / max))}%"></span></span>
+      </a>`).join("") : `<div class="empty"><b>${T("Aucune valeur ne correspond à")} « ${esc(q)} »</b><br>${T("Essayez un mot plus court, ou en anglais : les identifiants sont en anglais.")}</div>`;
+    countEl.innerHTML = q
+      ? `<b>${n(view.length)}</b> ${T("sur")} ${n(all.length)} ${T(meta.l).toLowerCase()} ${T("correspondent à")} « ${esc(q)} »`
+      : `<b>${n(all.length)}</b> ${T(meta.l).toLowerCase()}${demo ? "" : " · " + T("comptées à l'instant")}`;
+    clearBtn.hidden = !q;
+    // pagination
+    if (pages <= 1) { pg.innerHTML = ""; return; }
+    const btn = (p, label, cls = "") => `<button class="${cls} ${p === page ? "active" : ""}" data-p="${p}" ${p < 1 || p > pages ? "disabled" : ""}>${label}</button>`;
+    let ps = new Set([1, pages, page - 1, page, page + 1].filter(p => p >= 1 && p <= pages));
+    ps = [...ps].sort((a, b) => a - b);
+    let html = btn(page - 1, "‹");
+    ps.forEach((p, i) => { if (i && p - ps[i - 1] > 1) html += `<span class="info">…</span>`; html += btn(p, p); });
+    html += btn(page + 1, "›") + `<span class="info">${(page - 1) * PAGE + 1}–${Math.min(page * PAGE, view.length)} ${T("sur")} ${n(view.length)}</span>`;
+    pg.innerHTML = html;
+    pg.querySelectorAll("button[data-p]").forEach(b => b.addEventListener("click", () => { page = +b.dataset.p; render(); list.scrollIntoView({ behavior: "smooth", block: "start" }); }));
+  }
+
+  async function load() {
+    skeleton();
+    let data = null;
+    try {
+      const ctrl = new AbortController(); const to = setTimeout(() => ctrl.abort(), 20000);
+      const r = await fetch(`https://world.openfoodfacts.org/facets/${facet}.json`, { signal: ctrl.signal });
+      clearTimeout(to);
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      const d = await r.json();
+      if (Array.isArray(d.tags) && d.tags.length) data = d.tags;
+    } catch (e) { /* repli */ }
+    if (!data) {
+      demo = true;
+      try { const s = await fetch("assets/facets-sample.json").then(r => r.json()); data = s[facet] || []; } catch (e) { data = []; }
+      document.getElementById("demoTag").innerHTML = `<span class="tag warn" title="${T("L'API n'a pas répondu (limite de débit ou facette trop lourde) : liste de démonstration")}">${T("données de démonstration")}</span>`;
+    }
+    all = data.map(t => ({ id: t.id, name: t.name || stripLang(t.id), products: +t.products || 0 }));
+    page = 1; render();
+  }
+  let deb; filterEl.addEventListener("input", () => { clearTimeout(deb); deb = setTimeout(() => { page = 1; render(); }, 120); });
+  clearBtn.addEventListener("click", () => { filterEl.value = ""; page = 1; render(); filterEl.focus(); });
+  sortEl.addEventListener("change", () => { page = 1; render(); });
+  load();
+</script>
+</body>
+</html>

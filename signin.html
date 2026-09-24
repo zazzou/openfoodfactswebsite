@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Se connecter | Open Food Facts</title>
+<link rel="icon" href="https://static.openfoodfacts.org/images/logos/off-logo-vertical-light.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=17">
+<style>
+  /* ---- Mise en page authentification (commune signin / signup / reset) ---- */
+  .auth{display:grid;grid-template-columns:1fr;min-height:calc(100vh - 72px)}
+  @media(min-width:900px){.auth{grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr)}}
+  .auth-main{display:flex;align-items:center;justify-content:center;padding:48px 20px 64px;background:linear-gradient(180deg,#fff7ef,var(--cream) 40%)}
+  .auth-card{width:100%;max-width:480px;background:#fff;border:1px solid var(--line-2);border-radius:var(--r-lg);padding:36px;box-shadow:var(--shadow)}
+  @media(max-width:480px){.auth-card{padding:26px 20px}}
+  .auth-card h1{font-size:clamp(1.9rem,4vw,2.4rem);margin:10px 0 10px}
+  .auth-card .lead{font-size:1rem;margin-bottom:26px}
+  .field{display:flex;flex-direction:column;gap:6px;margin-bottom:18px}
+  .field label{font-weight:700;font-size:.9rem;color:var(--brand)}
+  .field label small{font-weight:500;color:var(--muted);margin-left:6px}
+  .field .in{display:flex;align-items:center;background:#fff;border:2px solid var(--beige);border-radius:14px;transition:border-color .15s,box-shadow .15s}
+  .field .in:focus-within{border-color:var(--orange);box-shadow:0 0 0 4px rgba(255,135,20,.15)}
+  .field.invalid .in{border-color:var(--red);box-shadow:0 0 0 4px rgba(235,87,87,.12)}
+  .field input{flex:1;min-width:0;border:0;outline:0;background:transparent;font:inherit;font-size:1rem;padding:13px 14px;color:var(--ink)}
+  .field input::placeholder{color:#a3928a}
+  .field .eye{width:44px;height:44px;display:grid;place-items:center;color:var(--muted);border-radius:12px;margin-right:2px}
+  .field .eye:hover{background:var(--sand);color:var(--brand)}
+  .field .eye svg{width:20px;height:20px}
+  .field .hint{font-size:.8rem;color:var(--ink-2)}
+  .field .err{display:none;font-size:.82rem;font-weight:600;color:#b83232;align-items:center;gap:6px}
+  .field .err svg{width:14px;height:14px;flex:none}
+  .field.invalid .err{display:flex}
+  .form-msg{display:none;padding:12px 14px;border-radius:12px;background:var(--red-soft);color:#b83232;font-weight:600;font-size:.9rem;margin-bottom:18px}
+  .form-msg.show{display:block}
+  .auth-links{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:20px;font-size:.92rem;font-weight:600}
+  .auth-links a{color:var(--orange-dark)}
+  .auth-links a:hover{text-decoration:underline}
+  .auth-side{position:relative;isolation:isolate;color:#fff;display:flex;flex-direction:column;justify-content:flex-end;padding:48px 40px;min-height:420px;overflow:hidden}
+  .auth-side img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+  .auth-side::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(52,17,0,.15),rgba(52,17,0,.9) 70%)}
+  .auth-side h2{color:#fff;font-size:clamp(1.5rem,2.6vw,2rem);margin:10px 0 18px}
+  .auth-side .eyebrow{color:var(--orange)}
+  .args{list-style:none;padding:0;margin:0;display:grid;gap:12px}
+  .args li{display:flex;gap:12px;align-items:flex-start;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:12px 14px;font-size:.95rem;font-weight:600;backdrop-filter:blur(6px)}
+  .args li i{flex:none;width:30px;height:30px;border-radius:9px;background:var(--orange);color:var(--brand);display:grid;place-items:center;font-style:normal}
+  .args li i svg{width:16px;height:16px}
+  @media(max-width:899px){.auth-side{padding:32px 20px;min-height:0}.auth-side h2{font-size:1.4rem}}
+</style>
+</head>
+<body>
+<div id="site-header"></div>
+
+<div class="auth">
+  <div class="auth-main">
+    <form class="auth-card" id="signinForm" novalidate>
+      <span class="eyebrow">Compte contributeur</span>
+      <h1>Se connecter</h1>
+      <p class="lead">Connectez-vous à votre compte Open Food Facts pour que vos contributions vous soient créditées.</p>
+
+      <div class="form-msg" id="formMsg" role="alert"></div>
+
+      <div class="field" id="f-user">
+        <label for="user">Nom d'utilisateur ou e-mail</label>
+        <div class="in"><input id="user" name="user" type="text" autocomplete="username" placeholder="teolemon ou vous@exemple.fr" required></div>
+        <span class="err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>Indiquez votre nom d'utilisateur ou votre e-mail.</span>
+      </div>
+
+      <div class="field" id="f-pass">
+        <label for="pass">Mot de passe</label>
+        <div class="in">
+          <input id="pass" name="pass" type="password" autocomplete="current-password" placeholder="••••••••" required>
+          <button class="eye" type="button" id="eye" aria-label="Afficher le mot de passe" aria-pressed="false">
+            <svg class="i-show" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg class="i-hide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M3 3l18 18M10.6 10.6a3 3 0 0 0 4.2 4.2M9.9 5.2A10.5 10.5 0 0 1 12 5c6.5 0 10 7 10 7a17 17 0 0 1-3.2 4.2M6.2 6.2A17.5 17.5 0 0 0 2 12s3.5 7 10 7a10 10 0 0 0 4.4-1"/></svg>
+          </button>
+        </div>
+        <span class="err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>Saisissez votre mot de passe.</span>
+      </div>
+
+      <button class="btn btn-primary btn-lg" type="submit" style="width:100%">Se connecter</button>
+
+      <div class="auth-links">
+        <a href="reset.html">Mot de passe oublié ?</a>
+        <a href="signup.html">Créer un compte</a>
+      </div>
+    </form>
+  </div>
+
+  <aside class="auth-side" aria-label="Ce que change un compte">
+    <img src="https://images.unsplash.com/photo-1543168256-418811576931?w=1200&q=60&fit=crop" alt="">
+    <span class="eyebrow">Ce que change un compte</span>
+    <h2>Vos contributions, à votre nom, partout.</h2>
+    <ul class="args">
+      <li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></svg></i>Vos modifications sont créditées à votre nom</li>
+      <li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></svg></i>Vos contributions sont comptées sur tous vos appareils</li>
+      <li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg></i>Scanner, chercher et régler ses préférences ne demande aucun compte</li>
+    </ul>
+  </aside>
+</div>
+
+<div id="site-footer"></div>
+<script src="assets/locale.js?v=1"></script>
+<script src="assets/app.js?v=9"></script>
+<script src="assets/i18n-es.js?v=3"></script>
+<script src="assets/i18n.js?v=10"></script>
+<script src="assets/prefs.js?v=1"></script>
+<script>
+  OFF.mount(null);
+
+  // Afficher / masquer le mot de passe
+  const pass = document.getElementById("pass"), eye = document.getElementById("eye");
+  eye.addEventListener("click", () => {
+    const show = pass.type === "password";
+    pass.type = show ? "text" : "password";
+    eye.setAttribute("aria-pressed", String(show));
+    eye.setAttribute("aria-label", show ? OFF.t("Masquer le mot de passe") : OFF.t("Afficher le mot de passe"));
+    eye.querySelector(".i-show").style.display = show ? "none" : "";
+    eye.querySelector(".i-hide").style.display = show ? "" : "none";
+    pass.focus();
+  });
+
+  // Validation côté client
+  const form = document.getElementById("signinForm"), msg = document.getElementById("formMsg");
+  function check(id) {
+    const f = document.getElementById("f-" + id), input = f.querySelector("input");
+    const ok = input.value.trim().length > 0;
+    f.classList.toggle("invalid", !ok);
+    return ok;
+  }
+  ["user", "pass"].forEach(id => document.getElementById(id).addEventListener("input", () => { check(id); msg.classList.remove("show"); }));
+
+  form.addEventListener("submit", e => {
+    e.preventDefault();
+    const okU = check("user"), okP = check("pass");
+    if (!okU || !okP) {
+      msg.textContent = OFF.t("Certains champs sont manquants : vérifiez les informations en rouge.");
+      msg.classList.add("show");
+      (okU ? pass : document.getElementById("user")).focus();
+      return;
+    }
+    OFF.toast(OFF.t("Maquette : la connexion réelle n'est pas câblée"));
+    // Simulation : on retient le nom d'utilisateur (avant un éventuel @) et on ouvre le profil.
+    const raw = document.getElementById("user").value.trim();
+    const name = raw.includes("@") ? raw.split("@")[0] : raw;
+    try { localStorage.setItem("off_user", JSON.stringify({ name })); } catch (err) { }
+    form.querySelector("[type=submit]").disabled = true;
+    setTimeout(() => { location.href = "profile.html?user=" + encodeURIComponent(name); }, 900);
+  });
+</script>
+</body>
+</html>

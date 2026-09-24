@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Facettes : toutes les portes d'entrée | Open Food Facts</title>
+<link rel="icon" href="https://static.openfoodfacts.org/images/logos/off-logo-vertical-light.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=17">
+<style>
+  .fgroup{padding:48px 0}
+  .fgroup+.fgroup{border-top:1px solid var(--line-2)}
+  .fgroup h2{font-size:clamp(1.5rem,2.6vw,2.1rem);margin:10px 0 8px}
+  .fgroup .lead{font-size:1rem;margin-bottom:28px}
+  .fcards{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  @media(max-width:1000px){.fcards{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:520px){.fcards{grid-template-columns:1fr}}
+  .fcard{display:flex;flex-direction:column;gap:12px;padding:22px;background:#fff;border:1px solid var(--line-2);border-radius:var(--r-lg);box-shadow:var(--shadow-sm);transition:transform .2s,box-shadow .2s,border-color .2s;min-height:190px;position:relative}
+  .fcard:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:var(--beige)}
+  .fcard .ico{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--orange-soft);color:var(--orange-dark)}
+  .fcard .ico svg{width:24px;height:24px}
+  .fcard.green .ico{background:var(--green-soft);color:var(--green-dark)}
+  .fcard.blue .ico{background:var(--blue-soft);color:var(--blue)}
+  .fcard .num{font-family:var(--font-head);font-weight:800;font-size:clamp(2rem,3vw,2.6rem);letter-spacing:-.03em;line-height:1;color:var(--brand);font-variant-numeric:tabular-nums;margin-top:auto}
+  .fcard .num small{font-size:.95rem;font-weight:600;color:var(--muted);letter-spacing:0;margin-left:6px}
+  .fcard .lbl{font-weight:700;color:var(--brand);font-size:1.05rem}
+  .fcard .sub{font-size:.85rem;color:var(--ink-2)}
+  .fcard .sub b{color:var(--brand)}
+  .fcard .go{position:absolute;top:20px;right:20px;color:var(--muted);transition:transform .2s,color .2s}
+  .fcard .go svg{width:20px;height:20px}
+  .fcard:hover .go{transform:translateX(3px);color:var(--orange-dark)}
+  .fcard .live{position:absolute;bottom:20px;right:20px}
+  .more-facets{margin:8px 0 64px}
+  .more-facets details{background:#fff;border:1px solid var(--line-2);border-radius:var(--r-lg);padding:0}
+  .more-facets summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:22px 26px;font-family:var(--font-head);font-weight:800;font-size:1.2rem;color:var(--brand)}
+  .more-facets summary::-webkit-details-marker{display:none}
+  .more-facets summary svg{width:22px;height:22px;transition:transform .2s;flex:none}
+  .more-facets details[open] summary svg{transform:rotate(180deg)}
+  .more-facets summary span{font-family:var(--font-body);font-weight:500;font-size:.9rem;color:var(--muted)}
+  .mini{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:0 26px 26px}
+  @media(max-width:900px){.mini{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:480px){.mini{grid-template-columns:1fr}}
+  .mini a{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:12px;border:1.5px solid var(--line);font-weight:600;font-size:.9rem;color:var(--ink-2);transition:.15s}
+  .mini a:hover{border-color:var(--orange);color:var(--orange-dark);background:var(--orange-soft)}
+  .mini a svg{width:18px;height:18px;flex:none;color:var(--muted)}
+  .mini a:hover svg{color:inherit}
+  .hero-num{display:flex;gap:32px;flex-wrap:wrap;margin-top:22px}
+  .hero-num div b{display:block;font-family:var(--font-head);font-size:2.4rem;font-weight:800;letter-spacing:-.03em;line-height:1;color:var(--brand);font-variant-numeric:tabular-nums}
+  .hero-num div span{font-size:.85rem;color:var(--ink-2);font-weight:600}
+</style>
+</head>
+<body>
+<div id="site-header"></div>
+
+<div class="page-hero">
+  <div class="container">
+    <div class="breadcrumb"><a href="index.html">Accueil</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m9 6 6 6-6 6"/></svg><a href="search.html">Explorer</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m9 6 6 6-6 6"/></svg><span>Facettes</span></div>
+    <span class="eyebrow mt-3">Naviguer sans chercher</span>
+    <h1 style="font-size:clamp(2rem,4.2vw,3.2rem);max-width:20ch">Facettes : toutes les portes d'entrée dans 4,7 millions de produits qui ne sont pas une barre de recherche.</h1>
+    <p class="lead">Chaque information d'une étiquette est une facette : une liste de valeurs, chacune menant à ses produits. Choisissez une porte, puis affinez.</p>
+    <div class="hero-num">
+      <div><b data-count="29">29</b><span>facettes</span></div>
+      <div><b>2,4 M</b><span>valeurs distinctes</span></div>
+      <div><b>4,7 M</b><span>produits</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <section class="fgroup" style="padding-top:40px">
+    <span class="eyebrow">Sur l'emballage</span>
+    <h2>Ce qu'il y a sur l'étiquette</h2>
+    <p class="lead">Ce que le fabricant écrit, lu et structuré par les contributeurs.</p>
+    <div class="fcards" id="g1"></div>
+  </section>
+
+  <section class="fgroup">
+    <span class="eyebrow green">Calculé par Open Food Facts</span>
+    <h2>Ce que disent les scores, et ce qu'ils ne disent pas</h2>
+    <p class="lead">Un score est calculé à partir des données saisies : quand elles manquent, le score est « inconnu ». Le nombre d'inconnus est la mesure la plus honnête de ce qu'il reste à faire.</p>
+    <div class="fcards" id="g2"></div>
+  </section>
+
+  <section class="fgroup">
+    <span class="eyebrow blue">Géographie</span>
+    <h2>Où c'est vendu</h2>
+    <p class="lead">Le pays de vente indiqué sur l'étiquette ou par la personne qui a ajouté le produit.</p>
+    <div class="fcards" id="g3"></div>
+  </section>
+
+  <section class="more-facets">
+    <details>
+      <summary><div>Données et contribution <span>· 16 autres facettes, utiles surtout pour contribuer et vérifier</span></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <div class="mini" id="g4"></div>
+    </details>
+  </section>
+</div>
+
+<div id="site-footer"></div>
+<script src="assets/locale.js?v=1"></script>
+<script src="assets/app.js?v=9"></script>
+<script src="assets/i18n-es.js?v=3"></script>
+<script src="assets/i18n.js?v=10"></script>
+<script src="assets/prefs.js?v=1"></script>
+<script>
+  OFF.mount("search.html");
+  const S = 'viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"';
+  const ICO = {
+    cat: `<svg ${S}><path d="M4 7h16M4 12h16M4 17h10"/></svg>`,
+    label: `<svg ${S}><path d="M20 12 12 20l-8-8V4h8l8 8Z"/><circle cx="8" cy="8" r="1.5"/></svg>`,
+    brand: `<svg ${S}><path d="M3 21V8l9-5 9 5v13"/><path d="M9 21v-6h6v6"/></svg>`,
+    ingr: `<svg ${S}><path d="M12 3c-4 4-7 6-7 11a7 7 0 0 0 14 0c0-5-3-7-7-11Z"/><path d="M12 22V11"/></svg>`,
+    add: `<svg ${S}><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-5-9V3"/><path d="M7 15h10"/></svg>`,
+    allerg: `<svg ${S}><path d="M12 3 2 21h20L12 3Z"/><path d="M12 10v5M12 18v.5"/></svg>`,
+    trace: `<svg ${S}><path d="M4 20c3-8 8-8 8-16M12 4c0 8 5 8 8 16"/><circle cx="12" cy="20" r="1"/></svg>`,
+    pack: `<svg ${S}><path d="M3 8 12 3l9 5-9 5-9-5Z"/><path d="M3 8v8l9 5 9-5V8M12 13v8"/></svg>`,
+    ns: `<svg ${S}><rect x="3" y="6" width="18" height="12" rx="3"/><path d="M8 6v12M13 6v12"/></svg>`,
+    eco: `<svg ${S}><path d="M4 20c0-9 6-14 16-16-1 10-6 16-16 16Z"/><path d="M4 20c4-6 8-9 12-11"/></svg>`,
+    nova: `<svg ${S}><path d="M4 6h16M4 12h16M4 18h16"/><circle cx="8" cy="6" r="2" fill="#fff"/><circle cx="14" cy="12" r="2" fill="#fff"/><circle cx="10" cy="18" r="2" fill="#fff"/></svg>`,
+    origin: `<svg ${S}><path d="M12 21s-7-6-7-12a7 7 0 0 1 14 0c0 6-7 12-7 12Z"/><circle cx="12" cy="9" r="2.5"/></svg>`,
+    country: `<svg ${S}><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>`,
+    user: `<svg ${S}><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>`,
+    dot: `<svg ${S}><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg>`,
+  };
+  const n = x => x.toLocaleString(OFF.numLocale || "fr-FR");
+  const T = OFF.t;
+
+  // ---- Groupes de cartes ---------------------------------------------------
+  const G1 = [
+    { f: "categories", l: "Catégories", ico: "cat", count: 72047, unit: "valeurs" },
+    { f: "labels", l: "Labels", ico: "label", count: 28916, unit: "valeurs", top: "Bio en tête, 258 333 produits" },
+    { f: "brands", l: "Marques", ico: "brand", count: 278625, unit: "valeurs" },
+    { f: "ingredients", l: "Ingrédients", ico: "ingr", count: 1392249, unit: "valeurs" },
+    { f: "additives", l: "Additifs", ico: "add", count: 609, unit: "valeurs" },
+    { f: "allergens", l: "Allergènes", ico: "allerg", count: 6931, unit: "valeurs", top: "Lait en tête, 313 469 produits" },
+    { f: "traces", l: "Traces", ico: "trace", count: 10667, unit: "valeurs" },
+    { f: "packaging", l: "Emballages", ico: "pack", count: 25824, unit: "valeurs", top: "Plastique en tête, 128 415 produits" },
+  ];
+  const G2 = [
+    { f: "nutrition-grades", l: "Nutri-Score", ico: "ns", count: 7, unit: "grades", unknown: 2291283, cls: "green", live: true },
+    { f: "ecoscore", l: "Green-Score", ico: "eco", count: 9, unit: "grades", unknown: 2654362, cls: "green", live: true },
+    { f: "nova-groups", l: "Groupes NOVA", ico: "nova", count: 6, unit: "groupes", unknown: 2601411, cls: "green", live: true },
+    { f: "origins", l: "Origines des ingrédients", ico: "origin", count: 15296, unit: "valeurs", top: "France en tête", cls: "green" },
+  ];
+  const G3 = [
+    { f: "countries", l: "Pays", ico: "country", count: 476, unit: "pays", top: "France en tête, 1 114 545 produits", cls: "blue", href: "countries.html" },
+  ];
+  const G4 = [
+    ["contributors", "Contributeurs", "user"], ["states", "États", "dot"], ["teams", "Équipes", "user"], ["data-sources", "Sources", "dot"],
+    ["languages", "Langues", "dot"], ["entry-dates", "Dates d'ajout", "dot"], ["last-edit-dates", "Dates de modification", "dot"], ["emb-codes", "Codes de traçabilité", "dot"],
+    ["manufacturing-places", "Lieux de fabrication", "origin"], ["vitamins", "Vitamines", "ingr"], ["minerals", "Minéraux", "ingr"], ["amino-acids", "Acides aminés", "ingr"],
+    ["nucleotides", "Nucléotides", "ingr"], ["other-nutritional-substances", "Autres substances", "ingr"], ["misc", "Divers", "dot"], ["purchase-places", "Lieux d'achat", "brand"],
+  ];
+
+  function card(c) {
+    const href = c.href || `facet-values.html?facet=${c.f}`;
+    const sub = c.unknown != null ? `<b id="unk-${c.f}">${n(c.unknown)}</b> ${T("inconnus")}` : (c.top || "");
+    return `<a class="fcard ${c.cls || ""}" href="${href}" data-f="${c.f}">
+      <div class="ico">${ICO[c.ico]}</div>
+      <div class="lbl">${c.l}</div>
+      ${sub ? `<div class="sub">${sub}</div>` : ""}
+      <div class="num"><span id="n-${c.f}">${n(c.count)}</span><small>${T(c.unit)}</small></div>
+      <span class="go">${OFF.I.arrow}</span>
+    </a>`;
+  }
+  document.getElementById("g1").innerHTML = G1.map(card).join("");
+  document.getElementById("g2").innerHTML = G2.map(card).join("");
+  document.getElementById("g3").innerHTML = G3.map(card).join("");
+  document.getElementById("g4").innerHTML = G4.map(([f, l, i]) => `<a href="facet-values.html?facet=${f}">${ICO[i]}${l}</a>`).join("");
+
+  // ---- Rafraîchissement en direct des petites facettes ----------------------
+  async function refresh(c) {
+    try {
+      const r = await fetch(`https://world.openfoodfacts.org/facets/${c.f}.json`);
+      if (!r.ok) throw new Error(r.status);
+      const d = await r.json();
+      const tags = d.tags || [];
+      if (!tags.length) return;
+      const unk = tags.find(t => /unknown/.test(t.id));
+      const total = d.count || tags.length;
+      document.getElementById("n-" + c.f).textContent = n(total);
+      if (unk) document.getElementById("unk-" + c.f).textContent = n(unk.products);
+      const el = document.querySelector(`.fcard[data-f="${c.f}"]`);
+      if (el && !el.querySelector(".live")) el.insertAdjacentHTML("beforeend", `<span class="tag ok live" title="${T("Compté à l'instant sur l'API")}">${T("en direct")}</span>`);
+    } catch (e) { /* on garde la valeur statique */ }
+  }
+  G2.filter(c => c.live).forEach(refresh);
+</script>
+</body>
+</html>

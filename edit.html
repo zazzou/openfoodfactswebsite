@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modifier un produit | Open Food Facts</title>
+<link rel="icon" href="https://static.openfoodfacts.org/images/logos/off-logo-vertical-light.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=17">
+<style>
+  .ed-head{display:grid;grid-template-columns:120px minmax(0,1fr) auto;gap:24px;align-items:center;background:#fff;border:1px solid var(--line-2);border-radius:var(--r-lg);padding:22px 26px;margin-top:24px;box-shadow:var(--shadow-sm)}
+  .ed-head .img{height:120px;display:grid;place-items:center;background:var(--sand);border-radius:14px;overflow:hidden;color:var(--muted);font-size:.72rem;font-weight:700;text-align:center;padding:6px}
+  .ed-head .img img{max-height:120px;width:auto;object-fit:contain}
+  .ed-head h1{font-size:clamp(1.6rem,3vw,2.2rem)}
+  .ed-head .meta{display:flex;flex-wrap:wrap;gap:6px 16px;color:var(--ink-2);font-size:.92rem;margin-top:6px}
+  .ed-head .meta b{color:var(--brand)}
+  .gauge{min-width:220px}
+  .gauge .big{font-family:var(--font-head);font-weight:800;font-size:2.6rem;line-height:1;letter-spacing:-.03em;color:var(--brand)}
+  .gauge .big small{font-size:1rem;letter-spacing:0;font-weight:700;color:var(--ink-2);margin-left:6px}
+  .gauge .track{height:10px;border-radius:999px;background:var(--sand);overflow:hidden;margin:10px 0 8px}
+  .gauge .fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--orange),var(--green));transition:width .6s}
+  .gauge .todo{font-size:.88rem;font-weight:700;color:var(--orange-dark);display:flex;align-items:center;gap:6px}
+  .gauge .todo i{width:9px;height:9px;border-radius:50%;background:var(--orange)}
+  .gauge .todo.ok{color:var(--green-dark)}.gauge .todo.ok i{background:var(--green)}
+  .ed-layout{display:grid;grid-template-columns:260px minmax(0,1fr);gap:32px;align-items:start;margin-top:28px;padding-bottom:110px}
+  .ednav{position:sticky;top:96px;background:#fff;border:1px solid var(--line-2);border-radius:var(--r-lg);padding:18px}
+  .ednav h3{font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:0 0 8px 10px}
+  .ednav h3+h3,.ednav .grp+h3{margin-top:18px}
+  .ednav .grp{display:grid;gap:2px}
+  .ednav a{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:12px;font-weight:600;font-size:.92rem;color:var(--ink-2)}
+  .ednav a:hover,.ednav a.active{background:var(--beige);color:var(--brand)}
+  .ednav a i{width:10px;height:10px;border-radius:50%;background:var(--orange);flex:none}
+  .ednav a svg{width:16px;height:16px;color:var(--green-dark);flex:none}
+  .ednav .none{padding:8px 12px;color:var(--muted);font-size:.85rem}
+  .panel{margin-top:0}
+  .panel+.panel{margin-top:20px}
+  .panel h2 .st{margin-left:auto;font-family:var(--font-body);font-size:.75rem;padding:4px 10px}
+  .field{display:grid;gap:6px;margin-top:14px}
+  .field label,.field .lb{font-size:.85rem;font-weight:700;color:var(--ink-2)}
+  .field small{color:var(--muted);font-size:.8rem}
+  .in,.sel,.ta{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:11px 14px;font:inherit;font-size:.95rem;background:#fff;color:var(--ink);outline:0;transition:border-color .15s,box-shadow .15s;min-width:0}
+  .in:focus,.sel:focus,.ta:focus{border-color:var(--orange);box-shadow:0 0 0 4px rgba(255,135,20,.15)}
+  .in.err,.sel.err,.ta.err{border-color:var(--red);box-shadow:0 0 0 4px rgba(235,87,87,.15)}
+  .ta{min-height:130px;resize:vertical;line-height:1.55}
+  .sel{appearance:none;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23846f66' stroke-width='3'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center;padding-right:34px}
+  .inrow{display:grid;grid-template-columns:minmax(0,1fr) 130px;gap:10px}
+  .inrow.trans{grid-template-columns:minmax(0,1fr) 130px 44px}
+  .rmbtn{width:44px;height:44px;border-radius:12px;background:var(--sand);color:var(--brand);display:grid;place-items:center;font-size:1.2rem;font-weight:700}
+  .rmbtn:hover{background:var(--red-soft);color:#b83232}
+  .chipbox{display:flex;flex-wrap:wrap;gap:8px;margin-top:0;min-height:22px}
+  .chipbox .chip{padding-right:6px;gap:8px;cursor:default}
+  .chipbox .chip:hover{border-color:var(--line);color:var(--ink-2);background:#fff}
+  .chipbox .chip button{width:20px;height:20px;border-radius:50%;background:var(--sand);display:grid;place-items:center;font-size:.9rem;line-height:1;color:var(--brand)}
+  .chipbox .chip button:hover{background:var(--red-soft);color:#b83232}
+  .chipbox .none{color:var(--muted);font-size:.85rem;font-weight:500}
+  .addrow{display:flex;gap:8px;margin-top:10px}
+  .addrow .in{flex:1}
+  .photos{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:16px}
+  @media(max-width:900px){.photos{grid-template-columns:repeat(2,1fr)}}
+  .slot{border:1px solid var(--line-2);border-radius:16px;padding:12px;display:grid;gap:10px;background:var(--cream)}
+  .slot .lb{font-weight:700;font-size:.85rem;color:var(--brand)}
+  .slot .ph{height:150px;border-radius:12px;background:#fff;display:grid;place-items:center;overflow:hidden;border:1px dashed var(--line);color:var(--muted);font-size:.78rem;font-weight:600;text-align:center;padding:10px}
+  .slot .ph.has{border-style:solid}
+  .slot .ph img{max-height:150px;width:auto;object-fit:contain}
+  .slot .acts{display:grid;gap:6px}
+  .slot .acts .btn{padding:9px 10px;font-size:.8rem;gap:6px}
+  .ntable{width:100%;border-collapse:collapse;font-size:.92rem;margin-top:14px}
+  .ntable th,.ntable td{padding:8px 6px;border-bottom:1px solid var(--line-2);text-align:left;vertical-align:middle}
+  .ntable th{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+  .ntable td.sub{padding-left:24px;color:var(--ink-2)}
+  .ntable .in{padding:8px 10px;text-align:right;font-variant-numeric:tabular-nums}
+  .ntable .sel{padding:8px 30px 8px 10px;width:84px}
+  .ntable td.n{width:140px}.ntable td.u{width:90px}
+  .packrow{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1fr) 44px;gap:8px;margin-top:8px}
+  .actions{position:fixed;left:0;right:0;bottom:0;z-index:40;background:rgba(253,248,244,.92);backdrop-filter:blur(10px);border-top:1px solid var(--line-2);padding:12px 0}
+  .actions .container{display:flex;gap:10px;align-items:center;justify-content:flex-end;flex-wrap:wrap}
+  .actions .hint{margin-right:auto;font-size:.85rem;color:var(--ink-2);font-weight:600}
+  .sk-main{display:grid;gap:14px}
+  @media(max-width:900px){
+    .ed-layout{grid-template-columns:1fr}
+    .ednav{position:static}
+    .ednav .grp{grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}
+    .ed-head{grid-template-columns:90px 1fr}.ed-head .gauge{grid-column:1/-1}
+    .packrow{grid-template-columns:1fr 1fr;grid-auto-rows:auto}
+    .actions .hint{display:none}
+  }
+  @media(max-width:520px){.inrow,.inrow.trans{grid-template-columns:1fr}.ntable td.n{width:100px}.ntable td.u{width:76px}.ntable .sel{width:70px}}
+  .ed-layout,.ed-layout>*{min-width:0}
+  .ntable{width:100%;display:block;overflow-x:auto}
+  @media(max-width:520px){.ed-head{grid-template-columns:72px minmax(0,1fr)}.gauge{min-width:0}}
+</style>
+</head>
+<body>
+<div id="site-header"></div>
+
+<div class="container">
+  <nav class="breadcrumb" aria-label="Fil d'Ariane" style="padding-top:24px">
+    <a href="index.html">Accueil</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 6 6 6-6 6"/></svg>
+    <a href="#" id="bc-product">Fiche produit</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 6 6 6-6 6"/></svg>
+    <span>Modifier</span>
+  </nav>
+
+  <div class="ed-head" id="head">
+    <div class="img" id="h-img">Pas de photo</div>
+    <div>
+      <span class="eyebrow">Modifier un produit</span>
+      <h1 id="h-name" style="margin-top:8px">Chargement…</h1>
+      <div class="meta"><span>Marque <b id="h-brand">–</b></span><span>Code-barres <b id="h-code">–</b></span></div>
+    </div>
+    <div class="gauge">
+      <div class="big"><span id="g-pct">0 %</span><small>complet</small></div>
+      <div class="track"><div class="fill" id="g-fill" style="width:0%"></div></div>
+      <div class="todo" id="g-todo"><i></i><span>… sections sans données</span></div>
+    </div>
+  </div>
+
+  <div class="ed-layout">
+    <aside class="ednav" id="ednav"></aside>
+    <main id="main"><div class="sk-main"><div class="skeleton" style="height:260px"></div><div class="skeleton" style="height:200px"></div><div class="skeleton" style="height:200px"></div></div></main>
+  </div>
+</div>
+
+<div class="actions">
+  <div class="container">
+    <span class="hint" id="a-hint">Vos modifications ne sont pas encore enregistrées.</span>
+    <a class="btn btn-outline" id="cancelBtn" href="product.html">Annuler</a>
+    <button class="btn btn-primary" type="button" id="saveBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></svg> Enregistrer</button>
+  </div>
+</div>
+
+<div id="site-footer"></div>
+<script src="assets/locale.js?v=1"></script>
+<script src="assets/app.js?v=9"></script>
+<script src="assets/i18n-es.js?v=3"></script>
+<script src="assets/i18n.js?v=10"></script>
+<script src="assets/prefs.js?v=1"></script>
+<script>
+  OFF.mount("contribute.html");
+  const T = OFF.t, esc = OFF.esc;
+  const params = new URLSearchParams(location.search);
+  const code = (params.get("code") || "3800205872962").replace(/\D/g, "") || "3800205872962";
+  const isNew = params.get("new") === "1";
+  document.getElementById("cancelBtn").href = isNew ? "contribute.html" : "product.html?code=" + code;
+  document.getElementById("bc-product").href = "product.html?code=" + code;
+  document.getElementById("h-code").textContent = code;
+
+  const API_FIELDS = "code,lang,product_name,product_name_fr,product_name_en,product_name_es,product_name_de,product_name_it,brands,quantity,ingredients_text,ingredients_text_fr,ingredients_text_en,categories,labels,packagings,origins,stores,traces,emb_codes,countries,link,nutriments,serving_size,nutrition_data_per,image_front_url,image_ingredients_url,image_nutrition_url,image_packaging_url,image_front_small_url,completeness,states_tags";
+  const LANGS = { fr: "Français", en: "Anglais", es: "Espagnol", de: "Allemand", it: "Italien", nl: "Néerlandais", pt: "Portugais" };
+  const NUTR = [
+    { k: "energy-kcal", label: "Énergie", units: ["kcal", "kJ"] },
+    { k: "fat", label: "Matières grasses", units: ["g", "mg"] },
+    { k: "saturated-fat", label: "dont acides gras saturés", units: ["g", "mg"], sub: true },
+    { k: "carbohydrates", label: "Glucides", units: ["g", "mg"] },
+    { k: "sugars", label: "dont sucres", units: ["g", "mg"], sub: true },
+    { k: "fiber", label: "Fibres", units: ["g", "mg"] },
+    { k: "proteins", label: "Protéines", units: ["g", "mg"] },
+    { k: "salt", label: "Sel", units: ["g", "mg"] },
+  ];
+  const SUG = {
+    categories: ["Snacks salés", "Chips", "Biscuits apéritifs", "Céréales pour petit-déjeuner", "Yaourts", "Boissons gazeuses", "Chocolats", "Pâtes à tartiner", "Pains", "Fromages", "Jus de fruits", "Plats préparés"],
+    labels: ["Bio", "AB Agriculture Biologique", "Sans gluten", "Végétarien", "Végan", "Commerce équitable", "Label Rouge", "AOP", "Sans huile de palme", "Point vert", "Triman", "Nutri-Score"],
+    traces: ["Gluten", "Lait", "Œufs", "Fruits à coque", "Arachides", "Sésame", "Soja", "Céleri", "Moutarde", "Lupin", "Poisson", "Crustacés", "Mollusques", "Sulfites"],
+    countries: ["France", "Belgique", "Suisse", "Allemagne", "Espagne", "Italie", "Royaume-Uni", "Pays-Bas", "Bulgarie", "Luxembourg"],
+    stores: ["Carrefour", "Leclerc", "Auchan", "Intermarché", "Lidl", "Aldi", "Monoprix", "Casino", "Franprix", "Système U"],
+    brands: [],
+  };
+  const PK = {
+    shape: ["Sachet", "Boîte", "Bouteille", "Pot", "Barquette", "Film", "Étui", "Bouchon", "Couvercle", "Opercule", "Canette", "Brique"],
+    material: ["Plastique", "Carton", "Verre", "Métal", "Aluminium", "Acier", "Papier", "Bois"],
+    recycling: ["Recycler", "Jeter", "Consigne", "Composter", "Réutiliser"],
+  };
+  const PK_MAP = { "en:bag": "Sachet", "en:box": "Boîte", "en:bottle": "Bouteille", "en:jar": "Pot", "en:pot": "Pot", "en:tray": "Barquette", "en:film": "Film", "en:sleeve": "Étui", "en:cap": "Bouchon", "en:lid": "Couvercle", "en:seal": "Opercule", "en:can": "Canette", "en:brick": "Brique", "en:plastic": "Plastique", "en:cardboard": "Carton", "en:glass": "Verre", "en:metal": "Métal", "en:aluminium": "Aluminium", "en:steel": "Acier", "en:paper": "Papier", "en:wood": "Bois", "en:recycle": "Recycler", "en:discard": "Jeter", "en:deposit": "Consigne", "en:compost": "Composter", "en:reuse": "Réutiliser", "en:recycle-in-glass-bin": "Recycler", "en:recycle-in-sorting-bin": "Recycler" };
+
+  /* Repli statique : Bruschette chips pizza (Maretti, 150 g) */
+  const DEMO = {
+    code: "3800205872962", lang: "fr", product_name: "Bruschette chips pizza", product_name_fr: "Bruschette chips pizza", product_name_en: "Bruschette Chips Pizza", brands: "Maretti", quantity: "150 g",
+    ingredients_text_fr: "Farine de blé, huile de tournesol, sucre, sel, tomate en poudre 1,4 %, fromage en poudre (lait), levure, oignon en poudre, ail en poudre, origan, exhausteur de goût : glutamate monosodique, arômes, épices, acidifiant : acide citrique.",
+    categories: "Snacks, Snacks salés, Apéritifs, Chips et frites, Chips de pain, Bruschettes", labels: "", packagings: [], origins: "", stores: "", traces: "", emb_codes: "", countries: "France, Belgique, Bulgarie", link: "",
+    nutriments: { "energy-kcal_100g": 453, "energy-kcal_serving": 136, "energy-kcal_unit": "kcal", fat_100g: 16, fat_serving: 4.8, "saturated-fat_100g": 1.6, "saturated-fat_serving": 0.5, carbohydrates_100g: 66, carbohydrates_serving: 19.8, sugars_100g: 5.9, sugars_serving: 1.8, fiber_100g: 3.6, fiber_serving: 1.1, proteins_100g: 10, proteins_serving: 3, salt_100g: 2.1, salt_serving: 0.63 },
+    serving_size: "30 g", image_front_url: "https://images.openfoodfacts.org/images/products/380/020/587/2962/front_fr.4.400.jpg", image_ingredients_url: "https://images.openfoodfacts.org/images/products/380/020/587/2962/ingredients_fr.5.400.jpg", image_nutrition_url: "https://images.openfoodfacts.org/images/products/380/020/587/2962/nutrition_fr.6.400.jpg", image_packaging_url: "",
+    completeness: 0.7, states_tags: ["en:labels-to-be-completed", "en:packaging-to-be-completed", "en:origins-to-be-completed", "en:packaging-code-to-be-completed", "en:stores-to-be-completed", "en:traces-to-be-completed", "en:link-to-be-completed", "en:packaging-photo-to-be-selected"],
+  };
+
+  /* ----- Sections : ordre, titres, états API, test de vide sur le formulaire ----- */
+  const SECTIONS = [
+    { id: "photos", title: "Photos", states: ["en:photos-to-be-uploaded", "en:front-photo-to-be-selected"], empty: F => !F.images.front },
+    { id: "basics", title: "Informations de base", states: ["en:product-name-to-be-completed", "en:brands-to-be-completed", "en:quantity-to-be-completed"], empty: F => !(F.names[0] && F.names[0].value.trim()) || !F.brands.length || !F.quantity.trim() },
+    { id: "ingredients", title: "Ingrédients", states: ["en:ingredients-to-be-completed"], empty: F => !F.ingredients.trim() },
+    { id: "categories", title: "Catégories", states: ["en:categories-to-be-completed"], empty: F => !F.categories.length },
+    { id: "nutrition", title: "Valeurs nutritionnelles", states: ["en:nutrition-facts-to-be-completed"], empty: F => !NUTR.some(r => F.nutr.sold[r.k].v100 !== "") },
+    { id: "labels", title: "Labels", states: ["en:labels-to-be-completed"], empty: F => !F.labels.length },
+    { id: "packaging", title: "Emballage", states: ["en:packaging-to-be-completed"], empty: F => !F.packagings.some(x => x.shape || x.material) },
+    { id: "origins", title: "Origines", states: ["en:origins-to-be-completed"], empty: F => !F.origins.trim() },
+    { id: "stores", title: "Magasins", states: ["en:stores-to-be-completed"], empty: F => !F.stores.length },
+    { id: "traces", title: "Traces", states: ["en:traces-to-be-completed"], empty: F => !F.traces.length },
+    { id: "codes", title: "Codes de traçabilité", states: ["en:packaging-code-to-be-completed"], empty: F => !F.emb.trim() },
+    { id: "country", title: "Pays", states: ["en:countries-to-be-completed"], empty: F => !F.countries.length },
+    { id: "website", title: "Site web", states: ["en:link-to-be-completed"], empty: F => !F.link.trim() },
+  ];
+  let F, forced = new Set(), demo = false, apiPct = 0, initialEmpty = 0, order = [];
+  const list = s => String(s || "").split(",").map(x => x.trim().replace(/^[a-z]{2}:/, "")).filter(Boolean);
+  const pkName = v => PK_MAP[v] || String(v || "").replace(/^[a-z]{2}:/, "").replace(/-/g, " ");
+
+  function toForm(p) {
+    const lang = p.lang || "fr";
+    const names = Object.keys(LANGS).filter(l => p["product_name_" + l]).map(l => ({ lang: l, value: p["product_name_" + l] }));
+    if (!names.length) names.push({ lang, value: p.product_name || "" });
+    else if (!names.some(n => n.lang === lang) && p.product_name) names.unshift({ lang, value: p.product_name });
+    const n = p.nutriments || {}, mk = pref => Object.fromEntries(NUTR.map(r => [r.k, { v100: n[`${r.k}${pref}_100g`] ?? "", vs: n[`${r.k}${pref}_serving`] ?? "", unit: n[`${r.k}_unit`] || r.units[0] }]));
+    return {
+      names, brands: list(p.brands), quantity: p.quantity || "",
+      ingredients: p["ingredients_text_" + lang] || p.ingredients_text || p.ingredients_text_fr || "", ingLang: lang,
+      categories: list(p.categories), labels: list(p.labels), stores: list(p.stores), traces: list(p.traces), countries: list(p.countries),
+      packagings: (p.packagings || []).map(x => ({ shape: pkName(x.shape), material: pkName(x.material), recycling: pkName(x.recycling) })),
+      origins: p.origins || "", emb: p.emb_codes || "", link: p.link || "", serving: p.serving_size || "", prepared: false,
+      nutr: { sold: mk(""), prepared: mk("_prepared") },
+      images: { front: p.image_front_url || "", ingredients: p.image_ingredients_url || "", nutrition: p.image_nutrition_url || "", packaging: p.image_packaging_url || "" },
+    };
+  }
+
+  /* ----- Rendu ----- */
+  const chips = (key, arr, ph) => `<div class="chipbox" id="chips-${key}">${chipList(key, arr)}</div><div class="addrow"><input class="in" list="dl-${key}" id="add-${key}" placeholder="${esc(ph)}" aria-label="${esc(ph)}"><button class="btn btn-outline btn-sm" type="button" data-add="${key}">${T("Ajouter")}</button></div><datalist id="dl-${key}">${(SUG[key] || []).map(s => `<option value="${esc(s)}">`).join("")}</datalist>`;
+  const chipList = (key, arr) => arr.length ? arr.map((v, i) => `<span class="chip">${esc(v)}<button type="button" data-rm="${key}" data-i="${i}" aria-label="${T("Retirer")} ${esc(v)}">×</button></span>`).join("") : `<span class="none">${T("Rien pour l'instant")}</span>`;
+  const selOpts = (arr, cur) => `<option value="">–</option>` + arr.map(v => `<option ${v === cur ? "selected" : ""}>${esc(v)}</option>`).join("");
+  const langSel = (cur, cls) => `<select class="sel ${cls || ""}">${Object.entries(LANGS).map(([k, v]) => `<option value="${k}" ${k === cur ? "selected" : ""}>${T(v)}</option>`).join("")}</select>`;
+
+  function panelBody(id) {
+    switch (id) {
+      case "photos": return `<p class="sub">${T("Une photo nette de chaque face permet de tout vérifier et de lire automatiquement les ingrédients.")}</p><div class="photos">${[["front", "Face avant"], ["ingredients", "Ingrédients"], ["nutrition", "Valeurs nutritionnelles"], ["packaging", "Recyclage / emballage"]].map(([k, l]) => `<div class="slot"><span class="lb">${T(l)}</span><div class="ph ${F.images[k] ? "has" : ""}">${F.images[k] ? `<img src="${esc(F.images[k])}" alt="${T(l)}" onerror="this.parentNode.classList.remove('has');this.outerHTML='${T("Pas encore d'image dans cette langue").replace(/'/g, "\\'")}'">` : T("Pas encore d'image dans cette langue")}</div><div class="acts"><button class="btn btn-brand" type="button" data-photo="take"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>${T("Prendre une photo")}</button><button class="btn btn-outline" type="button" data-photo="pick">${T("Choisir une image existante")}</button></div></div>`).join("")}</div>`;
+      case "basics": return `<div class="field"><span class="lb">${T("Nom du produit")}</span><div id="names">${F.names.map((n, i) => `<div class="inrow ${i ? "trans" : ""}" style="margin-top:${i ? 8 : 0}px"><input class="in" data-name="${i}" value="${esc(n.value)}" placeholder="${T("ex. Bruschette chips pizza")}">${langSel(n.lang, "").replace("<select", `<select data-namelang="${i}"`)}${i ? `<button class="rmbtn" type="button" data-rmname="${i}" aria-label="${T("Retirer cette traduction")}">×</button>` : ""}</div>`).join("")}</div><div><button class="btn btn-ghost btn-sm" type="button" id="addTrans" style="margin-top:8px">+ ${T("Ajouter une traduction")}</button></div></div>
+        <div class="field"><span class="lb">${T("Marques")}</span>${chips("brands", F.brands, T("ex. Maretti"))}</div>
+        <div class="field"><label for="quantity">${T("Quantité")}</label><input class="in" id="quantity" value="${esc(F.quantity)}" placeholder="${T("ex. 150 g, 1,5 L, 6 x 25 cl")}"><small>${T("Poids ou volume, tel qu'écrit sur l'emballage.")}</small></div>`;
+      case "ingredients": return `<p class="sub">${T("Recopiez la liste telle qu'elle apparaît sur l'emballage, dans l'ordre, avec les pourcentages.")}</p><div class="inrow"><div class="field" style="margin:0"><label for="ing">${T("Liste des ingrédients")}</label><textarea class="ta" id="ing" placeholder="${T("ex. Farine de blé, huile de tournesol, sel…")}">${esc(F.ingredients)}</textarea></div><div class="field" style="margin:0"><span class="lb">${T("Langue")}</span>${langSel(F.ingLang, "").replace("<select", '<select id="ingLang"')}<button class="btn btn-outline btn-sm" type="button" id="ocrBtn" style="margin-top:8px">${T("Extraire depuis la photo")}</button></div></div>`;
+      case "categories": return `<p class="sub">${T("Du plus général au plus précis. La catégorie la plus précise permet de calculer le Green-Score.")}</p>${chips("categories", F.categories, T("ex. Chips de pain"))}`;
+      case "nutrition": return `<div class="row between"><p class="sub" style="margin:0">${T("Valeurs lues sur l'étiquette. Laissez vide ce qui n'est pas indiqué.")}</p><div class="tabs" id="prepTabs"><button type="button" class="${F.prepared ? "" : "active"}" data-prep="0">${T("Produit tel que vendu")}</button><button type="button" class="${F.prepared ? "active" : ""}" data-prep="1">${T("Produit préparé")}</button></div></div>
+        <div class="field" style="max-width:280px"><label for="serving">${T("Taille d'une portion")}</label><input class="in" id="serving" value="${esc(F.serving)}" placeholder="${T("ex. 30 g")}"></div>
+        <table class="ntable"><thead><tr><th>${T("Nutriment")}</th><th class="n">${T("Pour 100 g / 100 ml")}</th><th class="n">${T("Par portion")}</th><th class="u">${T("Unité")}</th></tr></thead><tbody id="ntbody">${ntRows()}</tbody></table>`;
+      case "labels": return `<p class="sub">${T("Labels, certifications et mentions imprimées sur l'emballage.")}</p>${chips("labels", F.labels, T("ex. Bio, Sans gluten"))}`;
+      case "packaging": return `<p class="sub">${T("Un composant par ligne : sa forme, sa matière et la consigne de tri.")}</p><div id="packs">${packRows()}</div><button class="btn btn-ghost btn-sm" type="button" id="addPack" style="margin-top:10px">+ ${T("Ajouter un composant")}</button>`;
+      case "origins": return `<div class="field"><label for="origins">${T("Origine des ingrédients")}</label><input class="in" id="origins" value="${esc(F.origins)}" placeholder="${T("ex. Blé de France, Tomates d'Italie")}"><small>${T("Pays ou régions, séparés par des virgules.")}</small></div>`;
+      case "stores": return `<p class="sub">${T("Où avez-vous acheté ce produit ?")}</p>${chips("stores", F.stores, T("ex. Lidl"))}`;
+      case "traces": return `<p class="sub">${T("Mentions « peut contenir des traces de… ».")}</p>${chips("traces", F.traces, T("ex. Lait, Sésame"))}`;
+      case "codes": return `<div class="field"><label for="emb">${T("Codes de traçabilité")}</label><input class="in" id="emb" value="${esc(F.emb)}" placeholder="ex. EMB 53062, FR 62.448.034 CE"><small>${T("Code emballeur ou estampille sanitaire, imprimés près de la date.")}</small></div>`;
+      case "country": return `<p class="sub">${T("Pays où ce produit est vendu.")}</p>${chips("countries", F.countries, T("ex. France"))}`;
+      case "website": return `<div class="field"><label for="link">${T("Page officielle du produit")}</label><input class="in" id="link" type="url" value="${esc(F.link)}" placeholder="https://…"></div>`;
+    }
+  }
+  const ntRows = () => { const set = F.nutr[F.prepared ? "prepared" : "sold"]; return NUTR.map(r => `<tr><td class="${r.sub ? "sub" : ""}">${T(r.label)}</td><td class="n"><input class="in" type="number" step="any" min="0" data-nk="${r.k}" data-nf="v100" value="${set[r.k].v100}" aria-label="${T(r.label)} ${T("pour 100 g")}"></td><td class="n"><input class="in" type="number" step="any" min="0" data-nk="${r.k}" data-nf="vs" value="${set[r.k].vs}" aria-label="${T(r.label)} ${T("par portion")}"></td><td class="u"><select class="sel" data-nk="${r.k}" data-nf="unit" aria-label="${T("Unité")}">${r.units.map(u => `<option ${u === set[r.k].unit ? "selected" : ""}>${u}</option>`).join("")}</select></td></tr>`).join(""); };
+  const packRows = () => F.packagings.length ? F.packagings.map((x, i) => `<div class="packrow"><select class="sel" data-pk="${i}" data-pf="shape" aria-label="${T("Forme")}">${selOpts(PK.shape, x.shape)}</select><select class="sel" data-pk="${i}" data-pf="material" aria-label="${T("Matériau")}">${selOpts(PK.material, x.material)}</select><select class="sel" data-pk="${i}" data-pf="recycling" aria-label="${T("Recyclage")}">${selOpts(PK.recycling, x.recycling)}</select><button class="rmbtn" type="button" data-rmpack="${i}" aria-label="${T("Retirer ce composant")}">×</button></div>`).join("") : `<p class="muted" style="font-size:.9rem">${T("Aucun composant d'emballage renseigné.")}</p>`;
+
+  const ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>';
+  function isEmpty(s) { return s.empty(F) || forced.has(s.id); }
+  function renderAll() {
+    const todo = SECTIONS.filter(isEmpty), done = SECTIONS.filter(s => !isEmpty(s));
+    order = [...todo, ...done];
+    document.getElementById("main").innerHTML = order.map(s => `<section class="panel" id="${s.id}" style="padding:26px"><h2>${ICON} ${T(s.title)}<span class="tag st ${isEmpty(s) ? "warn" : "ok"}">${isEmpty(s) ? T("À compléter") : T("Complète")}</span></h2>${panelBody(s.id)}</section>`).join("");
+    renderNav(); renderGauge(); bind();
+  }
+  function renderNav() {
+    const todo = SECTIONS.filter(isEmpty), done = SECTIONS.filter(s => !isEmpty(s));
+    const a = (s, ok) => `<a href="#${s.id}">${ok ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></svg>' : "<i></i>"}${T(s.title)}</a>`;
+    document.getElementById("ednav").innerHTML = `<h3>${T("À compléter")} · ${todo.length}</h3><div class="grp">${todo.length ? todo.map(s => a(s, false)).join("") : `<div class="none">${T("Tout est renseigné, bravo.")}</div>`}</div><h3>${T("Complètes")} · ${done.length}</h3><div class="grp">${done.length ? done.map(s => a(s, true)).join("") : `<div class="none">${T("Aucune pour l'instant.")}</div>`}</div>`;
+    SECTIONS.forEach(s => { const el = document.querySelector(`#${s.id} .st`); if (el) { const e = isEmpty(s); el.className = "tag st " + (e ? "warn" : "ok"); el.textContent = e ? T("À compléter") : T("Complète"); } });
+  }
+  function renderGauge() {
+    const n = SECTIONS.filter(isEmpty).length;
+    const pct = initialEmpty ? Math.round(apiPct + (initialEmpty - n) * (100 - apiPct) / initialEmpty) : apiPct;
+    document.getElementById("g-pct").textContent = pct + " %";
+    document.getElementById("g-fill").style.width = pct + "%";
+    const t = document.getElementById("g-todo"); t.className = "todo " + (n ? "" : "ok");
+    t.innerHTML = `<i></i><span>${n ? `${n} ${n > 1 ? T("sections sans données") : T("section sans données")}` : T("Toutes les sections sont renseignées")}</span>`;
+    const nm = F.names[0] && F.names[0].value.trim();
+    document.getElementById("h-name").textContent = nm || (isNew ? T("Nouveau produit") : T("Produit sans nom"));
+    document.getElementById("h-brand").textContent = F.brands.join(", ") || "–";
+    document.title = `${T("Modifier")} · ${nm || code} | Open Food Facts`;
+  }
+  function touch(el) { const p = el.closest(".panel"); if (p) forced.delete(p.id); renderNav(); renderGauge(); }
+  function rechip(key) { document.getElementById("chips-" + key).innerHTML = chipList(key, F[key]); }
+
+  function bind() {
+    const main = document.getElementById("main");
+    main.addEventListener("click", e => {
+      const t = e.target.closest("button"); if (!t) return;
+      if (t.dataset.rm) { F[t.dataset.rm].splice(+t.dataset.i, 1); rechip(t.dataset.rm); touch(t); }
+      else if (t.dataset.add) { const key = t.dataset.add, inp = document.getElementById("add-" + key), v = inp.value.trim(); if (!v) return inp.focus(); if (!F[key].some(x => x.toLowerCase() === v.toLowerCase())) F[key].push(v); inp.value = ""; rechip(key); touch(t); inp.focus(); }
+      else if (t.dataset.photo) OFF.toast(t.dataset.photo === "take" ? T("Maquette : la prise de photo se fait depuis l'app mobile ou un compte") : T("Maquette : l'écriture nécessite un compte Open Food Facts"));
+      else if (t.id === "ocrBtn") OFF.toast(T("Maquette : l'extraction du texte (OCR) nécessite un compte Open Food Facts"));
+      else if (t.id === "addTrans") { F.names.push({ lang: Object.keys(LANGS).find(l => !F.names.some(n => n.lang === l)) || "en", value: "" }); document.getElementById("basics").innerHTML = `<h2>${ICON} ${T("Informations de base")}<span class="tag st"></span></h2>` + panelBody("basics"); renderNav(); document.querySelector('[data-name="' + (F.names.length - 1) + '"]').focus(); }
+      else if (t.dataset.rmname) { F.names.splice(+t.dataset.rmname, 1); document.getElementById("basics").innerHTML = `<h2>${ICON} ${T("Informations de base")}<span class="tag st"></span></h2>` + panelBody("basics"); touch(t); }
+      else if (t.id === "addPack") { F.packagings.push({ shape: "", material: "", recycling: "" }); document.getElementById("packs").innerHTML = packRows(); touch(t); }
+      else if (t.dataset.rmpack) { F.packagings.splice(+t.dataset.rmpack, 1); document.getElementById("packs").innerHTML = packRows(); touch(t); }
+      else if (t.dataset.prep != null) { F.prepared = t.dataset.prep === "1"; document.querySelectorAll("#prepTabs button").forEach(b => b.classList.toggle("active", b === t)); document.getElementById("ntbody").innerHTML = ntRows(); }
+    });
+    main.addEventListener("keydown", e => { if (e.key === "Enter" && e.target.id && e.target.id.startsWith("add-")) { e.preventDefault(); document.querySelector(`[data-add="${e.target.id.slice(4)}"]`).click(); } });
+    const onEdit = t => {
+      if (!t || !("value" in t)) return;
+      t.classList.remove("err");
+      if (t.dataset.name != null) F.names[+t.dataset.name].value = t.value;
+      else if (t.dataset.namelang != null) F.names[+t.dataset.namelang].lang = t.value;
+      else if (t.dataset.nk) F.nutr[F.prepared ? "prepared" : "sold"][t.dataset.nk][t.dataset.nf] = t.value;
+      else if (t.dataset.pk != null) F.packagings[+t.dataset.pk][t.dataset.pf] = t.value;
+      else if (t.id === "ingLang") F.ingLang = t.value;
+      else if (t.id === "ing") F.ingredients = t.value;
+      else if (t.id && typeof F[t.id] === "string") F[t.id] = t.value;
+      touch(t);
+    };
+    main.addEventListener("input", e => onEdit(e.target));
+    main.addEventListener("change", e => { if (e.target.tagName === "SELECT") onEdit(e.target); });
+    /* scrollspy */
+    const spy = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) document.querySelectorAll(".ednav a").forEach(l => l.classList.toggle("active", l.getAttribute("href") === "#" + en.target.id)); }), { rootMargin: "-30% 0px -60% 0px" });
+    main.querySelectorAll(".panel").forEach(p => spy.observe(p));
+  }
+
+  /* ----- Validation puis enregistrement (maquette) ----- */
+  function validate() {
+    const errs = [];
+    const mark = (sel, msg) => { const el = document.querySelector(sel); if (el) el.classList.add("err"); errs.push({ el, msg }); };
+    if (!(F.names[0] && F.names[0].value.trim())) mark('[data-name="0"]', T("Le nom du produit est obligatoire."));
+    if (F.quantity.trim() && !/\d/.test(F.quantity)) mark("#quantity", T("La quantité doit contenir un nombre (ex. 150 g)."));
+    if (F.link.trim()) { try { const u = new URL(F.link.trim()); if (!/^https?:$/.test(u.protocol)) throw 0; } catch (e) { mark("#link", T("L'adresse du site web n'est pas valide (elle doit commencer par http:// ou https://).")); } }
+    const set = F.nutr[F.prepared ? "prepared" : "sold"], num = k => set[k].v100 === "" ? null : +set[k].v100;
+    NUTR.forEach(r => { const v = num(r.k); if (v != null && (isNaN(v) || v < 0)) mark(`[data-nk="${r.k}"][data-nf="v100"]`, T("Une valeur nutritionnelle ne peut pas être négative.")); else if (v != null && r.k !== "energy-kcal" && set[r.k].unit === "g" && v > 100) mark(`[data-nk="${r.k}"][data-nf="v100"]`, `${T(r.label)} : ${T("plus de 100 g pour 100 g, vérifiez la valeur.")}`); });
+    if (num("saturated-fat") != null && num("fat") != null && num("saturated-fat") > num("fat")) mark('[data-nk="saturated-fat"][data-nf="v100"]', T("Les acides gras saturés ne peuvent pas dépasser les matières grasses."));
+    if (num("sugars") != null && num("carbohydrates") != null && num("sugars") > num("carbohydrates")) mark('[data-nk="sugars"][data-nf="v100"]', T("Les sucres ne peuvent pas dépasser les glucides."));
+    if (F.emb.trim() && !/[A-Za-z]/.test(F.emb)) mark("#emb", T("Un code de traçabilité contient des lettres (ex. EMB 53062)."));
+    return errs;
+  }
+  document.getElementById("saveBtn").addEventListener("click", () => {
+    if (!F) return;
+    document.querySelectorAll(".err").forEach(e => e.classList.remove("err"));
+    const errs = validate();
+    if (errs.length) { OFF.toast(errs[0].msg); if (errs[0].el) { errs[0].el.scrollIntoView({ behavior: "smooth", block: "center" }); errs[0].el.focus({ preventScroll: true }); } return; }
+    OFF.toast(T("Maquette : l'écriture nécessite un compte Open Food Facts"));
+  });
+
+  /* ----- Chargement ----- */
+  async function load() {
+    let p = null;
+    if (isNew) { p = { code, lang: OFF.lang || "fr", states_tags: [] }; }
+    else {
+      try {
+        const r = await fetch(`https://world.openfoodfacts.org/api/v2/product/${code}.json?lc=${OFF.lang || "fr"}&fields=${API_FIELDS}`);
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        const d = await r.json(); if (d.status !== 1 || !d.product) throw new Error("not found");
+        p = d.product;
+      } catch (e) {
+        demo = true;
+        p = code === DEMO.code ? DEMO : Object.assign({}, DEMO, { code, product_name: T("Produit") + " " + code, product_name_fr: T("Produit") + " " + code });
+        OFF.toast(T("API indisponible : fiche de démonstration affichée"));
+      }
+    }
+    F = toForm(p);
+    const st = p.states_tags || [];
+    SECTIONS.forEach(s => { if (isNew || s.states.some(x => st.includes(x))) forced.add(s.id); });
+    initialEmpty = SECTIONS.filter(isEmpty).length;
+    apiPct = isNew ? 0 : Math.round((p.completeness ?? (1 - initialEmpty / SECTIONS.length)) * 100);
+    const img = p.image_front_small_url || p.image_front_url;
+    document.getElementById("h-img").innerHTML = img ? `<img src="${esc(img)}" alt="" onerror="this.parentNode.textContent='${T("Pas de photo")}'">` : T("Pas de photo");
+    document.getElementById("h-code").innerHTML = `${code}${demo ? ` <span class="tag warn" style="margin-left:6px">${T("données de démonstration")}</span>` : ""}${isNew ? ` <span class="tag info" style="margin-left:6px">${T("Nouveau produit")}</span>` : ""}`;
+    renderAll();
+    if (location.hash) { const el = document.querySelector(location.hash); el && el.scrollIntoView(); }
+  }
+  load();
+</script>
+</body>
+</html>
+
