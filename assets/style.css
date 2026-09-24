@@ -781,3 +781,18 @@ select.sort{border:1.5px solid var(--line);border-radius:999px;padding:9px 36px 
   .match.lg{font-size:.85rem;padding:5px 12px 5px 5px}
   .match.lg b{height:32px;min-width:58px;font-size:1rem}
 }
+
+/* ===================== Fiche produit : pas de sticky sur petit ecran ===================== */
+@media(max-width:1000px){
+  .gallery{position:static!important;top:auto!important}
+  .sim-out,.filters,.sticky-toc{position:static!important;top:auto!important}
+  .subnav{top:64px}
+}
+@media(max-width:560px){
+  .topbar{top:0}
+  .subnav{top:64px}
+  .gallery .main{height:auto;min-height:240px;padding:16px}
+  .gallery .main img{max-height:300px}
+  .gallery .thumbs{overflow-x:auto;padding-bottom:4px}
+  .gallery .thumbs button{flex:none}
+}

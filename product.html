@@ -7,7 +7,7 @@
 <link rel="icon" href="https://static.openfoodfacts.org/images/logos/off-logo-vertical-light.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=19">
+<link rel="stylesheet" href="assets/style.css?v=20">
 <style>
   .po-missing{background:linear-gradient(135deg,#fff7ef,#fff);border:1px solid #ffd9b3}
   .po-missing .top{display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:center;margin-bottom:8px}
@@ -25,6 +25,8 @@
   .gallery .main.empty{background:var(--sand);border-style:dashed;color:var(--ink-2);font-weight:600;text-align:center}
   .gallery .main.empty svg{width:48px;height:48px;color:var(--muted);margin:0 auto 10px}
   .gallery .main.empty a{display:block;color:var(--orange-dark);font-size:.9rem;margin-top:6px}
+  .po-body,.po-body>div,.po-body>div>div{min-width:0}
+  .po-body .panel:first-child{margin-top:0}
 </style>
 </head>
 <body>
@@ -58,9 +60,8 @@
 <!-- Sous-navigation à 4 onglets -->
 <div id="pp-subnav"></div>
 
-<div class="container" style="max-width:1200px">
-  <div class="product-top" style="grid-template-columns:420px 1fr">
-    <div></div>
+<div class="container po-body" style="padding-top:28px;padding-bottom:64px">
+  <div>
     <div>
       <!-- Presque vide : ce qu'on ne sait pas encore -->
       <div class="panel po-missing" id="missing" hidden>
