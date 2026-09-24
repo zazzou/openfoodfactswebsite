@@ -1137,6 +1137,7 @@
     "Propriétés (folksonomie)": "Properties (folksonomy)",
     "Mon profil": "My profile",
     "Nutri-Score, NOVA, Green-Score": "Nutri-Score, NOVA, Green-Score",
+    "Chiffre en direct depuis l'API Open Food Facts": "Live figure from the Open Food Facts API",
   };
 
   // langue d'interface : fr (source), en, es (dictionnaire séparé dans i18n-es.js) ; toute autre langue de contenu → interface en anglais

@@ -1912,5 +1912,6 @@ window.OFF_I18N_ES = {
 "Égypte": "Egipto",
 "Nigeria": "Nigeria",
 "Kenya": "Kenia",
-"Portugal": "Portugal"
+"Portugal": "Portugal",
+"Chiffre en direct depuis l'API Open Food Facts": "Cifra en directo desde la API de Open Food Facts"
 };

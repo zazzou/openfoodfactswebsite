@@ -765,3 +765,19 @@ select.sort{border:1.5px solid var(--line);border-radius:999px;padding:9px 36px 
 .logo .logo-light{display:none}
 .night .topbar .logo .logo-dark{display:none}
 .night .topbar .logo .logo-light{display:block}
+
+/* ===================== Pastille de correspondance (global) ===================== */
+.match{display:inline-flex;align-items:center;gap:8px;padding:4px 10px 4px 4px;border-radius:999px;
+  background:#fff;border:1.5px solid var(--line);font-size:.8rem;font-weight:600;color:var(--ink-2);
+  max-width:100%;min-width:0}
+.match b{display:inline-grid;place-items:center;min-width:46px;height:26px;padding:0 9px;border-radius:999px;
+  background:var(--c,#cfc4be);color:#fff;font-family:var(--font-head);white-space:nowrap;flex:none;
+  font-variant-numeric:tabular-nums;line-height:1}
+.match>span{min-width:0;overflow-wrap:break-word}
+.match.lg{font-size:.95rem;padding:6px 14px 6px 6px}
+.match.lg b{height:36px;min-width:64px;font-size:1.1rem;padding:0 12px}
+@media(max-width:560px){
+  .match{font-size:.78rem;gap:7px}
+  .match.lg{font-size:.85rem;padding:5px 12px 5px 5px}
+  .match.lg b{height:32px;min-width:58px;font-size:1rem}
+}

@@ -6,7 +6,7 @@
 <link rel="icon" href="https://static.openfoodfacts.org/images/logos/off-logo-vertical-light.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=18">
+<link rel="stylesheet" href="assets/style.css?v=19">
 <style>
   .profile-hero{padding:48px 0 36px;background:linear-gradient(180deg,#fff7ef,var(--cream));border-bottom:1px solid var(--line-2)}
   .profile-head{display:flex;align-items:center;gap:24px;flex-wrap:wrap}
@@ -60,7 +60,7 @@
       </div>
       <div class="profile-actions">
         <a class="btn btn-primary" href="preferences.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2.5"/><circle cx="9" cy="17" r="2.5"/></svg> Mes préférences alimentaires</a>
-        <a class="btn btn-outline" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 19V5M4 19h16M8 15v-4M12 15V8M16 15v-6"/></svg> Tableau de bord Open Prices</a>
+        <a class="btn btn-outline" href="https://prices.openfoodfacts.org/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 19V5M4 19h16M8 15v-4M12 15V8M16 15v-6"/></svg> Tableau de bord Open Prices</a>
         <button class="btn btn-ghost" type="button" id="logout" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 17l5-5-5-5M15 12H3M21 3v18"/></svg> Se déconnecter</button>
       </div>
     </div>
@@ -102,10 +102,10 @@
 
 <div id="site-footer"></div>
 <script src="assets/locale.js?v=1"></script>
-<script src="assets/app.js?v=10"></script>
-<script src="assets/i18n-es.js?v=3"></script>
-<script src="assets/i18n.js?v=10"></script>
-<script src="assets/prefs.js?v=1"></script>
+<script src="assets/app.js?v=11"></script>
+<script src="assets/i18n-es.js?v=4"></script>
+<script src="assets/i18n.js?v=11"></script>
+<script src="assets/prefs.js?v=2"></script>
 <script>
   OFF.mount("contribute.html");
   const API = "https://world.openfoodfacts.org";

@@ -13,7 +13,7 @@
 <link rel="preload" as="image" href="https://images.openfoodfacts.org/images/products/544/900/021/4911/front_hi.242.400.jpg">
 <link rel="preload" as="image" href="https://images.openfoodfacts.org/images/products/730/040/048/1588/front.7.400.jpg">
 <link rel="preconnect" href="https://images.openfoodfacts.org">
-<link rel="stylesheet" href="assets/style.css?v=18">
+<link rel="stylesheet" href="assets/style.css?v=19">
 <style>
   /* Hero "rayon de nuit" — spécifique à l'accueil */
   .night{position:relative;color:#fff;overflow:hidden;background:#1b0d05;isolation:isolate}
@@ -253,8 +253,8 @@
         <p class="lead">Définissez vos préférences (allergènes, végétarien, sans huile de palme…) et l'app vous dit en rayon si un produit vous correspond. Hors-ligne, libre, sans pub ni traqueur.</p>
         <p class="mt-2"><a class="btn btn-outline" href="preferences.html">Régler mes préférences sur le site</a></p>
         <div class="store-btns">
-          <a class="store" href="#"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.4 12.6c0-2.6 2.1-3.8 2.2-3.9-1.2-1.8-3.1-2-3.7-2-1.6-.2-3.1.9-3.9.9-.8 0-2-.9-3.4-.9-1.7 0-3.3 1-4.2 2.6-1.8 3.1-.5 7.8 1.3 10.3.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.4-.8 1.6 0 2 .8 3.4.8 1.4 0 2.3-1.3 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9-.1 0-2.8-1-2.8-4.2ZM13.9 5c.7-.9 1.2-2 1-3.2-1 0-2.3.7-3 1.6-.7.8-1.2 2-1.1 3.1 1.2.1 2.4-.6 3.1-1.5Z"/></svg><span><small>Télécharger sur</small><b>App Store</b></span></a>
-          <a class="store" href="#"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.6 2.3 13.4 12l-9.8 9.7c-.3-.2-.5-.6-.5-1.1V3.4c0-.5.2-.9.5-1.1Zm11.3 11.2 2.5 2.5-9.1 5.2 6.6-7.7Zm3.9-3.6 3 1.7c.8.5.8 1.3 0 1.8l-3 1.7-2.8-2.6 2.8-2.6ZM8.3 2.8l9.1 5.2-2.5 2.5-6.6-7.7Z"/></svg><span><small>Disponible sur</small><b>Google Play</b></span></a>
+          <a class="store" href="https://apps.apple.com/app/open-food-facts/id588797948" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.4 12.6c0-2.6 2.1-3.8 2.2-3.9-1.2-1.8-3.1-2-3.7-2-1.6-.2-3.1.9-3.9.9-.8 0-2-.9-3.4-.9-1.7 0-3.3 1-4.2 2.6-1.8 3.1-.5 7.8 1.3 10.3.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.4-.8 1.6 0 2 .8 3.4.8 1.4 0 2.3-1.3 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9-.1 0-2.8-1-2.8-4.2ZM13.9 5c.7-.9 1.2-2 1-3.2-1 0-2.3.7-3 1.6-.7.8-1.2 2-1.1 3.1 1.2.1 2.4-.6 3.1-1.5Z"/></svg><span><small>Télécharger sur</small><b>App Store</b></span></a>
+          <a class="store" href="https://play.google.com/store/apps/details?id=org.openfoodfacts.scanner" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.6 2.3 13.4 12l-9.8 9.7c-.3-.2-.5-.6-.5-1.1V3.4c0-.5.2-.9.5-1.1Zm11.3 11.2 2.5 2.5-9.1 5.2 6.6-7.7Zm3.9-3.6 3 1.7c.8.5.8 1.3 0 1.8l-3 1.7-2.8-2.6 2.8-2.6ZM8.3 2.8l9.1 5.2-2.5 2.5-6.6-7.7Z"/></svg><span><small>Disponible sur</small><b>Google Play</b></span></a>
         </div>
       </div>
       <div class="phone">
@@ -293,10 +293,10 @@
 <div class="bigmark" aria-hidden="true">open food facts</div>
 
 <script src="assets/locale.js?v=1"></script>
-<script src="assets/app.js?v=10"></script>
-<script src="assets/i18n-es.js?v=3"></script>
-<script src="assets/i18n.js?v=10"></script>
-<script src="assets/prefs.js?v=1"></script>
+<script src="assets/app.js?v=11"></script>
+<script src="assets/i18n-es.js?v=4"></script>
+<script src="assets/i18n.js?v=11"></script>
+<script src="assets/prefs.js?v=2"></script>
 <script>
   OFF.mount("index.html");
   document.querySelectorAll(".scores[data-ns]").forEach(el => el.innerHTML = OFF.ns(el.dataset.ns) + OFF.nova(el.dataset.nova));
@@ -337,6 +337,18 @@
 
   /* ---- Compteur "en direct" ---- */
   let live = 4768553; const lc = document.getElementById("liveCount");
+  /* total reel de produits, depuis l'API publique (repli : dernier total connu) */
+  (async () => {
+    try {
+      const u = new URL((OFF.locale && OFF.locale.api ? OFF.locale.api() : "https://world.openfoodfacts.org") + "/api/v2/search");
+      u.searchParams.set("page_size", "1"); u.searchParams.set("fields", "code"); u.searchParams.set("nutrition_grades_tags", "a,b,c,d,e,unknown,not-applicable");
+      const c = new AbortController(); setTimeout(() => c.abort(), 12000);
+      const r = await fetch(u, { signal: c.signal });
+      if (!r.ok) return;
+      const d = await r.json();
+      if (d && d.count > 1000) { live = d.count; lc.textContent = live.toLocaleString(OFF.numLocale || "fr-FR"); lc.title = OFF.t("Chiffre en direct depuis l'API Open Food Facts"); }
+    } catch (e) { /* repli : chiffre embarque */ }
+  })();
   setInterval(() => { live += 1; lc.textContent = live.toLocaleString("fr-FR"); lc.style.color = "#fff"; setTimeout(() => lc.style.color = "", 300); }, 7000);
 
   /* ---- Marquee de vrais produits ---- */

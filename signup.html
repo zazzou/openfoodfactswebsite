@@ -6,7 +6,7 @@
 <link rel="icon" href="https://static.openfoodfacts.org/images/logos/off-logo-vertical-light.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=18">
+<link rel="stylesheet" href="assets/style.css?v=19">
 <style>
   /* ---- Mise en page authentification (commune signin / signup / reset) ---- */
   .auth{display:grid;grid-template-columns:1fr;min-height:calc(100vh - 72px)}
@@ -133,7 +133,7 @@
         <span class="err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>Les deux mots de passe ne sont pas identiques.</span>
       </div>
 
-      <label class="check" id="c-terms"><input type="checkbox" id="terms"><span>J'accepte les <a href="#" style="color:var(--orange-dark);font-weight:600">conditions d'utilisation et de contribution</a> <b>(obligatoire)</b></span></label>
+      <label class="check" id="c-terms"><input type="checkbox" id="terms"><span>J'accepte les <a href="https://world.openfoodfacts.org/terms-of-use" target="_blank" rel="noopener" style="color:var(--orange-dark);font-weight:600">conditions d'utilisation et de contribution</a> <b>(obligatoire)</b></span></label>
       <label class="check"><input type="checkbox" id="producer"><span>Je suis un producteur <span class="muted">— fabricant, marque ou distributeur</span></span></label>
       <div class="producer-box" id="producerBox">
         <div class="field" id="f-org">
@@ -172,10 +172,10 @@
 
 <div id="site-footer"></div>
 <script src="assets/locale.js?v=1"></script>
-<script src="assets/app.js?v=10"></script>
-<script src="assets/i18n-es.js?v=3"></script>
-<script src="assets/i18n.js?v=10"></script>
-<script src="assets/prefs.js?v=1"></script>
+<script src="assets/app.js?v=11"></script>
+<script src="assets/i18n-es.js?v=4"></script>
+<script src="assets/i18n.js?v=11"></script>
+<script src="assets/prefs.js?v=2"></script>
 <script>
   OFF.mount(null);
   const $ = id => document.getElementById(id);

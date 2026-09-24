@@ -85,7 +85,7 @@
   function badge(p, lg) {
     const s = score(p); const T = (window.OFF && OFF.t) ? OFF.t : x => x;
     const col = { very_good: "var(--ns-a)", good: "var(--ns-b)", poor: "var(--ns-d)", very_poor: "var(--ns-e)", does_not_match: "var(--ns-e)", unknown: "#cfc4be", none: "#cfc4be" }[s.status];
-    return `<span class="match ${lg ? "lg" : ""}" style="--c:${col}" title="${T(s.label)}"><b>${s.pct == null ? "?" : s.pct + " %"}</b><span>${T(s.label)}</span></span>`;
+    return `<span class="match ${lg ? "lg" : ""}" style="--c:${col}" title="${T(s.label)}"><b>${s.pct == null ? "?" : s.pct + " %"}</b><span>${T(s.label)}</span></span>`;
   }
   const FIELDS = "nutriscore_grade,ecoscore_grade,nova_group,additives_n,nutrient_levels,ingredients_analysis_tags,allergens_tags,traces_tags,labels_tags,ingredients_text";
   window.OFF = window.OFF || {};

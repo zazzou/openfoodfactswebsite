@@ -71,7 +71,13 @@
 .kp-group{margin-top:18px}
 .kp-group>h3{font-size:1.05rem;margin-bottom:6px}
 .kp-img{margin:12px 0;border-radius:12px;max-height:280px;width:auto}
-.kp-table{overflow:auto;margin:12px 0}
+.kp-table{overflow-x:auto;max-width:100%;margin:12px 0;-webkit-overflow-scrolling:touch}
+.kp-text{max-width:100%;overflow-x:auto}
+.kp-text table{max-width:100%;border-collapse:collapse;font-size:.9rem}
+.kp-text table th,.kp-text table td{padding:8px 10px;border-bottom:1px solid var(--line-2);text-align:left}
+.kp-text img{max-width:100%;height:auto}
+.kp-text pre,.kp-text code{white-space:pre-wrap;word-break:break-word}
+.panel,.panel>*{min-width:0}
 .kp-table .nutri-table{min-width:420px}
 .kp-table td.ev-good{color:var(--green-dark);font-weight:600}.kp-table td.ev-bad{color:#b83232;font-weight:600}.kp-table td.ev-average{color:#a35f00;font-weight:600}
 .kp-table td img{height:18px;display:inline;vertical-align:middle;margin-right:6px}

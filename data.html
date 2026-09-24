@@ -7,7 +7,7 @@
 <link rel="icon" href="https://static.openfoodfacts.org/images/logos/off-logo-vertical-light.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=18">
+<link rel="stylesheet" href="assets/style.css?v=19">
 </head>
 <body>
 <div id="site-header"></div>
@@ -55,7 +55,7 @@
       <div class="endpoint"><span class="m">GET</span>/api/v2/taxonomy?tagtype=…<span class="d">Taxonomies : catégories, additifs, allergènes, labels…</span></div>
       <div class="endpoint"><span class="m">GET</span>robotoff.openfoodfacts.org/api/v1/questions<span class="d">Questions générées par l'IA à valider</span></div>
     </div>
-    <div class="row mt-4"><a class="btn btn-brand" href="#">Documentation OpenAPI complète</a><a class="btn btn-outline" href="properties.html">Propriétés libres (folksonomie)</a><a class="btn btn-outline" href="changes.html">Flux des modifications</a><a class="btn btn-outline" href="countries.html">Produits par pays</a></div>
+    <div class="row mt-4"><a class="btn btn-brand" href="https://openfoodfacts.github.io/openfoodfacts-server/api/" target="_blank" rel="noopener">Documentation OpenAPI complète</a><a class="btn btn-outline" href="properties.html">Propriétés libres (folksonomie)</a><a class="btn btn-outline" href="changes.html">Flux des modifications</a><a class="btn btn-outline" href="countries.html">Produits par pays</a></div>
   </div>
 </section>
 
@@ -63,18 +63,18 @@
   <div class="container">
     <div class="section-head"><span class="eyebrow green">SDK officiels</span><h2>Dans votre langage préféré</h2></div>
     <div class="grid-4" style="gap:12px">
-      <a class="sdk" href="#"><i style="background:#3572a5">Py</i>Python</a>
-      <a class="sdk" href="#"><i style="background:#e0b000;color:#222">JS</i>JavaScript / Node</a>
-      <a class="sdk" href="#"><i style="background:#0175c2">Dt</i>Dart / Flutter</a>
-      <a class="sdk" href="#"><i style="background:#b07219">Jv</i>Java / Kotlin</a>
-      <a class="sdk" href="#"><i style="background:#f05138">Sw</i>Swift</a>
-      <a class="sdk" href="#"><i style="background:#4f5d95">Php</i>PHP</a>
-      <a class="sdk" href="#"><i style="background:#701516">Rb</i>Ruby</a>
-      <a class="sdk" href="#"><i style="background:#dea584;color:#222">Rs</i>Rust</a>
-      <a class="sdk" href="#"><i style="background:#007d9c">Go</i>Go</a>
-      <a class="sdk" href="#"><i style="background:#178600">C#</i>.NET</a>
-      <a class="sdk" href="#"><i style="background:#198ce7">R</i>R</a>
-      <a class="sdk" href="#"><i style="background:#0064c8">Elx</i>Elixir</a>
+      <a class="sdk" href="https://github.com/openfoodfacts/openfoodfacts-python" target="_blank" rel="noopener"><i style="background:#3572a5">Py</i>Python</a>
+      <a class="sdk" href="https://github.com/openfoodfacts/openfoodfacts-nodejs" target="_blank" rel="noopener"><i style="background:#e0b000;color:#222">JS</i>JavaScript / Node</a>
+      <a class="sdk" href="https://github.com/openfoodfacts/openfoodfacts-dart" target="_blank" rel="noopener"><i style="background:#0175c2">Dt</i>Dart / Flutter</a>
+      <a class="sdk" href="https://github.com/openfoodfacts/openfoodfacts-java" target="_blank" rel="noopener"><i style="background:#b07219">Jv</i>Java / Kotlin</a>
+      <a class="sdk" href="https://github.com/openfoodfacts/openfoodfacts-swift" target="_blank" rel="noopener"><i style="background:#f05138">Sw</i>Swift</a>
+      <a class="sdk" href="https://github.com/openfoodfacts/openfoodfacts-php" target="_blank" rel="noopener"><i style="background:#4f5d95">Php</i>PHP</a>
+      <a class="sdk" href="https://github.com/openfoodfacts/openfoodfacts-ruby" target="_blank" rel="noopener"><i style="background:#701516">Rb</i>Ruby</a>
+      <a class="sdk" href="https://github.com/openfoodfacts/openfoodfacts-rust" target="_blank" rel="noopener"><i style="background:#dea584;color:#222">Rs</i>Rust</a>
+      <a class="sdk" href="https://github.com/openfoodfacts/openfoodfacts-go" target="_blank" rel="noopener"><i style="background:#007d9c">Go</i>Go</a>
+      <a class="sdk" href="https://github.com/openfoodfacts/openfoodfacts-csharp" target="_blank" rel="noopener"><i style="background:#178600">C#</i>.NET</a>
+      <a class="sdk" href="https://github.com/openfoodfacts/openfoodfacts-r" target="_blank" rel="noopener"><i style="background:#198ce7">R</i>R</a>
+      <a class="sdk" href="https://github.com/openfoodfacts/openfoodfacts-elixir" target="_blank" rel="noopener"><i style="background:#0064c8">Elx</i>Elixir</a>
     </div>
   </div>
 </section>
@@ -88,11 +88,11 @@
       <div class="callout blue mt-3"><b>Licence ODbL.</b> Vous pouvez tout réutiliser, y compris commercialement, à condition de citer Open Food Facts et de partager vos améliorations de la base sous la même licence.</div>
     </div>
     <div style="display:grid;gap:10px">
-      <div class="dl"><div><b>Parquet (recommandé)</b><small>Hugging Face · ~2,5 Go · colonnes typées</small></div><a class="btn btn-brand btn-sm" href="#">Télécharger</a></div>
-      <div class="dl"><div><b>JSONL complet</b><small>~9 Go compressé · toutes les colonnes</small></div><a class="btn btn-outline btn-sm" href="#">Télécharger</a></div>
-      <div class="dl"><div><b>CSV</b><small>~10 Go · 200 colonnes principales</small></div><a class="btn btn-outline btn-sm" href="#">Télécharger</a></div>
-      <div class="dl"><div><b>MongoDB dump</b><small>~11 Go · réplique de la base de production</small></div><a class="btn btn-outline btn-sm" href="#">Télécharger</a></div>
-      <div class="dl"><div><b>Deltas quotidiens</b><small>Uniquement les produits modifiés dans la journée</small></div><a class="btn btn-outline btn-sm" href="#">Parcourir</a></div>
+      <div class="dl"><div><b>Parquet (recommandé)</b><small>Hugging Face · ~2,5 Go · colonnes typées</small></div><a class="btn btn-brand btn-sm" href="https://huggingface.co/datasets/openfoodfacts/product-database" target="_blank" rel="noopener">Télécharger</a></div>
+      <div class="dl"><div><b>JSONL complet</b><small>~9 Go compressé · toutes les colonnes</small></div><a class="btn btn-outline btn-sm" href="https://static.openfoodfacts.org/data/openfoodfacts-products.jsonl.gz" target="_blank" rel="noopener">Télécharger</a></div>
+      <div class="dl"><div><b>CSV</b><small>~10 Go · 200 colonnes principales</small></div><a class="btn btn-outline btn-sm" href="https://static.openfoodfacts.org/data/en.openfoodfacts.org.products.csv.gz" target="_blank" rel="noopener">Télécharger</a></div>
+      <div class="dl"><div><b>MongoDB dump</b><small>~11 Go · réplique de la base de production</small></div><a class="btn btn-outline btn-sm" href="https://static.openfoodfacts.org/data/openfoodfacts-mongodbdump.gz" target="_blank" rel="noopener">Télécharger</a></div>
+      <div class="dl"><div><b>Deltas quotidiens</b><small>Uniquement les produits modifiés dans la journée</small></div><a class="btn btn-outline btn-sm" href="https://static.openfoodfacts.org/data/delta/" target="_blank" rel="noopener">Parcourir</a></div>
     </div>
   </div>
 </section>
@@ -105,16 +105,16 @@
       <div class="quote reveal"><p>Nous avons entraîné nos modèles de vision sur les 40 millions de photos de produits. Une ressource unique au monde.</p><footer>Laboratoire de recherche en IA</footer></div>
       <div class="quote reveal"><p>Les données ODbL nous permettent de comparer l'offre alimentaire entre pays et de mesurer l'effet des politiques publiques.</p><footer>Chercheurs en santé publique</footer></div>
     </div>
-    <div class="center mt-4"><a class="btn btn-outline" href="#">Ajouter votre projet à la liste</a></div>
+    <div class="center mt-4"><a class="btn btn-outline" href="https://github.com/openfoodfacts/openfoodfacts-server/blob/main/docs/introduction/reusers.md" target="_blank" rel="noopener">Ajouter votre projet à la liste</a></div>
   </div>
 </section>
 
 <div id="site-footer"></div>
 <script src="assets/locale.js?v=1"></script>
-<script src="assets/app.js?v=10"></script>
-<script src="assets/i18n-es.js?v=3"></script>
-<script src="assets/i18n.js?v=10"></script>
-<script src="assets/prefs.js?v=1"></script>
+<script src="assets/app.js?v=11"></script>
+<script src="assets/i18n-es.js?v=4"></script>
+<script src="assets/i18n.js?v=11"></script>
+<script src="assets/prefs.js?v=2"></script>
 <script>OFF.mount("data.html");</script>
 </body>
 </html>
