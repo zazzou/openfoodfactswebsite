@@ -8,6 +8,11 @@
 <link rel="icon" href="https://static.openfoodfacts.org/images/logos/off-logo-vertical-light.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="https://images.openfoodfacts.org/images/products/301/762/042/2003/front_en.879.400.jpg">
+<link rel="preload" as="image" href="https://images.openfoodfacts.org/images/products/316/893/016/3480/front_fr.113.400.jpg">
+<link rel="preload" as="image" href="https://images.openfoodfacts.org/images/products/544/900/021/4911/front_hi.242.400.jpg">
+<link rel="preload" as="image" href="https://images.openfoodfacts.org/images/products/730/040/048/1588/front.7.400.jpg">
+<link rel="preconnect" href="https://images.openfoodfacts.org">
 <link rel="stylesheet" href="assets/style.css?v=12">
 <style>
   /* Hero "rayon de nuit" — spécifique à l'accueil */
@@ -307,12 +312,13 @@
     { img: "https://images.openfoodfacts.org/images/products/730/040/048/1588/front.7.400.jpg", name: "Wasa Fibres", brand: "Wasa · 230 g", ns: "a", nova: 3, eco: "b", v: ["good", "Riche en fibres · sans additifs"] },
   ];
   const sc = document.getElementById("scanner"), scImg = document.getElementById("scanImg"), res = document.getElementById("scanResult"), hint = document.getElementById("scanHint");
+  const cache = DEMO.map(p => { const im = new Image(); im.decoding = "async"; im.src = p.img; return im; });
   let di = 0;
   function showDemo(i) {
     const p = DEMO[i];
     sc.classList.remove("done"); sc.classList.add("scanning"); hint.textContent = OFF.t("Analyse en cours…");
     scImg.style.opacity = 0;
-    setTimeout(() => { scImg.src = p.img; scImg.style.opacity = 1; }, 300);
+    setTimeout(() => { const show = () => { scImg.src = p.img; scImg.style.opacity = 1; }; (cache[i].complete ? Promise.resolve() : cache[i].decode().catch(() => {})).then(show); }, 250);
     sc.querySelectorAll(".dots i").forEach((d, k) => d.classList.toggle("on", k === i));
     setTimeout(() => {
       res.querySelector(".name").textContent = p.name; res.querySelector(".brand").textContent = p.brand;
