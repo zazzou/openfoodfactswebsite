@@ -1,0 +1,301 @@
+[
+{
+"code": "3274080005003",
+"product_name": "Eau de source",
+"brands": [
+"Cristaline"
+],
+"nutriscore_grade": "a",
+"nova_group": 1,
+"ecoscore_grade": "not-applicable",
+"image_front_small_url": "https://images.openfoodfacts.org/images/products/327/408/000/5003/front_fr.994.200.jpg",
+"quantity": "1,5 L"
+},
+{
+"code": "7622210449283",
+"product_name": "Galletas de Chocolate Príncipe",
+"brands": [
+"Lu",
+"Mondelez"
+],
+"nutriscore_grade": "e",
+"nova_group": 4,
+"ecoscore_grade": "unknown",
+"image_front_small_url": "https://images.openfoodfacts.org/images/products/762/221/044/9283/front_es.590.200.jpg",
+"quantity": "100g"
+},
+{
+"code": "3017620425035",
+"product_name": "Nutella",
+"brands": [
+"Ferrero"
+],
+"nutriscore_grade": "e",
+"nova_group": 4,
+"ecoscore_grade": "e",
+"image_front_small_url": "https://images.openfoodfacts.org/images/products/301/762/042/5035/front_en.583.200.jpg",
+"quantity": "1 kg"
+},
+{
+"code": "3175680011480",
+"product_name": "Sésame",
+"brands": [
+"Gerblé"
+],
+"nutriscore_grade": "c",
+"nova_group": 4,
+"ecoscore_grade": "c",
+"image_front_small_url": "https://images.openfoodfacts.org/images/products/317/568/001/1480/front_fr.139.200.jpg",
+"quantity": "230g"
+},
+{
+"code": "5449000214911",
+"product_name": "Coca-Cola",
+"brands": [
+"Coca-Cola"
+],
+"nutriscore_grade": "e",
+"nova_group": 4,
+"ecoscore_grade": "not-applicable",
+"image_front_small_url": "https://images.openfoodfacts.org/images/products/544/900/021/4911/front_hi.242.200.jpg",
+"quantity": "330 mL"
+},
+{
+"code": "3017620422003",
+"product_name": "Nutella",
+"brands": [
+"Nutella",
+"Ferrero"
+],
+"nutriscore_grade": "e",
+"nova_group": 4,
+"ecoscore_grade": "d",
+"image_front_small_url": "https://images.openfoodfacts.org/images/products/301/762/042/2003/front_fr.715.200.jpg",
+"quantity": "400 g"
+},
+{
+"code": "50184453",
+"product_name": "Yeast Extract",
+"brands": [
+"Marmite",
+"Unilever"
+],
+"nutriscore_grade": "d",
+"nova_group": 4,
+"ecoscore_grade": "unknown",
+"image_front_small_url": "https://images.openfoodfacts.org/images/products/50184453/front_en.78.200.jpg",
+"quantity": "250 g"
+},
+{
+"code": "5449000000996",
+"product_name": "Coca-Cola",
+"brands": [
+"Coca-Cola"
+],
+"nutriscore_grade": "e",
+"nova_group": 4,
+"ecoscore_grade": "not-applicable",
+"image_front_small_url": "https://images.openfoodfacts.org/images/products/544/900/000/0996/front_en.782.200.jpg",
+"quantity": "330 ml"
+},
+{
+"code": "3268840001008",
+"product_name": "Eau de source",
+"brands": [
+"Cristaline"
+],
+"nutriscore_grade": "a",
+"nova_group": null,
+"ecoscore_grade": "not-applicable",
+"image_front_small_url": "https://images.openfoodfacts.org/images/products/326/884/000/1008/front_fr.377.200.jpg",
+"quantity": "50 cl"
+},
+{
+"code": "5449000214799",
+"product_name": "Coke zero",
+"brands": [
+"Coca Cola"
+],
+"nutriscore_grade": "b",
+"nova_group": 4,
+"ecoscore_grade": "not-applicable",
+"image_front_small_url": "https://images.openfoodfacts.org/images/products/544/900/021/4799/front.3.200.jpg",
+"quantity": "330ml"
+},
+{
+"code": "54491472",
+"product_name": "Coca Cola 500ml",
+"brands": [
+"Coca-Cola"
+],
+"nutriscore_grade": "e",
+"nova_group": 4,
+"ecoscore_grade": "not-applicable",
+"image_front_small_url": "https://images.openfoodfacts.org/images/products/54491472/front_ro.405.200.jpg",
+"quantity": "0.5 l"
+},
+{
+"code": "20724696",
+"product_name": "Almonds",
+"brands": [
+"Alesto",
+"Lidl"
+],
+"nutriscore_grade": "a",
+"nova_group": 1,
+"ecoscore_grade": "e",
+"image_front_small_url": "https://images.openfoodfacts.org/images/products/20724696/front_en.301.200.jpg",
+"quantity": "200 g"
+},
+{
+"code": "3168930163480",
+"product_name": "Alvalle Gazpacho l'original",
+"brands": [
+"Alvalle",
+"Pepsico"
+],
+"nutriscore_grade": "a",
+"nova_group": 3,
+"ecoscore_grade": "a",
+"image_front_small_url": "https://images.openfoodfacts.org/images/products/316/893/016/3480/front_fr.113.200.jpg",
+"quantity": "1L"
+},
+{
+"code": "3046920022651",
+"product_name": "70% Cacao noir intense",
+"brands": [
+"Lindt"
+],
+"nutriscore_grade": "e",
+"nova_group": 3,
+"ecoscore_grade": "e",
+"image_front_small_url": "https://images.openfoodfacts.org/images/products/304/692/002/2651/front.7.200.jpg",
+"quantity": "100 g"
+},
+{
+"code": "7300400481588",
+"product_name": "FIBRES",
+"brands": [
+"Wasa"
+],
+"nutriscore_grade": "a",
+"nova_group": 3,
+"ecoscore_grade": "unknown",
+"image_front_small_url": "https://images.openfoodfacts.org/images/products/730/040/048/1588/front.7.200.jpg",
+"quantity": "230 g"
+},
+{
+"code": "8002270014901",
+"product_name": "S. Pellegrino Water",
+"brands": [
+"San Pellegrino",
+"Nestlé Waters",
+"Nestlé"
+],
+"nutriscore_grade": "a",
+"nova_group": 1,
+"ecoscore_grade": "not-applicable",
+"image_front_small_url": "https://images.openfoodfacts.org/images/products/800/227/001/4901/front_en.304.200.jpg",
+"quantity": "1 L"
+},
+{
+"code": "3046920029759",
+"product_name": "Lindt Excellence 90% 100g",
+"brands": [
+"Lindt & sprüngli (nordic)"
+],
+"nutriscore_grade": "d",
+"nova_group": null,
+"ecoscore_grade": "e",
+"image_front_small_url": "https://images.openfoodfacts.org/images/products/304/692/002/9759/front_en.396.200.jpg",
+"quantity": "100 g"
+},
+{
+"code": "3046920022606",
+"product_name": "Excellence 85% Cacao Chocolat Noir Puissant",
+"brands": [
+"Lindt"
+],
+"nutriscore_grade": "d",
+"nova_group": 3,
+"ecoscore_grade": "e",
+"image_front_small_url": "https://images.openfoodfacts.org/images/products/304/692/002/2606/front_fr.235.200.jpg",
+"quantity": "100g"
+},
+{
+"code": "20267605",
+"product_name": "Cashews",
+"brands": [
+"Alesto"
+],
+"nutriscore_grade": "b",
+"nova_group": 1,
+"ecoscore_grade": "d",
+"image_front_small_url": "https://images.openfoodfacts.org/images/products/20267605/front.9.200.jpg",
+"quantity": "200g"
+},
+{
+"code": "5410041001204",
+"product_name": "Original",
+"brands": [
+"Tuc",
+"LU",
+"Mondelēz"
+],
+"nutriscore_grade": "e",
+"nova_group": 4,
+"ecoscore_grade": "b",
+"image_front_small_url": "https://images.openfoodfacts.org/images/products/541/004/100/1204/front.6.200.jpg",
+"quantity": "100 g"
+},
+{
+"code": "3057640257773",
+"product_name": "volvic",
+"brands": [
+"volvic"
+],
+"nutriscore_grade": "a",
+"nova_group": null,
+"ecoscore_grade": "not-applicable",
+"image_front_small_url": "https://images.openfoodfacts.org/images/products/305/764/025/7773/front_fr.292.200.jpg",
+"quantity": "1,5 L"
+},
+{
+"code": "5411188112709",
+"product_name": "Geröstete Mandel Ohne Zucker",
+"brands": [
+"Alpro"
+],
+"nutriscore_grade": "b",
+"nova_group": 4,
+"ecoscore_grade": "b",
+"image_front_small_url": "https://images.openfoodfacts.org/images/products/541/118/811/2709/front_de.572.200.jpg",
+"quantity": "1 l"
+},
+{
+"code": "20005733",
+"product_name": "Walnusskerne",
+"brands": [
+"Alesto",
+"Lidl"
+],
+"nutriscore_grade": "a",
+"nova_group": 1,
+"ecoscore_grade": "f",
+"image_front_small_url": "https://images.openfoodfacts.org/images/products/20005733/front_de.516.200.jpg",
+"quantity": "200 g"
+},
+{
+"code": "8000500310427",
+"product_name": "Biscuits croquants au coeur onctueux de Nutella®",
+"brands": [
+"Nutella",
+"Ferrero"
+],
+"nutriscore_grade": "e",
+"nova_group": 4,
+"ecoscore_grade": "d",
+"image_front_small_url": "https://images.openfoodfacts.org/images/products/800/050/031/0427/front_fr.356.200.jpg",
+"quantity": "304 g"
+}
+]

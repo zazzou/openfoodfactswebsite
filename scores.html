@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nutri-Score, NOVA, Green-Score : comprendre les scores | Open Food Facts</title>
+<link rel="icon" href="https://static.openfoodfacts.org/images/logos/off-logo-vertical-light.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=12">
+</head>
+<body>
+<div id="site-header"></div>
+
+<div class="page-hero">
+  <div class="container">
+    <nav class="breadcrumb"><a href="index.html">Accueil</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 6 6 6-6 6"/></svg><span>Comprendre les scores</span></nav>
+    <span class="eyebrow mt-3">Décoder l'étiquette</span>
+    <h1>Trois scores, une seule question : <br>est-ce que c'est bon pour moi et pour la planète ?</h1>
+    <p class="lead">Chaque score est calculé automatiquement par Open Food Facts à partir des données de l'emballage. Les méthodes sont publiques, le code est open source, et vous pouvez tout vérifier.</p>
+  </div>
+</div>
+
+<section style="padding:8px 0 0">
+  <div class="container">
+    <div class="photo-band reveal" style="min-height:420px">
+      <video autoplay muted loop playsinline poster="https://images.unsplash.com/photo-1610348725531-843dff563e2c?w=1600&q=60&fit=crop"><source src="https://assets.mixkit.co/videos/10420/10420-720.mp4" type="video/mp4"></video>
+      <div class="row" style="gap:10px"><img src="https://static.openfoodfacts.org/images/attributes/dist/nutriscore-a-new-en.svg" alt="" style="height:56px;background:#fff;padding:6px;border-radius:10px"><img src="https://static.openfoodfacts.org/images/attributes/dist/nova-group-1.svg" alt="" style="height:56px;background:#fff;padding:6px;border-radius:10px"><img src="https://static.openfoodfacts.org/images/attributes/dist/green-score-a.svg" alt="" style="height:56px;background:#fff;padding:6px;border-radius:10px"></div>
+      <h2 style="margin:16px 0 0;max-width:18ch">Trois scores, calculés sur 4,7 millions de produits.</h2>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:48px">
+  <div class="container article">
+    <nav class="sticky-toc">
+      <a href="#nutriscore" class="active">Nutri-Score</a>
+      <a href="#nova">Groupes NOVA</a>
+      <a href="#green">Green-Score</a>
+      <a href="#faq">Questions fréquentes</a>
+    </nav>
+    <div>
+      <div class="panel" id="nutriscore" style="margin-top:0">
+        <img src="https://static.openfoodfacts.org/images/attributes/dist/nutriscore-b-new-en.svg" alt="" style="height:70px;margin-bottom:16px">
+        <h2>Nutri-Score : la qualité nutritionnelle</h2>
+        <p>Le Nutri-Score résume en une lettre, de <b>A</b> (meilleure qualité) à <b>E</b> (moins bonne), la qualité nutritionnelle d'un aliment pour 100 g ou 100 ml. Il a été conçu par Santé publique France et adopté par 7 pays européens.</p>
+        <div class="scale"><span>A</span><span>B</span><span>C</span><span>D</span><span>E</span></div>
+        <p>Le calcul attribue des <b>points négatifs</b> aux nutriments à limiter (énergie, sucres, graisses saturées, sel) et des <b>points positifs</b> aux éléments favorables (fibres, protéines, fruits, légumes, légumineuses, noix). La différence donne un score converti en lettre.</p>
+        <div class="grid-2 mt-3">
+          <div class="card" style="padding:22px;border-left:4px solid var(--ns-e)"><h3 style="margin:0 0 8px;font-size:1rem">Points négatifs</h3><p>Énergie · Sucres · Acides gras saturés · Sel</p></div>
+          <div class="card" style="padding:22px;border-left:4px solid var(--ns-a)"><h3 style="margin:0 0 8px;font-size:1rem">Points positifs</h3><p>Fibres · Protéines · Fruits, légumes, légumineuses, noix</p></div>
+        </div>
+        <div class="callout">🆕 <b>Nouvelle formule 2024.</b> Le Nutri-Score a été mis à jour pour mieux distinguer les céréales complètes, les poissons gras, les huiles et les boissons sucrées. Open Food Facts affiche la nouvelle version sur tous les produits.</div>
+        <p>Le Nutri-Score n'est <b>pas</b> un indicateur absolu : il compare des produits d'une même catégorie. Un Nutri-Score D sur une huile d'olive ne signifie pas qu'elle est mauvaise pour la santé.</p>
+      </div>
+
+      <div class="panel" id="nova">
+        <img src="https://static.openfoodfacts.org/images/attributes/dist/nova-group-4.svg" alt="" style="height:70px;margin-bottom:16px">
+        <h2>NOVA : le degré de transformation</h2>
+        <p>La classification NOVA, développée par l'université de São Paulo, ne regarde pas les nutriments mais <b>ce qu'on a fait subir à l'aliment</b>. Quatre groupes :</p>
+        <div class="scale nova"><span>1</span><span>2</span><span>3</span><span>4</span></div>
+        <ul>
+          <li><b>Groupe 1</b> – Aliments non ou peu transformés : fruits, légumes, œufs, lait, riz, viande fraîche.</li>
+          <li><b>Groupe 2</b> – Ingrédients culinaires : huile, beurre, sucre, sel, farine.</li>
+          <li><b>Groupe 3</b> – Aliments transformés : pain, fromage, conserves, poissons fumés.</li>
+          <li><b>Groupe 4</b> – Aliments ultra-transformés : sodas, biscuits industriels, plats préparés, nuggets. Ils contiennent des substances qu'on ne trouve pas en cuisine (émulsifiants, arômes, sirop de glucose…).</li>
+        </ul>
+        <div class="callout green">Des études (NutriNet-Santé, BMJ) associent une consommation élevée d'aliments du groupe 4 à des risques accrus de maladies cardiovasculaires, de diabète et d'obésité.</div>
+      </div>
+
+      <div class="panel" id="green">
+        <img src="https://static.openfoodfacts.org/images/attributes/dist/green-score-a.svg" alt="" style="height:70px;margin-bottom:16px">
+        <h2>Green-Score : l'impact environnemental</h2>
+        <p>Le Green-Score (ex-Eco-Score) note de <b>A+</b> à <b>E</b> l'impact d'un produit sur la planète, sur l'ensemble de son cycle de vie.</p>
+        <div class="scale eco"><span>A</span><span>B</span><span>C</span><span>D</span><span>E</span></div>
+        <p>Il part de l'<b>analyse du cycle de vie</b> (base Agribalyse de l'ADEME : agriculture, transformation, transport, distribution, consommation) puis applique des <b>bonus et malus</b> :</p>
+        <ul>
+          <li><b>Labels</b> – bio, Label Rouge, MSC/ASC, commerce équitable… (bonus)</li>
+          <li><b>Origine</b> – distance et politique environnementale du pays de production</li>
+          <li><b>Emballage</b> – recyclabilité des matériaux (verre, plastique, carton)</li>
+          <li><b>Espèces menacées</b> – malus pour l'huile de palme et les ingrédients liés à la déforestation</li>
+        </ul>
+        <div class="callout blue">Le Green-Score est calculé automatiquement sur les 4,7 millions de produits, mais sa précision dépend des données renseignées : origine et emballage sont souvent manquants. <a href="contribute.html" style="font-weight:700;color:var(--blue)">Aidez-nous à les compléter.</a></div>
+      </div>
+
+      <div class="panel" id="faq">
+        <h2>Questions fréquentes</h2>
+        <div style="display:grid;gap:10px" id="faqList">
+          <details><summary><b>Pourquoi un produit n'a-t-il pas de Nutri-Score ?</b></summary><p class="mt-1">Il manque probablement des valeurs nutritionnelles (sucres, fibres, sel…) ou une catégorie précise. Prenez en photo le tableau nutritionnel et nous le calculerons instantanément.</p></details>
+          <details><summary><b>Le Nutri-Score affiché est-il celui de l'emballage ?</b></summary><p class="mt-1">Non : nous le calculons nous-mêmes avec la formule officielle, ce qui permet de l'afficher même quand la marque ne le fait pas.</p></details>
+          <details><summary><b>Un Nutri-Score A peut-il être ultra-transformé ?</b></summary><p class="mt-1">Oui. Les deux indicateurs sont complémentaires : un soda light peut être Nutri-Score B mais NOVA 4.</p></details>
+          <details><summary><b>Qui décide de ces méthodes ?</b></summary><p class="mt-1">Les scientifiques et les autorités de santé. Open Food Facts ne fait qu'appliquer les formules publiées, de manière transparente et vérifiable dans notre code source.</p></details>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+<script src="assets/app.js?v=6"></script>
+<script src="assets/i18n.js?v=6"></script>
+<script>
+  OFF.mount("scores.html");
+  const links = [...document.querySelectorAll(".sticky-toc a")];
+  const spy = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) links.forEach(l => l.classList.toggle("active", l.getAttribute("href") === "#" + en.target.id)); }), { rootMargin: "-30% 0px -60% 0px" });
+  document.querySelectorAll(".panel[id]").forEach(p => spy.observe(p));
+</script>
+<style>
+  details{background:var(--sand);border-radius:14px;padding:14px 18px}
+  details summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;color:var(--brand)}
+  details summary::after{content:"+";font-size:1.3rem;color:var(--orange-dark);font-weight:700}
+  details[open] summary::after{content:"–"}
+  details p{color:var(--ink-2);font-size:.95rem;margin-bottom:0}
+</style>
+</body>
+</html>

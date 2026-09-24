@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Open Food Facts – Le Wikipédia de l'alimentation</title>
+<meta name="description" content="Scannez, comprenez et choisissez mieux vos aliments. 4,7 millions de produits, données ouvertes, faites par tout le monde, pour tout le monde.">
+<link rel="icon" href="https://static.openfoodfacts.org/images/logos/off-logo-vertical-light.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=12">
+<style>
+  /* Hero "rayon de nuit" — spécifique à l'accueil */
+  .night{position:relative;color:#fff;overflow:hidden;background:#1b0d05;isolation:isolate}
+  .night .bg{position:absolute;inset:0;z-index:-2}
+  .night .bg img{width:100%;height:100%;object-fit:cover;opacity:.5;transform:scale(1.05)}
+  .night::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(27,13,5,.97) 0%,rgba(27,13,5,.85) 45%,rgba(27,13,5,.35) 100%),linear-gradient(0deg,#1b0d05 0%,transparent 40%)}
+  .night .topbar{background:rgba(27,13,5,.55);border-bottom-color:rgba(255,255,255,.08)}
+  .night .topbar .nav a{color:rgba(255,255,255,.8)}
+  .night .topbar .nav a:hover,.night .topbar .nav a.active{background:rgba(255,255,255,.1);color:#fff}
+  .night .topbar .country{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15);color:#fff}
+  .night .topbar .btn-ghost{color:#fff}
+  .night .topbar .btn-ghost:hover{background:rgba(255,255,255,.1)}
+  .night .topbar .burger{background:rgba(255,255,255,.1);border-color:transparent;color:#fff}
+  .night .lang-menu{color:var(--ink)}
+  .night-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center;padding:72px 0 96px}
+  @media(max-width:960px){.night-grid{grid-template-columns:1fr;padding:48px 0 64px}}
+  .night h1{color:#fff;font-size:clamp(3rem,7.2vw,6.2rem);line-height:.95;letter-spacing:-.04em}
+  .night h1 .w{display:inline-block;opacity:0;transform:translateY(.5em) rotate(2deg);animation:wordin .8s cubic-bezier(.2,.8,.2,1) forwards}
+  .night h1 .accent{color:var(--orange)}
+  .night h1 .outline{color:transparent;-webkit-text-stroke:2px rgba(255,255,255,.9)}
+  @keyframes wordin{to{opacity:1;transform:none}}
+  @media(prefers-reduced-motion:reduce){.night h1 .w{opacity:1;transform:none;animation:none}}
+  .night .lead{color:rgba(255,255,255,.78);font-size:1.2rem;margin:26px 0 30px}
+  .night .eyebrow{color:var(--orange)}
+  .night .searchbar{border-color:transparent;box-shadow:0 30px 60px -20px rgba(0,0,0,.6)}
+  .night .chips span{color:rgba(255,255,255,.6)}
+  .night .chip{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.14);color:#fff}
+  .night .chip:hover{background:var(--orange);border-color:var(--orange);color:#fff}
+  .night .trust{display:flex;gap:22px;flex-wrap:wrap;margin-top:26px;font-size:.85rem;color:rgba(255,255,255,.6);font-weight:600}
+  .night .trust span{display:inline-flex;align-items:center;gap:8px}
+  .night .trust i{width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block;box-shadow:0 0 10px var(--green)}
+  .night .scanner{transform:rotate(-3deg)}
+  .night .scanner-caption{color:rgba(255,255,255,.55)}
+  .floaters{position:absolute;inset:0;pointer-events:none;z-index:0}
+  .floaters img{position:absolute;width:90px;filter:drop-shadow(0 20px 30px rgba(0,0,0,.6));opacity:.9;transition:transform .2s ease-out}
+  @media(max-width:960px){.floaters{display:none}}
+  .ticker-bar{background:var(--brand);color:#fff;padding:14px 0;border-top:1px solid rgba(255,255,255,.08)}
+  .ticker-bar .container{display:flex;gap:28px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+  .ticker-bar .n{font-family:var(--font-head);font-weight:800;font-size:1.5rem;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+  .ticker-bar .n em{font-style:normal;color:var(--orange)}
+  .ticker-bar .sep{color:rgba(255,255,255,.55);font-size:.9rem}
+  .why{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  @media(max-width:900px){.why{grid-template-columns:1fr}}
+  .why .w{position:relative;border-radius:var(--r-lg);overflow:hidden;min-height:400px;display:flex;flex-direction:column;justify-content:flex-end;padding:26px;color:#fff;isolation:isolate}
+  .why .w img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transition:transform .6s}
+  .why .w:hover img{transform:scale(1.05)}
+  .why .w::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(0,0,0,0) 30%,rgba(20,8,0,.9))}
+  .why .w .num{position:absolute;top:20px;left:22px;font-family:var(--font-head);font-weight:800;font-size:3rem;line-height:1;color:rgba(255,255,255,.35)}
+  .why .w h3{color:#fff;font-size:1.5rem;margin-bottom:8px}
+  .why .w p{color:rgba(255,255,255,.85);font-size:.95rem}
+  .why .w .badge-img{position:absolute;top:18px;right:18px;height:54px;background:#fff;padding:6px;border-radius:10px}
+</style>
+</head>
+<body>
+
+<div class="night">
+  <div class="bg"><video autoplay muted loop playsinline poster="https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=1800&q=70&fit=crop"><source src="https://assets.mixkit.co/videos/25438/25438-720.mp4" type="video/mp4"></video></div>
+  <div id="site-header"></div>
+  <div class="floaters" id="floaters">
+    <img src="https://images.openfoodfacts.org/images/products/20724696/front_en.301.200.jpg" alt="" style="right:0;top:14%;width:96px" data-depth="1.5">
+    <img src="https://images.openfoodfacts.org/images/products/544/900/021/4911/front_hi.242.200.jpg" alt="" style="right:1%;bottom:4%;width:64px;opacity:.75" data-depth="2.5">
+  </div>
+  <div class="container night-grid">
+    <div>
+      <span class="eyebrow">Base ouverte · 4,7 millions de produits · 150 pays</span>
+      <h1 style="margin-top:18px">
+        <span class="w" style="animation-delay:.05s">Ce que</span> <span class="w" style="animation-delay:.15s">vous</span> <span class="w" style="animation-delay:.25s">mangez,</span><br>
+        <span class="w accent" style="animation-delay:.4s">décodé.</span> <span class="w outline" style="animation-delay:.55s">Par tous.</span>
+      </h1>
+      <p class="lead">Scannez un code-barres ou tapez un nom. Nutri-Score, additifs, huile de palme, impact climat : tout, sur n'importe quel produit, sans pub et sans compte.</p>
+      <form class="searchbar" role="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="search" placeholder="Nutella, 3017620422003, Lindt…" aria-label="Rechercher un produit">
+        <button type="button" class="btn-scan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" width="18" height="18"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M7 8v8M11 8v8M15 8v8M18 8v8"/></svg><span>Scanner</span></button>
+        <button type="submit" class="btn btn-primary"><span>Rechercher</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+      </form>
+      <div class="chips">
+        <span>Essayez :</span>
+        <a class="chip" href="search.html?q=chocolat">Chocolat</a>
+        <a class="chip" href="search.html?q=yaourt">Yaourts</a>
+        <a class="chip" href="search.html?q=céréales">Céréales</a>
+        <a class="chip" href="search.html?q=pizza">Pizzas</a>
+        <a class="chip" href="product.html?code=5449000214911">Coca-Cola</a>
+      </div>
+      <div class="trust"><span><i></i>Association à but non lucratif</span><span>Sans publicité</span><span>Open source</span><span>Données sous licence ODbL</span></div>
+    </div>
+    <div>
+      <div class="scanner scanning" id="scanner">
+        <div class="dots"><i class="on"></i><i></i><i></i><i></i></div>
+        <div class="screen">
+          <div class="cam">
+            <div class="frame"><i></i><img id="scanImg" src="https://images.openfoodfacts.org/images/products/301/762/042/2003/front_en.879.400.jpg" alt=""></div>
+            <div class="laser"></div>
+            <div class="hint" id="scanHint">Analyse en cours…</div>
+          </div>
+          <div class="result" id="scanResult">
+            <div class="name">Nutella</div>
+            <div class="brand">Ferrero · 400 g</div>
+            <div class="scores"></div>
+            <div class="verdict bad">Huile de palme · 56 g de sucre / 100 g</div>
+          </div>
+        </div>
+      </div>
+      <p class="scanner-caption">Démo en direct : quatre vrais produits de la base, décodés en boucle.</p>
+    </div>
+  </div>
+  <div class="ticker-bar">
+    <div class="container">
+      <div class="row" style="gap:14px"><span class="live"><i></i>En direct</span><span class="n"><em id="liveCount">4 768 553</em> produits</span><span class="sep">+1 toutes les 7 s</span></div>
+      <div class="row" style="gap:24px"><span class="sep"><b style="color:#fff">280 000</b> contributeurs</span><span class="sep"><b style="color:#fff">40 M</b> de photos</span><span class="sep"><b style="color:#fff">300+</b> apps réutilisatrices</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- MARQUEE PRODUITS -->
+<div class="marquee-wrap" style="padding-top:28px">
+  <div class="marquee" id="mq1"></div>
+</div>
+<div class="marquee-wrap" style="padding-top:0">
+  <div class="marquee rev" id="mq2"></div>
+</div>
+
+<!-- POURQUOI -->
+<section>
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Trois questions, trois réponses</span>
+      <h2>Est-ce bon pour moi ? Est-ce ultra-transformé ? Est-ce bon pour la planète ?</h2>
+    </div>
+    <div class="why">
+      <a class="w reveal" href="scores.html#nutriscore">
+        <img src="https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=900&q=70&fit=crop" alt="">
+        <img class="badge-img" src="https://static.openfoodfacts.org/images/attributes/dist/nutriscore-a-new-en.svg" alt="Nutri-Score">
+        <span class="num">01</span>
+        <h3>Nutri-Score</h3>
+        <p>La qualité nutritionnelle de A à E, calculée avec la formule officielle 2024, même quand la marque ne l'affiche pas.</p>
+      </a>
+      <a class="w reveal" href="scores.html#nova">
+        <img src="https://images.unsplash.com/photo-1601599561213-832382fd07ba?w=900&q=70&fit=crop" alt="">
+        <img class="badge-img" src="https://static.openfoodfacts.org/images/attributes/dist/nova-group-4.svg" alt="NOVA">
+        <span class="num">02</span>
+        <h3>Groupe NOVA</h3>
+        <p>Le degré de transformation. Un soda light peut être Nutri-Score B et pourtant ultra-transformé.</p>
+      </a>
+      <a class="w reveal" href="scores.html#green">
+        <img src="https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=900&q=70&fit=crop" alt="">
+        <img class="badge-img" src="https://static.openfoodfacts.org/images/attributes/dist/green-score-a.svg" alt="Green-Score">
+        <span class="num">03</span>
+        <h3>Green-Score</h3>
+        <p>L'impact environnemental sur tout le cycle de vie : agriculture, transport, emballage, déforestation.</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- SIMULATEUR -->
+<section style="padding-top:0">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow green">À vous de jouer</span>
+      <h2>Fabriquez votre Nutri-Score</h2>
+      <p class="lead">Bougez les curseurs et regardez la lettre changer. C'est l'algorithme officiel (aliments généraux, version 2023), celui que nous appliquons aux 4,7 millions de produits.</p>
+    </div>
+    <div class="sim reveal">
+      <div>
+        <div class="presets" id="presets">
+          <button class="chip active" data-p="nutella">Nutella</button>
+          <button class="chip" data-p="gazpacho">Gazpacho</button>
+          <button class="chip" data-p="chips">Chips</button>
+          <button class="chip" data-p="yaourt">Yaourt nature</button>
+          <button class="chip" data-p="muesli">Muesli</button>
+        </div>
+        <div class="legend"><span><i style="background:var(--ns-e)"></i>À limiter</span><span><i style="background:var(--ns-a)"></i>À favoriser</span></div>
+        <div class="sliders" id="sliders">
+          <div class="sl"><label for="s-kcal">Énergie <small>kcal / 100 g</small></label><input class="neg" type="range" id="s-kcal" min="0" max="900" step="1"><output>0</output></div>
+          <div class="sl"><label for="s-sugars">Sucres <small>g / 100 g</small></label><input class="neg" type="range" id="s-sugars" min="0" max="80" step=".1"><output>0</output></div>
+          <div class="sl"><label for="s-satfat">Graisses saturées <small>g / 100 g</small></label><input class="neg" type="range" id="s-satfat" min="0" max="30" step=".1"><output>0</output></div>
+          <div class="sl"><label for="s-salt">Sel <small>g / 100 g</small></label><input class="neg" type="range" id="s-salt" min="0" max="5" step=".01"><output>0</output></div>
+          <div class="sl"><label for="s-fiber">Fibres <small>g / 100 g</small></label><input class="pos" type="range" id="s-fiber" min="0" max="15" step=".1"><output>0</output></div>
+          <div class="sl"><label for="s-protein">Protéines <small>g / 100 g</small></label><input class="pos" type="range" id="s-protein" min="0" max="30" step=".1"><output>0</output></div>
+          <div class="sl"><label for="s-fruit">Fruits, légumes, légumineuses <small>% du produit</small></label><input class="pos" type="range" id="s-fruit" min="0" max="100" step="1"><output>0</output></div>
+        </div>
+      </div>
+      <div class="sim-out">
+        <div class="grade e" id="simGrade">E</div>
+        <div id="simNs"></div>
+        <div class="detail">
+          <div class="neg">Points négatifs<b id="simN">0</b></div>
+          <div class="pos">Points positifs<b id="simP">0</b></div>
+          <div style="grid-column:1/-1">Score final<b id="simScore">0</b><span>A ≤ 0 · B 1–2 · C 3–10 · D 11–18 · E ≥ 19</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BENTO -->
+<section style="padding-top:0">
+  <div class="container">
+    <div class="row between reveal" style="margin-bottom:24px">
+      <div><span class="eyebrow blue">Explorer</span><h2 style="margin-top:10px">Par rayon</h2></div>
+      <a class="btn btn-outline" href="search.html">Tout le catalogue</a>
+    </div>
+    <div class="bento reveal">
+      <a class="big photo" href="search.html?q=petit-déjeuner"><img src="https://images.unsplash.com/photo-1506617420156-8e4536971650?w=1200&q=70&fit=crop" alt="">Petit-déjeuner<small>Céréales, tartinables, biscottes</small></a>
+      <a href="search.html?q=boisson" style="--bg:linear-gradient(135deg,#0064c8,#003c7a)"><img src="https://images.openfoodfacts.org/images/products/544/900/021/4911/front_hi.242.200.jpg" alt="">Boissons<small>Sodas, jus, eaux</small></a>
+      <a href="search.html?q=chocolat" style="--bg:linear-gradient(135deg,#5a2a10,#2a0e00)"><img src="https://images.openfoodfacts.org/images/products/304/692/002/2606/front_fr.235.200.jpg" alt="">Chocolats<small>Tablettes, pâtes à tartiner</small></a>
+      <a href="search.html?q=biscuits" style="--bg:linear-gradient(135deg,#cc6500,#8c3c00)"><img src="https://images.openfoodfacts.org/images/products/762/221/044/9283/front_es.590.200.jpg" alt="">Biscuits & snacks<small>Sucrés, salés, apéritif</small></a>
+      <a href="search.html?q=végan" style="--bg:linear-gradient(135deg,#00961e,#00641e)"><img src="https://images.openfoodfacts.org/images/products/541/118/811/2709/front_de.572.200.jpg" alt="">Végan & végétal<small>Laits, alternatives</small></a>
+      <a class="wide photo" href="search.html?q=bio"><img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=1200&q=70&fit=crop" alt="">Bio & labels<small>AB, Label Rouge, commerce équitable, MSC</small></a>
+      <a href="search.html?q=fruits secs" style="--bg:linear-gradient(135deg,#846f66,#52443d)"><img src="https://images.openfoodfacts.org/images/products/20724696/front_en.301.200.jpg" alt="">Fruits secs<small>Amandes, noix, cajou</small></a>
+      <a href="search.html?q=eau" style="--bg:linear-gradient(135deg,#3595f6,#0064c8)"><img src="https://images.openfoodfacts.org/images/products/327/408/000/5003/front_fr.994.200.jpg" alt="">Eaux<small>Source, minérale, gazeuse</small></a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTRIBUER : photo band -->
+<section style="padding-top:0">
+  <div class="container">
+    <div class="photo-band reveal">
+      <img src="https://images.unsplash.com/photo-1543168256-418811576931?w=1800&q=70&fit=crop" alt="">
+      <span class="eyebrow" style="color:var(--orange)">Fait par tout le monde, pour tout le monde</span>
+      <h2 style="margin:12px 0 14px;max-width:16ch">Chaque photo que vous prenez sert à des millions de gens</h2>
+      <p style="max-width:52ch;font-size:1.05rem">Scannez, prenez trois photos, validez. Notre IA lit l'étiquette, la communauté vérifie, les scores sont calculés dans la seconde. Et c'est ouvert pour toujours.</p>
+      <div class="row mt-4"><a class="btn btn-primary btn-lg" href="contribute.html">Je contribue</a><a class="btn btn-white btn-lg" href="contribute.html#app">Télécharger l'app</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- APP -->
+<section style="padding-top:0">
+  <div class="container">
+    <div class="app-cta reveal">
+      <div>
+        <span class="eyebrow">L'application</span>
+        <h2 style="margin:12px 0 14px">Le scanner dans votre poche</h2>
+        <p class="lead">Définissez vos préférences (allergènes, végétarien, sans huile de palme…) et l'app vous dit en rayon si un produit vous correspond. Hors-ligne, libre, sans pub ni traqueur.</p>
+        <div class="store-btns">
+          <a class="store" href="#"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.4 12.6c0-2.6 2.1-3.8 2.2-3.9-1.2-1.8-3.1-2-3.7-2-1.6-.2-3.1.9-3.9.9-.8 0-2-.9-3.4-.9-1.7 0-3.3 1-4.2 2.6-1.8 3.1-.5 7.8 1.3 10.3.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.4-.8 1.6 0 2 .8 3.4.8 1.4 0 2.3-1.3 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9-.1 0-2.8-1-2.8-4.2ZM13.9 5c.7-.9 1.2-2 1-3.2-1 0-2.3.7-3 1.6-.7.8-1.2 2-1.1 3.1 1.2.1 2.4-.6 3.1-1.5Z"/></svg><span><small>Télécharger sur</small><b>App Store</b></span></a>
+          <a class="store" href="#"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.6 2.3 13.4 12l-9.8 9.7c-.3-.2-.5-.6-.5-1.1V3.4c0-.5.2-.9.5-1.1Zm11.3 11.2 2.5 2.5-9.1 5.2 6.6-7.7Zm3.9-3.6 3 1.7c.8.5.8 1.3 0 1.8l-3 1.7-2.8-2.6 2.8-2.6ZM8.3 2.8l9.1 5.2-2.5 2.5-6.6-7.7Z"/></svg><span><small>Disponible sur</small><b>Google Play</b></span></a>
+        </div>
+      </div>
+      <div class="phone">
+        <div class="screen">
+          <div class="ph-top"><img src="https://static.openfoodfacts.org/images/logos/off-logo-horizontal-light.svg" alt=""></div>
+          <div class="ph-scan"><svg viewBox="0 0 120 60" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 6v48M16 6v48M24 6v48M36 6v48M44 6v48M56 6v48M62 6v48M74 6v48M84 6v48M92 6v48M104 6v48M114 6v48"/></svg></div>
+          <div class="ph-res"><b>Nutella</b><small>Ferrero · 400 g</small><div class="scores" data-ns="e" data-nova="4"></div></div>
+          <div style="margin:12px 16px;padding:12px 14px;border-radius:14px;background:var(--red-soft);font-size:.8rem;color:#b83232;font-weight:600">⚠︎ Contient de l'huile de palme<br><span style="font-weight:500">Ne correspond pas à vos préférences</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DATA -->
+<section style="padding-top:0">
+  <div class="container">
+    <div class="band reveal">
+      <div class="grid-2" style="align-items:center;position:relative">
+        <div>
+          <span class="eyebrow" style="color:var(--orange)">Données ouvertes</span>
+          <h2 style="margin:12px 0 14px">Une API gratuite, utilisée par plus de 300 applications</h2>
+          <p style="font-size:1.05rem">Yuka, Foodvisor, Open Prices et des centaines de projets de recherche s'appuient sur nos données. Licence ODbL : réutilisez, même commercialement.</p>
+          <div class="row mt-4"><a class="btn btn-primary" href="data.html">Documentation de l'API</a><a class="btn btn-white" href="data.html#exports">Télécharger le dump</a></div>
+        </div>
+        <div class="code" id="typed">
+          <div class="code-head"><i></i><i></i><i></i></div><pre style="margin:0;font:inherit;white-space:pre-wrap" id="typedBody"></pre>
+        </div>
+      </div>
+    </div>
+    <div class="logos mt-6 reveal"><span>Yuka</span><span>Foodvisor</span><span>ScanUp</span><span>Open Prices</span><span>INRAE</span><span>Santé publique France</span><span>Wikidata</span></div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+<div class="bigmark" aria-hidden="true">open food facts</div>
+
+<script src="assets/app.js?v=6"></script>
+<script src="assets/i18n.js?v=6"></script>
+<script>
+  OFF.mount("index.html");
+  document.querySelectorAll(".scores[data-ns]").forEach(el => el.innerHTML = OFF.ns(el.dataset.ns) + OFF.nova(el.dataset.nova));
+
+  /* ---- Parallaxe des produits flottants ---- */
+  const fl = document.getElementById("floaters");
+  document.querySelector(".night").addEventListener("mousemove", e => {
+    const cx = innerWidth / 2, cy = 300;
+    fl.querySelectorAll("img").forEach(im => { const d = +im.dataset.depth; im.style.transform = `translate(${(e.clientX - cx) / (40 / d)}px, ${(e.clientY - cy) / (40 / d)}px) rotate(${(e.clientX - cx) / 80}deg)`; });
+  });
+
+  /* ---- Scanner : boucle sur 4 vrais produits ---- */
+  const DEMO = [
+    { img: "https://images.openfoodfacts.org/images/products/301/762/042/2003/front_en.879.400.jpg", name: "Nutella", brand: "Ferrero · 400 g", ns: "e", nova: 4, eco: "d", v: ["bad", "Huile de palme · 56 g de sucre / 100 g"] },
+    { img: "https://images.openfoodfacts.org/images/products/316/893/016/3480/front_fr.113.400.jpg", name: "Gazpacho l'original", brand: "Alvalle · 1 L", ns: "a", nova: 3, eco: "a", v: ["good", "94 % de légumes · faible en graisses saturées"] },
+    { img: "https://images.openfoodfacts.org/images/products/544/900/021/4911/front_hi.242.400.jpg", name: "Coca-Cola", brand: "Coca-Cola · 33 cl", ns: "e", nova: 4, eco: "not-applicable", v: ["bad", "10,6 g de sucre / 100 ml · colorant E150d"] },
+    { img: "https://images.openfoodfacts.org/images/products/730/040/048/1588/front.7.400.jpg", name: "Wasa Fibres", brand: "Wasa · 230 g", ns: "a", nova: 3, eco: "b", v: ["good", "Riche en fibres · sans additifs"] },
+  ];
+  const sc = document.getElementById("scanner"), scImg = document.getElementById("scanImg"), res = document.getElementById("scanResult"), hint = document.getElementById("scanHint");
+  let di = 0;
+  function showDemo(i) {
+    const p = DEMO[i];
+    sc.classList.remove("done"); sc.classList.add("scanning"); hint.textContent = OFF.t("Analyse en cours…");
+    scImg.style.opacity = 0;
+    setTimeout(() => { scImg.src = p.img; scImg.style.opacity = 1; }, 300);
+    sc.querySelectorAll(".dots i").forEach((d, k) => d.classList.toggle("on", k === i));
+    setTimeout(() => {
+      res.querySelector(".name").textContent = p.name; res.querySelector(".brand").textContent = p.brand;
+      res.querySelector(".scores").innerHTML = OFF.ns(p.ns) + OFF.nova(p.nova) + OFF.eco(p.eco);
+      res.querySelector(".verdict").className = "verdict " + p.v[0]; res.querySelector(".verdict").textContent = OFF.t(p.v[1]);
+      sc.classList.remove("scanning"); sc.classList.add("done"); hint.textContent = OFF.t("Produit reconnu");
+    }, 1500);
+  }
+  showDemo(0);
+  setInterval(() => { di = (di + 1) % DEMO.length; showDemo(di); }, 4800);
+  sc.addEventListener("click", () => { di = (di + 1) % DEMO.length; showDemo(di); });
+
+  /* ---- Compteur "en direct" ---- */
+  let live = 4768553; const lc = document.getElementById("liveCount");
+  setInterval(() => { live += 1; lc.textContent = live.toLocaleString("fr-FR"); lc.style.color = "#fff"; setTimeout(() => lc.style.color = "", 300); }, 7000);
+
+  /* ---- Marquee de vrais produits ---- */
+  fetch("assets/sample.json").then(r => r.json()).then(list => {
+    const seen = new Set(); const uniq = list.filter(p => { const k = p.product_name.slice(0, 6); if (seen.has(k)) return false; seen.add(k); return true; });
+    const a = uniq.slice(0, 9), b = uniq.slice(9, 18);
+    document.getElementById("mq1").innerHTML = [...a, ...a].map(OFF.tile).join("");
+    document.getElementById("mq2").innerHTML = [...b, ...b].map(OFF.tile).join("");
+    OFF.tilt(".marquee .tile", 10);
+  });
+
+  /* ---- Simulateur Nutri-Score (aliments généraux, 2023) ---- */
+  const pts = (v, th) => th.filter(t => v > t).length;
+  const T = {
+    kj: [335, 670, 1005, 1340, 1675, 2010, 2345, 2680, 3015, 3350],
+    sugars: [3.4, 6.8, 10, 14, 17, 20, 24, 27, 31, 34, 37, 41, 44, 48, 51],
+    satfat: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    salt: [.2, .4, .6, .8, 1, 1.2, 1.4, 1.6, 1.8, 2, 2.2, 2.4, 2.6, 2.8, 3, 3.2, 3.4, 3.6, 3.8, 4],
+    fiber: [3, 4.1, 5.2, 6.3, 7.4],
+    protein: [2.4, 4.8, 7.2, 9.6, 12, 14, 17],
+  };
+  const PRESETS = {
+    nutella: { kcal: 539, sugars: 56.3, satfat: 10.6, salt: .107, fiber: 0, protein: 6.3, fruit: 0 },
+    gazpacho: { kcal: 38, sugars: 3.3, satfat: .4, salt: .8, fiber: 1.4, protein: .9, fruit: 94 },
+    chips: { kcal: 536, sugars: .5, satfat: 3.2, salt: 1.5, fiber: 4, protein: 6, fruit: 0 },
+    yaourt: { kcal: 60, sugars: 5, satfat: 2, salt: .12, fiber: 0, protein: 4, fruit: 0 },
+    muesli: { kcal: 380, sugars: 14, satfat: 1.2, salt: .1, fiber: 9, protein: 10, fruit: 25 },
+  };
+  const S = id => document.getElementById("s-" + id);
+  const ids = ["kcal", "sugars", "satfat", "salt", "fiber", "protein", "fruit"];
+  let lastGrade = "";
+  function compute() {
+    const v = Object.fromEntries(ids.map(k => [k, +S(k).value]));
+    ids.forEach(k => S(k).nextElementSibling.textContent = v[k].toLocaleString("fr-FR") + (k === "fruit" ? " %" : k === "kcal" ? "" : " g"));
+    const N = pts(v.kcal * 4.184, T.kj) + pts(v.sugars, T.sugars) + pts(v.satfat, T.satfat) + pts(v.salt, T.salt);
+    const fruitPts = v.fruit > 80 ? 5 : v.fruit > 60 ? 2 : v.fruit > 40 ? 1 : 0;
+    const prot = pts(v.protein, T.protein), fib = pts(v.fiber, T.fiber);
+    const P = fib + fruitPts + ((N >= 11 && fruitPts < 5) ? 0 : prot);
+    const score = N - P;
+    const g = score <= 0 ? "a" : score <= 2 ? "b" : score <= 10 ? "c" : score <= 18 ? "d" : "e";
+    const el = document.getElementById("simGrade");
+    el.className = "grade " + g; el.textContent = g.toUpperCase();
+    if (g !== lastGrade) { el.classList.add("flip"); setTimeout(() => el.classList.remove("flip"), 300); lastGrade = g; }
+    document.getElementById("simNs").innerHTML = OFF.ns(g, 1);
+    document.getElementById("simN").textContent = N; document.getElementById("simP").textContent = P; document.getElementById("simScore").textContent = score;
+  }
+  function preset(name) { const p = PRESETS[name]; ids.forEach(k => S(k).value = p[k]); compute(); }
+  ids.forEach(k => S(k).addEventListener("input", () => { document.querySelectorAll("#presets .chip").forEach(c => c.classList.remove("active")); compute(); }));
+  document.querySelectorAll("#presets .chip").forEach(b => b.addEventListener("click", () => { document.querySelectorAll("#presets .chip").forEach(c => c.classList.remove("active")); b.classList.add("active"); preset(b.dataset.p); }));
+  preset("nutella");
+
+  /* ---- Code qui se tape tout seul ---- */
+  const CODE = `<span class="c"># Un produit par code-barres</span>\n<span class="k">GET</span> https://world.openfoodfacts.org/api/v2/product/<span class="n">3017620422003</span>\n\n{\n  <span class="s">"product_name"</span>: <span class="s">"Nutella"</span>,\n  <span class="s">"nutriscore_grade"</span>: <span class="s">"e"</span>,\n  <span class="s">"nova_group"</span>: <span class="n">4</span>,\n  <span class="s">"ingredients_text_fr"</span>: <span class="s">"Sucre, huile de palme, NOISETTES 13%…"</span>,\n  <span class="s">"nutriments"</span>: { <span class="s">"sugars_100g"</span>: <span class="n">56.3</span>, … }\n}`;
+  const tb = document.getElementById("typedBody");
+  let typed = false;
+  new IntersectionObserver(es => { if (es[0].isIntersecting && !typed) { typed = true; let i = 0; const tick = () => { i += 3; tb.innerHTML = CODE.slice(0, i) + '<span class="cursor"></span>'; if (i < CODE.length) setTimeout(tick, 12); else tb.innerHTML = CODE; }; tick(); } }).observe(tb);
+  OFF.tilt(".bento a", 6);
+</script>
+</body>
+</html>

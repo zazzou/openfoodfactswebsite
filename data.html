@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Données ouvertes, API et SDK | Open Food Facts</title>
+<link rel="icon" href="https://static.openfoodfacts.org/images/logos/off-logo-vertical-light.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=12">
+</head>
+<body>
+<div id="site-header"></div>
+
+<div class="page-hero" style="background:var(--brand);color:#fff;padding-bottom:72px;position:relative;overflow:hidden;isolation:isolate"><img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=1800&q=60&fit=crop" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.16;z-index:-1">
+  <div class="container two-col">
+    <div>
+      <span class="eyebrow" style="color:var(--orange)">Open data · Licence ODbL</span>
+      <h1 style="color:#fff">La plus grande base alimentaire ouverte du monde. <span style="color:var(--orange)">Servez-vous.</span></h1>
+      <p class="lead" style="color:rgba(255,255,255,.75)">4,7 millions de produits, 150 pays, mis à jour en continu. Une API REST gratuite, des SDK dans 10 langages, des exports complets chaque nuit.</p>
+      <div class="row mt-4"><a class="btn btn-primary btn-lg" href="#api">Commencer avec l'API</a><a class="btn btn-white btn-lg" href="#exports">Télécharger les données</a></div>
+    </div>
+    <div class="code" style="background:#1b0d05">
+      <div class="code-head"><i></i><i></i><i></i></div>
+<span class="c"># Essayez maintenant, sans clé d'API</span>
+<span class="k">curl</span> https://world.openfoodfacts.org/api/v2/product/<span class="n">3017620422003</span> \
+  <span class="k">-H</span> <span class="s">"User-Agent: MonApp/1.0 (contact@exemple.fr)"</span>
+
+<span class="c"># Recherche plein texte (Search-a-licious)</span>
+<span class="k">curl</span> <span class="s">"https://search.openfoodfacts.org/search?q=chocolat noir&page_size=10"</span>
+
+<span class="c"># Filtrer : Nutri-Score A, bio, en France</span>
+<span class="k">curl</span> <span class="s">"https://search.openfoodfacts.org/search?q=nutriscore_grade:a labels_tags:en:organic countries_tags:en:france"</span></div>
+  </div>
+</div>
+
+<div class="stats light">
+  <div class="container stats-grid">
+    <div class="stat"><b><span data-count="300" data-suffix="+"></span></b><span>applications utilisent l'API</span></div>
+    <div class="stat"><b><span data-count="1200" data-suffix="+"></span></b><span>publications scientifiques</span></div>
+    <div class="stat"><b><span data-count="100" data-suffix=" M"></span></b><span>requêtes API par mois</span></div>
+    <div class="stat"><b><span data-count="10"></span></b><span>SDK officiels</span></div>
+  </div>
+</div>
+
+<section id="api">
+  <div class="container">
+    <div class="section-head"><span class="eyebrow">API REST v2</span><h2>Les endpoints essentiels</h2><p class="lead">Aucune clé requise en lecture. Identifiez simplement votre application avec un User-Agent. L'écriture demande un compte Open Food Facts.</p></div>
+    <div style="display:grid;gap:10px">
+      <div class="endpoint"><span class="m">GET</span>/api/v2/product/{code}<span class="d">Une fiche produit complète par code-barres</span></div>
+      <div class="endpoint"><span class="m">GET</span>/api/v2/search?categories_tags=…&nutrition_grades_tags=…<span class="d">Recherche par facettes (catégorie, marque, label, score)</span></div>
+      <div class="endpoint"><span class="m">GET</span>search.openfoodfacts.org/search?q=…<span class="d">Recherche plein texte, tri, agrégations</span></div>
+      <div class="endpoint"><span class="m post">POST</span>/cgi/product_jqm2.pl<span class="d">Créer ou modifier un produit</span></div>
+      <div class="endpoint"><span class="m post">POST</span>/cgi/product_image_upload.pl<span class="d">Envoyer une photo</span></div>
+      <div class="endpoint"><span class="m">GET</span>/api/v2/taxonomy?tagtype=…<span class="d">Taxonomies : catégories, additifs, allergènes, labels…</span></div>
+      <div class="endpoint"><span class="m">GET</span>robotoff.openfoodfacts.org/api/v1/questions<span class="d">Questions générées par l'IA à valider</span></div>
+    </div>
+    <div class="row mt-4"><a class="btn btn-brand" href="#">Documentation OpenAPI complète</a><a class="btn btn-outline" href="#">Tutoriel : votre première requête</a><a class="btn btn-ghost" href="#">Tester dans le navigateur</a></div>
+  </div>
+</section>
+
+<section id="sdk" style="padding-top:0">
+  <div class="container">
+    <div class="section-head"><span class="eyebrow green">SDK officiels</span><h2>Dans votre langage préféré</h2></div>
+    <div class="grid-4" style="gap:12px">
+      <a class="sdk" href="#"><i style="background:#3572a5">Py</i>Python</a>
+      <a class="sdk" href="#"><i style="background:#e0b000;color:#222">JS</i>JavaScript / Node</a>
+      <a class="sdk" href="#"><i style="background:#0175c2">Dt</i>Dart / Flutter</a>
+      <a class="sdk" href="#"><i style="background:#b07219">Jv</i>Java / Kotlin</a>
+      <a class="sdk" href="#"><i style="background:#f05138">Sw</i>Swift</a>
+      <a class="sdk" href="#"><i style="background:#4f5d95">Php</i>PHP</a>
+      <a class="sdk" href="#"><i style="background:#701516">Rb</i>Ruby</a>
+      <a class="sdk" href="#"><i style="background:#dea584;color:#222">Rs</i>Rust</a>
+      <a class="sdk" href="#"><i style="background:#007d9c">Go</i>Go</a>
+      <a class="sdk" href="#"><i style="background:#178600">C#</i>.NET</a>
+      <a class="sdk" href="#"><i style="background:#198ce7">R</i>R</a>
+      <a class="sdk" href="#"><i style="background:#0064c8">Elx</i>Elixir</a>
+    </div>
+  </div>
+</section>
+
+<section id="exports" style="background:#fff;border-block:1px solid var(--line-2)">
+  <div class="container two-col">
+    <div>
+      <span class="eyebrow blue">Exports complets</span>
+      <h2 style="margin:12px 0 14px">Toute la base, chaque nuit</h2>
+      <p class="lead">Pour la recherche, la data science ou l'entraînement de modèles. Les dumps sont régénérés quotidiennement. Les images sont disponibles sur demande via AWS Open Data.</p>
+      <div class="callout blue mt-3"><b>Licence ODbL.</b> Vous pouvez tout réutiliser, y compris commercialement, à condition de citer Open Food Facts et de partager vos améliorations de la base sous la même licence.</div>
+    </div>
+    <div style="display:grid;gap:10px">
+      <div class="dl"><div><b>Parquet (recommandé)</b><small>Hugging Face · ~2,5 Go · colonnes typées</small></div><a class="btn btn-brand btn-sm" href="#">Télécharger</a></div>
+      <div class="dl"><div><b>JSONL complet</b><small>~9 Go compressé · toutes les colonnes</small></div><a class="btn btn-outline btn-sm" href="#">Télécharger</a></div>
+      <div class="dl"><div><b>CSV</b><small>~10 Go · 200 colonnes principales</small></div><a class="btn btn-outline btn-sm" href="#">Télécharger</a></div>
+      <div class="dl"><div><b>MongoDB dump</b><small>~11 Go · réplique de la base de production</small></div><a class="btn btn-outline btn-sm" href="#">Télécharger</a></div>
+      <div class="dl"><div><b>Deltas quotidiens</b><small>Uniquement les produits modifiés dans la journée</small></div><a class="btn btn-outline btn-sm" href="#">Parcourir</a></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="section-head center"><span class="eyebrow">Ils construisent avec nos données</span><h2>Plus de 300 réutilisations</h2></div>
+    <div class="grid-3">
+      <div class="quote reveal"><p>Open Food Facts est la colonne vertébrale de notre application. Sans cette base ouverte, Yuka n'existerait pas.</p><footer>Équipe Yuka · 50 M d'utilisateurs</footer></div>
+      <div class="quote reveal"><p>Nous avons entraîné nos modèles de vision sur les 40 millions de photos de produits. Une ressource unique au monde.</p><footer>Laboratoire de recherche en IA</footer></div>
+      <div class="quote reveal"><p>Les données ODbL nous permettent de comparer l'offre alimentaire entre pays et de mesurer l'effet des politiques publiques.</p><footer>Chercheurs en santé publique</footer></div>
+    </div>
+    <div class="center mt-4"><a class="btn btn-outline" href="#">Ajouter votre projet à la liste</a></div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+<script src="assets/app.js?v=6"></script>
+<script src="assets/i18n.js?v=6"></script>
+<script>OFF.mount("data.html");</script>
+</body>
+</html>

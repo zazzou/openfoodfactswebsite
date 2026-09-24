@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Explorer les produits | Open Food Facts</title>
+<link rel="icon" href="https://static.openfoodfacts.org/images/logos/off-logo-vertical-light.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=12">
+</head>
+<body>
+<div id="site-header"></div>
+
+<div class="page-hero" style="padding-bottom:32px">
+  <div class="container">
+    <span class="eyebrow">Explorer</span>
+    <h1 style="font-size:clamp(1.8rem,3.5vw,2.6rem)">Rechercher parmi 4,7 millions de produits</h1>
+    <form class="searchbar mt-3" role="search" id="searchForm" style="max-width:820px">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input type="search" id="q" placeholder="Nom, marque, code-barres…" aria-label="Rechercher">
+      <button type="button" class="btn-scan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" width="18" height="18"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M7 8v8M11 8v8M15 8v8M18 8v8"/></svg><span>Scanner</span></button>
+      <button type="submit" class="btn btn-primary"><span>Rechercher</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+    </form>
+    <div class="chips">
+      <a class="chip" href="search.html?q=chocolat">Chocolat</a><a class="chip" href="search.html?q=yaourt">Yaourts</a><a class="chip" href="search.html?q=céréales">Céréales</a><a class="chip" href="search.html?q=pizza">Pizzas</a><a class="chip" href="search.html?q=jus d'orange">Jus d'orange</a><a class="chip" href="search.html?q=biscuits">Biscuits</a>
+    </div>
+  </div>
+</div>
+
+<div class="container search-layout">
+  <aside class="filters" id="filters">
+    <h3>Nutri-Score</h3>
+    <label><input type="checkbox" name="ns" value="a"><span class="ns"><i class="a on">A</i></span> A – Excellente<span class="count"></span></label>
+    <label><input type="checkbox" name="ns" value="b"><span class="ns"><i class="b on">B</i></span> B – Bonne</label>
+    <label><input type="checkbox" name="ns" value="c"><span class="ns"><i class="c on">C</i></span> C – Moyenne</label>
+    <label><input type="checkbox" name="ns" value="d"><span class="ns"><i class="d on">D</i></span> D – Faible</label>
+    <label><input type="checkbox" name="ns" value="e"><span class="ns"><i class="e on">E</i></span> E – Très faible</label>
+    <h3>Transformation (NOVA)</h3>
+    <label><input type="checkbox" name="nova" value="1"> Non transformé</label>
+    <label><input type="checkbox" name="nova" value="2"> Ingrédients culinaires</label>
+    <label><input type="checkbox" name="nova" value="3"> Transformé</label>
+    <label><input type="checkbox" name="nova" value="4"> Ultra-transformé</label>
+    <h3>Régime & labels</h3>
+    <label><input type="checkbox" name="label" value="en:organic"> 🌱 Bio</label>
+    <label><input type="checkbox" name="label" value="en:vegan"> 🌿 Végan</label>
+    <label><input type="checkbox" name="label" value="en:no-gluten"> 🌾 Sans gluten</label>
+    <label><input type="checkbox" name="label" value="en:fair-trade"> 🤝 Commerce équitable</label>
+    <h3>Ingrédients</h3>
+    <label><input type="checkbox" name="ia" value="en:palm-oil-free"> Sans huile de palme</label>
+    <label><input type="checkbox" name="additives" value="0"> Sans additifs</label>
+    <button class="btn btn-outline btn-sm mt-3" style="width:100%" id="reset">Réinitialiser</button>
+  </aside>
+
+  <main>
+    <div class="results-head">
+      <div class="n" id="count">Chargement…</div>
+      <div class="row">
+        <button class="btn btn-outline btn-sm" id="toggleFilters" style="display:none">Filtres</button>
+        <select class="sort" id="sort" aria-label="Trier">
+          <option value="">Pertinence</option>
+          <option value="unique_scans_n">Popularité</option>
+          <option value="nutriscore_score">Nutri-Score (meilleur d'abord)</option>
+          <option value="created_t">Nouveautés</option>
+        </select>
+      </div>
+    </div>
+    <div class="active-filters" id="activeFilters"></div>
+    <div class="results" id="results"></div>
+    <div class="pagination" id="pagination"></div>
+  </main>
+</div>
+
+<div id="site-footer"></div>
+<script src="assets/app.js?v=6"></script>
+<script src="assets/i18n.js?v=6"></script>
+<script>
+  OFF.mount("search.html");
+  const params = new URLSearchParams(location.search);
+  const qInput = document.getElementById("q");
+  qInput.value = params.get("q") || "";
+  let page = 1;
+  const media = matchMedia("(max-width:900px)");
+  const tf = document.getElementById("toggleFilters");
+  const syncTf = () => tf.style.display = media.matches ? "" : "none"; syncTf(); media.addEventListener("change", syncTf);
+  tf.addEventListener("click", () => document.getElementById("filters").classList.toggle("open"));
+
+  function filters() {
+    const facets = [], flags = {}, chips = [];
+    const get = n => [...document.querySelectorAll(`input[name="${n}"]:checked`)].map(i => i.value);
+    get("ns").forEach(v => { facets.push({ type: "nutrition_grades", value: v }); chips.push("Nutri-Score " + v.toUpperCase()); });
+    get("nova").forEach(v => { facets.push({ type: "nova_groups", value: v }); chips.push("NOVA " + v); });
+    get("label").forEach(v => { facets.push({ type: "labels", value: v }); chips.push(v.replace("en:", "").replace(/-/g, " ")); });
+    if (get("ia").length) { flags.palm = "without"; chips.push(OFF.t("sans huile de palme")); }
+    if (get("additives").length) { flags.additives = "without"; chips.push(OFF.t("sans additifs")); }
+    return { facets, flags, chips };
+  }
+  async function run() {
+    const q = qInput.value.trim();
+    const { facets, flags, chips } = filters();
+    document.getElementById("activeFilters").innerHTML = chips.map(c => `<span class="chip active">${c}</span>`).join("");
+    const res = document.getElementById("results");
+    res.innerHTML = Array.from({ length: 8 }, () => '<div class="tile"><div class="skeleton" style="height:150px"></div><div class="skeleton" style="height:16px;width:80%"></div><div class="skeleton" style="height:12px;width:50%"></div></div>').join("");
+    document.getElementById("count").textContent = OFF.t("Recherche…");
+    const r = await OFF.search(q, { page, pageSize: 24, sort: document.getElementById("sort").value, facets, flags });
+    const list = (r.products || []);
+    res.innerHTML = list.length ? list.map(OFF.tile).join("") : '<div class="card" style="grid-column:1/-1;text-align:center"><h3>${OFF.t("Aucun résultat")}</h3><p>${OFF.t("Essayez un autre terme, ou")} <a href="contribute.html" style="color:var(--orange-dark);font-weight:700">${OFF.t("ajoutez ce produit")}</a>.</p></div>';
+    document.getElementById("count").innerHTML = r.offline ? `<b>${list.length}</b> ${OFF.t("produits (mode hors-ligne, données de démonstration)")}` : `<b>${(r.count || 0).toLocaleString(OFF.locale)}</b> ${OFF.t("produits")}${q ? ` ${OFF.t("pour")} « ${OFF.esc(q)} »` : ""}`;
+    const pages = Math.min(r.pages || 1, 20), pg = document.getElementById("pagination");
+    pg.innerHTML = pages > 1 ? Array.from({ length: Math.min(pages, 7) }, (_, i) => `<button class="${i + 1 === page ? "active" : ""}" data-p="${i + 1}">${i + 1}</button>`).join("") + (pages > 7 ? `<button data-p="${page + 1}">›</button>` : "") : "";
+    pg.querySelectorAll("button").forEach(b => b.addEventListener("click", () => { page = +b.dataset.p; run(); scrollTo({ top: 0, behavior: "smooth" }); }));
+    history.replaceState(null, "", "search.html" + (q ? "?q=" + encodeURIComponent(q) : ""));
+  }
+  document.getElementById("searchForm").addEventListener("submit", e => { e.preventDefault(); e.stopImmediatePropagation(); const v = qInput.value.trim(); if (/^\d{8,14}$/.test(v)) return location.href = "product.html?code=" + v; page = 1; run(); }, true);
+  document.querySelectorAll("#filters input").forEach(i => i.addEventListener("change", () => { if ((i.name === "ns" || i.name === "nova") && i.checked) document.querySelectorAll(`input[name="${i.name}"]`).forEach(o => { if (o !== i) o.checked = false; }); page = 1; run(); }));
+  document.getElementById("sort").addEventListener("change", () => { page = 1; run(); });
+  document.getElementById("reset").addEventListener("click", () => { document.querySelectorAll("#filters input").forEach(i => i.checked = false); page = 1; run(); });
+  run();
+</script>
+</body>
+</html>
