@@ -1913,5 +1913,17 @@ window.OFF_I18N_ES = {
 "Nigeria": "Nigeria",
 "Kenya": "Kenia",
 "Portugal": "Portugal",
-"Chiffre en direct depuis l'API Open Food Facts": "Cifra en directo desde la API de Open Food Facts"
+"Chiffre en direct depuis l'API Open Food Facts": "Cifra en directo desde la API de Open Food Facts",
+"Flux en direct · API Open Food Facts": "Flujo en directo · API de Open Food Facts",
+"Les 24 produits modifiés le plus récemment. L'API n'expose pas le détail d'une révision.": "Los 24 productos editados más recientemente. La API no expone el detalle de una revisión.",
+"fiche créée": "ficha creada",
+"de cette fiche": "de esta ficha",
+"Compteurs en direct · Robotoff": "Contadores en directo · Robotoff",
+"Produits dans la base": "Productos en la base",
+"Dernier ajout": "Última incorporación",
+"Les trois derniers produits créés, en direct :": "Los tres últimos productos creados, en directo:",
+"voir toutes les modifications": "ver todas las modificaciones",
+"En direct depuis l'API": "En directo desde la API",
+"API indisponible": "API no disponible",
+"à l'instant": "ahora mismo"
 };

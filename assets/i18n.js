@@ -1138,6 +1138,18 @@
     "Mon profil": "My profile",
     "Nutri-Score, NOVA, Green-Score": "Nutri-Score, NOVA, Green-Score",
     "Chiffre en direct depuis l'API Open Food Facts": "Live figure from the Open Food Facts API",
+    "Flux en direct · API Open Food Facts": "Live feed · Open Food Facts API",
+    "Les 24 produits modifiés le plus récemment. L'API n'expose pas le détail d'une révision.": "The 24 most recently edited products. The API does not expose the details of a revision.",
+    "fiche créée": "product created",
+    "de cette fiche": "of this product",
+    "Compteurs en direct · Robotoff": "Live counters · Robotoff",
+    "Produits dans la base": "Products in the database",
+    "Dernier ajout": "Latest addition",
+    "Les trois derniers produits créés, en direct :": "The three most recently created products, live:",
+    "voir toutes les modifications": "see all changes",
+    "En direct depuis l'API": "Live from the API",
+    "API indisponible": "API unavailable",
+    "à l'instant": "just now",
   };
 
   // langue d'interface : fr (source), en, es (dictionnaire séparé dans i18n-es.js) ; toute autre langue de contenu → interface en anglais

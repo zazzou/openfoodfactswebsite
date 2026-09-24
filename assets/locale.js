@@ -42,7 +42,11 @@
   if (!LANGUAGES[lang]) lang = "en";
   const uiLang = UI_LANGS.includes(lang) ? lang : "en";
 
-  const api = () => country === "world" ? "https://world.openfoodfacts.org" : `https://${country}.openfoodfacts.org`;
+  /* Les sous-domaines pays refusent la recherche aux navigateurs (503) : on interroge
+     toujours world et on filtre par pays avec countries_tags. */
+  const COUNTRY_TAGS = {"fr": "en:france", "us": "en:united-states", "de": "en:germany", "es": "en:spain", "it": "en:italy", "uk": "en:united-kingdom", "ca": "en:canada", "nl": "en:netherlands", "ch": "en:switzerland", "be": "en:belgium", "ie": "en:ireland", "au": "en:australia", "pl": "en:poland", "pt": "en:portugal", "at": "en:austria", "se": "en:sweden", "mx": "en:mexico", "br": "en:brazil", "ru": "en:russia", "dk": "en:denmark", "cz": "en:czech-republic", "ro": "en:romania", "hu": "en:hungary", "ma": "en:morocco", "no": "en:norway", "fi": "en:finland", "gr": "en:greece", "ar": "en:argentina", "jp": "en:japan", "in": "en:india", "tr": "en:turkey", "hr": "en:croatia", "nz": "en:new-zealand", "za": "en:south-africa", "sk": "en:slovakia", "bg": "en:bulgaria", "rs": "en:serbia", "dz": "en:algeria", "tn": "en:tunisia", "cl": "en:chile", "co": "en:colombia", "il": "en:israel", "kr": "en:south-korea", "cn": "en:china", "th": "en:thailand", "id": "en:indonesia", "vn": "en:vietnam", "ua": "en:ukraine", "si": "en:slovenia", "ae": "en:united-arab-emirates", "sa": "en:saudi-arabia", "eg": "en:egypt", "ng": "en:nigeria", "ke": "en:kenya"};
+  const api = () => "https://world.openfoodfacts.org";
+  const countryTag = () => COUNTRY_TAGS[country] || null;
   function set({ country: c, lang: l }) {
     if (c !== undefined) store("off_country", c === "world" ? null : c);
     if (l !== undefined) store("off_lang", l);
@@ -51,6 +55,6 @@
   const info = cc => COUNTRIES.find(c => c[0] === cc) || COUNTRIES[0];
 
   window.OFF = window.OFF || {};
-  OFF.locale = Object.assign(OFF.locale || {}, { COUNTRIES, LANGUAGES, UI_LANGS, country, lang, uiLang, api, set, info });
+  OFF.locale = Object.assign(OFF.locale || {}, { COUNTRIES, LANGUAGES, UI_LANGS, COUNTRY_TAGS, country, lang, uiLang, api, countryTag, set, info });
   OFF.lang = lang; OFF.uiLang = uiLang; OFF.country = country;
 })();

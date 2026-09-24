@@ -21,14 +21,14 @@
       <div class="row mt-4"><a class="btn btn-primary btn-lg" href="#app">Télécharger l'app</a><a class="btn btn-outline btn-lg" href="edit.html?new=1">Ajouter un produit sur le site</a></div>
     </div>
     <div class="card" style="padding:28px">
-      <div class="row between"><h3 style="margin:0">En direct</h3><span class="tag ok"><span style="width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block"></span> Contributions du jour</span></div>
+      <div class="row between"><h3 style="margin:0">En direct</h3><span class="tag ok" id="liveState"><span style="width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block"></span> Chargement…</span></div>
       <div class="grid-2 mt-3" style="gap:14px">
-        <div class="fact"><small>Produits ajoutés</small><b style="font-size:1.6rem" data-count="1284"></b></div>
-        <div class="fact"><small>Photos envoyées</small><b style="font-size:1.6rem" data-count="6410"></b></div>
-        <div class="fact"><small>Fiches modifiées</small><b style="font-size:1.6rem" data-count="3927"></b></div>
-        <div class="fact"><small>Nouveaux contributeurs</small><b style="font-size:1.6rem" data-count="212"></b></div>
+        <div class="fact"><small>Produits dans la base</small><b style="font-size:1.6rem" id="cTotal">…</b></div>
+        <div class="fact"><small>Dernier ajout</small><b style="font-size:1.6rem" id="cLast">…</b></div>
       </div>
-      <div class="contrib-strip" style="margin-top:16px;padding:14px 16px"><div class="row"><div class="avatars"><span>AL</span><span>MB</span><span>JP</span><span>+</span></div><small class="muted">Merci à <b><a href="profile.html?user=teolemon">teolemon</a>, <a href="profile.html?user=charlesnepote">charlesnepote</a>, <a href="profile.html?user=aleene">aleene</a></b> et 209 autres aujourd'hui · <a href="changes.html" style="color:var(--orange-dark);font-weight:700">voir les modifications</a></small></div></div>
+      <p class="muted mt-3" style="font-size:.85rem;margin-bottom:6px">Les trois derniers produits créés, en direct :</p>
+      <div id="lastAdded" style="display:grid;gap:8px"></div>
+      <div class="contrib-strip" style="margin-top:16px;padding:14px 16px"><div class="row"><small class="muted">Chaque ajout est visible immédiatement · <a href="changes.html" style="color:var(--orange-dark);font-weight:700">voir toutes les modifications</a></small></div></div>
     </div>
   </div>
 </div>
@@ -91,13 +91,55 @@
 </section>
 
 <div id="site-footer"></div>
-<script src="assets/locale.js?v=1"></script>
-<script src="assets/app.js?v=11"></script>
-<script src="assets/i18n-es.js?v=4"></script>
-<script src="assets/i18n.js?v=11"></script>
+<script src="assets/locale.js?v=2"></script>
+<script src="assets/app.js?v=12"></script>
+<script src="assets/i18n-es.js?v=5"></script>
+<script src="assets/i18n.js?v=12"></script>
 <script src="assets/prefs.js?v=2"></script>
 <script>
   OFF.mount("contribute.html");
+  /* ---- Bloc "En direct" : vrais produits recemment crees (API publique) ---- */
+  (async () => {
+    const T = OFF.t, L = () => OFF.numLocale || "fr-FR";
+    const ago = t => { const d = Math.max(0, Math.floor(Date.now() / 1000 - t));
+      if (d < 90) return T("à l'instant");
+      if (d < 3600) return Math.round(d / 60) + " " + T("min");
+      if (d < 86400) return Math.round(d / 3600) + " " + T("h");
+      return Math.round(d / 86400) + " " + T("j"); };
+    try {
+      const base = (OFF.locale && OFF.locale.api) ? OFF.locale.api() : "https://world.openfoodfacts.org";
+      const u = new URL(base + "/api/v2/search");
+      u.searchParams.set("sort_by", "created_t"); u.searchParams.set("page_size", "3");
+      const ct = (OFF.locale && OFF.locale.countryTag) ? OFF.locale.countryTag() : null;
+      if (ct) u.searchParams.set("countries_tags", ct);
+      u.searchParams.set("fields", "code,product_name,product_name_fr,brands,creator,created_t,image_front_small_url");
+      /* l'API limite le debit : une seconde tentative apres une courte pause */
+      const once = async () => { const c = new AbortController(); setTimeout(() => c.abort(), 11000); return fetch(u, { signal: c.signal }); };
+      let r; try { r = await once(); } catch (e) { r = null; }
+      if (!r || !r.ok) { await new Promise(z => setTimeout(z, 1800)); try { r = await once(); } catch (e) { r = null; } }
+      if (!r) throw 0;
+      if (!r.ok) throw 0;
+      const d = await r.json();
+      const ps = d.products || [];
+      document.getElementById("cTotal").textContent = (d.count || 0).toLocaleString(L());
+      document.getElementById("cLast").textContent = ps[0] ? ago(ps[0].created_t) : "–";
+      document.getElementById("lastAdded").innerHTML = ps.map(p => {
+        const n = p.product_name_fr || p.product_name || T("Produit sans nom");
+        const im = p.image_front_small_url;
+        return `<a href="product.html?code=${p.code}" style="display:flex;gap:10px;align-items:center;padding:8px 10px;border:1px solid var(--line-2);border-radius:12px;background:#fff">
+          <span style="width:38px;height:38px;border-radius:9px;background:var(--sand);display:grid;place-items:center;overflow:hidden;flex:none">${im ? `<img src="${im}" alt="" style="max-width:100%;max-height:100%">` : ""}</span>
+          <span style="min-width:0;flex:1">
+            <b style="display:block;font-size:.9rem;color:var(--brand);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${OFF.esc(n)}</b>
+            <small class="muted">${OFF.esc(p.creator || "—")} · ${ago(p.created_t)}</small>
+          </span></a>`;
+      }).join("");
+      document.getElementById("liveState").innerHTML = `<span style="width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block"></span> ${T("En direct depuis l'API")}`;
+    } catch (e) {
+      document.getElementById("cTotal").textContent = (4769181).toLocaleString(L());
+      document.getElementById("cLast").textContent = "–";
+      document.getElementById("liveState").innerHTML = `<span class="tag warn" style="padding:0">${T("API indisponible")}</span>`;
+    }
+  })();
   fetch("assets/sample.json").then(r => r.json()).then(list => { document.getElementById("strip").innerHTML = list.slice(0, 12).map(p => `<a href="product.html?code=${p.code}"><img loading="lazy" src="${p.image_front_small_url}" alt="${OFF.esc(p.product_name)}"></a>`).join(""); });
 </script>
 </body>

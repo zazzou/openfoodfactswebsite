@@ -213,10 +213,10 @@
 </section>
 
 <div id="site-footer"></div>
-<script src="assets/locale.js?v=1"></script>
-<script src="assets/app.js?v=11"></script>
-<script src="assets/i18n-es.js?v=4"></script>
-<script src="assets/i18n.js?v=11"></script>
+<script src="assets/locale.js?v=2"></script>
+<script src="assets/app.js?v=12"></script>
+<script src="assets/i18n-es.js?v=5"></script>
+<script src="assets/i18n.js?v=12"></script>
 <script src="assets/prefs.js?v=2"></script>
 <script>
   OFF.mount("contribute.html");
@@ -271,9 +271,38 @@
   }
   document.querySelectorAll("#periodTabs button").forEach(b => b.addEventListener("click", () => { document.querySelectorAll("#periodTabs button").forEach(x => x.classList.remove("active")); b.classList.add("active"); podium(b.dataset.p); }));
   podium("all");
+  /* remplace le podium "depuis toujours" et le compteur perso par les vrais chiffres Robotoff */
+  (async () => {
+    const real = await realCounts(["teolemon", "charlesnepote", "raphael0202", "aleene", "odinh"]);
+    if (!real) return;
+    TOP.all = real.slice(0, 3);
+    ME = (real.find(x => x[0] === "teolemon") || [null, ME])[1];
+    const active = document.querySelector("#periodTabs button.active");
+    if (!active || active.dataset.p === "all") podium("all");
+    const me = document.querySelector('[data-count="186306"]');
+    if (me) { me.removeAttribute("data-count"); me.textContent = ME.toLocaleString(OFF.numLocale || "fr-FR"); }
+    if (typeof drawBadges === "function") try { drawBadges(); } catch (e) { }
+  })();
 
   /* ---- Badges Curateur ---- */
-  const ME = 186306;
+  let ME = 186306;
+  /* ---- Compteurs reels de reponses, API publique Robotoff ---- */
+  const RB = "https://robotoff.openfoodfacts.org/api/v1/users/statistics/";
+  async function realCounts(names) {
+    const out = await Promise.all(names.map(async n => {
+      try {
+        const c = new AbortController(); setTimeout(() => c.abort(), 9000);
+        const r = await fetch(RB + encodeURIComponent(n), { signal: c.signal });
+        if (!r.ok) return null;
+        const d = await r.json();
+        const v = d && d.count && d.count.annotations;
+        return typeof v === "number" ? [n, v] : null;
+      } catch (e) { return null; }
+    }));
+    const ok = out.filter(Boolean);
+    return ok.length >= 3 ? ok.sort((a, b) => b[1] - a[1]) : null;
+  }
+
   const LEVELS = [10, 100, 1000, 10000, 100000, 1000000], ROMAN = ["I", "II", "III", "IV", "V", "VI"];
   const check = '<span class="chk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg></span>';
   let nextFound = false;

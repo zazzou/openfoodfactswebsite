@@ -145,6 +145,8 @@ ${localeMenu()}<nav class="mobile-nav" id="mobileNav">${links}<a href="signin.ht
       u.searchParams.set("page", page); u.searchParams.set("page_size", pageSize); u.searchParams.set("fields", FIELDS + ",product_name_en"); u.searchParams.set("lc", (window.OFF && OFF.lang) || "fr");
       if (sort) u.searchParams.set("sort_by", sort);
       facets.forEach((f, i) => { u.searchParams.set(`tagtype_${i}`, f.type); u.searchParams.set(`tag_contains_${i}`, "contains"); u.searchParams.set(`tag_${i}`, f.value); });
+      const ct = (OFF.locale && OFF.locale.countryTag) ? OFF.locale.countryTag() : null;
+      if (ct) { const i = facets.length; u.searchParams.set(`tagtype_${i}`, "countries"); u.searchParams.set(`tag_contains_${i}`, "contains"); u.searchParams.set(`tag_${i}`, ct); }
       if (flags.additives) u.searchParams.set("additives", flags.additives);
       if (flags.palm) u.searchParams.set("ingredients_from_palm_oil", flags.palm);
       const r = await fetch(u);
@@ -155,6 +157,8 @@ ${localeMenu()}<nav class="mobile-nav" id="mobileNav">${links}<a href="signin.ht
       const u = new URL(`${API}/api/v2/search`);
       u.searchParams.set("page", page); u.searchParams.set("page_size", pageSize); u.searchParams.set("fields", FIELDS);
       facets.forEach(f => { const key = { nutrition_grades: "nutrition_grades_tags", nova_groups: "nova_groups_tags", labels: "labels_tags" }[f.type]; if (key) u.searchParams.set(key, f.value); });
+      const ct2 = (OFF.locale && OFF.locale.countryTag) ? OFF.locale.countryTag() : null;
+      if (ct2) u.searchParams.set("countries_tags", ct2);
       if (flags.additives) u.searchParams.set("additives_n", "0");
       if (flags.palm) u.searchParams.set("ingredients_analysis_tags", "en:palm-oil-free");
       const r = await fetch(u);
